@@ -12,4 +12,13 @@ public class HttpServerTest {
         HttpClient httpClient = new HttpClient(httpServer.getPort());
         assertEquals(200, httpClient.getStatusCode());
     }
+
+    @Test
+    void shouldReturnStatusCode404() {
+        HttpServer httpServer = new HttpServer(0);
+        HttpClient httpClient = new HttpClient(httpServer.getPort());
+        assertEquals(404, httpClient.getStatusCode());
+
+
+    }
 }
