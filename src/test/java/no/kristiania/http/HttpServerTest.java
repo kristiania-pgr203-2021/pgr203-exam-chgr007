@@ -18,12 +18,7 @@ public class HttpServerTest {
     public HttpServerTest() throws IOException {
     }
 
-    @Test
-    void shouldEchoQueryParameter() throws IOException {
-        HttpClient client = new HttpClient("localhost", server.getPort());
-        client.get("/hello?firstName=Test&lastName=Persson");
-        assertEquals("<p>Hello Persson, Test</p>", client.getMessage().getMessageBody());
-    }
+
 
     @Test
     void shouldReadFileFromServerMuahaha() throws IOException {
@@ -44,6 +39,7 @@ public class HttpServerTest {
         Postable product = server.getProducts().get(0);
         assertEquals("Cat", product.getValue());
         assertEquals("Findus", product.getKey());
+
     }
 
     @Test
