@@ -3,6 +3,7 @@ package no.kristiania.http.util;
 import no.kristiania.http.factory.Postable;
 import no.kristiania.http.factory.Product;
 
+
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -60,7 +61,9 @@ public class Router {
             clientSocket.getOutputStream().write(responseMessage.getBytes(StandardCharsets.UTF_8));
         } else if (message.getFileTarget().equals("/api/categoryOptions")) {
             values = message.getPostParams();
-            String messageBody = getCategories();
+          
+            String messageBody = printCategories();
+
             String responseMessage = "HTTP/1.1 200 OK\r\n" +
                     "Content-Length: " + messageBody.getBytes(StandardCharsets.UTF_8).length + "\r\n" +
                     "Connection: close\r\n" +
@@ -109,19 +112,53 @@ public class Router {
     }
 
     public String printProducts() {
+
         StringBuilder string = new StringBuilder();
+        String[] categories = getCategories();
+
+        string.append("<table>");
+        string.append("<tr>");
+
+        for (String category : categories) {
+            string.append("<th>" + category + "</th>");
+        }
+
+        string.append("</tr>");
+        string.append("<tr>");
+        for (String category : categories) {
+            string.append("<td>" + printProductsByCategory(category) + "</td>");
+        }
+        string.append("</tr>");
+
+
+
+        /*
         for(int i = 0; i<products.size(); i++){
             string.append(products.get(i).printProduct());
-        }
+        }*/
 
         return string.toString();
     }
 
-    private String getCategories() {
+    private String printProductsByCategory(String category) {
 
         StringBuilder string = new StringBuilder();
 
-        String[] categories = {"Katt", "Hund", "Hest", "Slange"};
+        for(Postable p : products){
+            if(p.getValue().equals(category)){
+                string.append("<li>");
+                string.append(p.getKey());
+                string.append("</li>");
+            }
+        }
+        return string.toString();
+    }
+
+    private String printCategories() {
+
+        StringBuilder string = new StringBuilder();
+
+        String[] categories = getCategories();
 
         for(String category : categories){
             string.append("<option>" + category + "</option>");
@@ -129,4 +166,12 @@ public class Router {
 
         return string.toString();
     }
+
+    private String[] getCategories() {
+
+        String[] categories = {"Katt", "Hund", "Hest", "Slange"};
+
+        return categories;
+    }
+
 }

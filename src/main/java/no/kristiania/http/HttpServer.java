@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpServer {
+
     private int port;
     private ServerSocket serverSocket;
     private Path rootDirectory;
