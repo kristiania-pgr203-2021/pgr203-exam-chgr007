@@ -2,6 +2,8 @@ package no.kristiania.http.util;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -26,7 +28,7 @@ public class HttpRequest extends HttpMessage {
     }
 
     private Map<String,String> parseRequestLine() {
-        String requestLineParts[] = getStartLine().split(" ");
+        String[] requestLineParts = getStartLine().split(" ");
         requestType = requestLineParts[0];
         HashMap<String, String> values = new HashMap<>();
         int questionMarkPosition = requestLineParts[1].indexOf("?");
@@ -50,7 +52,10 @@ public class HttpRequest extends HttpMessage {
         if (queryLine != null) {
             for (String queryPart : queryLine.split("&")) {
                 int equalPos = queryPart.indexOf("=");
-                values.put(queryPart.substring(0, equalPos), queryPart.substring(equalPos + 1));
+                values.put(URLDecoder.decode(queryPart.substring(0, equalPos),
+                        StandardCharsets.UTF_8),
+                        URLDecoder.decode(queryPart.substring(equalPos + 1),
+                                StandardCharsets.UTF_8));
             }
         }
         return values;
@@ -65,7 +70,7 @@ public class HttpRequest extends HttpMessage {
         return null;
     }
 
-    public Map getPostParams() {
+    public Map<String,String> getPostParams() {
         if (requestType.equalsIgnoreCase("POST")) {
             return parseRequestLine(getMessageBody());
         }

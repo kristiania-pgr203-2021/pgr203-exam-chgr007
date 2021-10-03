@@ -22,7 +22,7 @@ public class HttpServer {
     private int port;
     private ServerSocket serverSocket;
     private Path rootDirectory;
-    private List<Postable> products;
+    private List<Postable<String,String>> products;
 
     public HttpServer(int port) throws IOException {
         this.port = port;
@@ -56,7 +56,7 @@ public class HttpServer {
         return serverSocket.getLocalPort();
     }
 
-    public List<Postable> getProducts() {
+    public List<Postable<String,String>> getProducts() {
         return products;
     }
 

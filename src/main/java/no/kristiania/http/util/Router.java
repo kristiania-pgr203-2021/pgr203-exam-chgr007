@@ -15,25 +15,16 @@ import java.util.Map;
 public class Router {
     private Socket clientSocket;
     private Map<String,String> values;
-    private List<Postable> products;
+    private List<Postable<String,String>> products;
 
-    public Router(Socket clientSocket, List<Postable> products) {
+    public Router(Socket clientSocket, List<Postable<String,String>> products) {
         this.clientSocket = clientSocket;
         this.products = products;
     }
 
     public void route(HttpRequest message, Path rootDirectory) throws IOException {
 
-        if (message.getFileTarget().equalsIgnoreCase("/hello") && message.hasParams()) {
-
-            String messageBody = String.format("<p>Hello %s, %s</p>",message.getQueryParam("lastName"), message.getQueryParam("firstName"));
-            String responseMessage = "HTTP/1.1 200 OK\r\n" +
-                    "Content-Length: " + messageBody.getBytes(StandardCharsets.UTF_8).length + "\r\n" +
-                    "Connection: close" + messageBody + "\r\n" +
-                    "\r\n" +
-                    messageBody;
-            clientSocket.getOutputStream().write(responseMessage.getBytes(StandardCharsets.UTF_8));
-        }  else if (message.getFileTarget().equals("/api/newProduct")){
+        if (message.getFileTarget().equals("/api/newProduct")){
             values = message.getPostParams();
             String responseMessage = "HTTP/1.1 303 See Other\r\n" +
                     "Location: /listProducts.html\r\n" +
@@ -44,7 +35,7 @@ public class Router {
         } else if (message.getFileTarget().equals("/")){
             values = message.getPostParams();
             String responseMessage = "HTTP/1.1 303 See Other\r\n" +
-                    "Location: /newProduct.html\r\n" +
+                    "Location: /index.html\r\n" +
                     "\r\n";
             clientSocket.getOutputStream().write(responseMessage.getBytes(StandardCharsets.UTF_8));
             clientSocket.close();
@@ -55,6 +46,7 @@ public class Router {
             String messageBody = printProducts();
             String responseMessage = "HTTP/1.1 200 OK\r\n" +
                     "Content-Length: " + messageBody.getBytes(StandardCharsets.UTF_8).length + "\r\n" +
+                    "Content-Type: text/html; charset=UTF8\r\n" +
                     "Connection: close\r\n" +
                     "\r\n" +
                     messageBody;
@@ -66,6 +58,7 @@ public class Router {
 
             String responseMessage = "HTTP/1.1 200 OK\r\n" +
                     "Content-Length: " + messageBody.getBytes(StandardCharsets.UTF_8).length + "\r\n" +
+                    "Content-Type: " + getContentType(message.getFileTarget()) + "\r\n" +
                     "Connection: close\r\n" +
                     "\r\n" +
                     messageBody;
@@ -75,8 +68,6 @@ public class Router {
             if(rootDirectory != null && Files.exists(rootDirectory.resolve(message.getFileTarget().substring(1)))){
                 String responseTxt = Files.readString(rootDirectory.resolve(message.getFileTarget().substring(1)));
                 writeOkResponse(clientSocket, responseTxt, message.getFileTarget());
-                return;
-
             } else {
                 String responseText = "File not found: " + message.getFileTarget();
 
@@ -94,7 +85,8 @@ public class Router {
         if(fileTarget.endsWith(".html")) response = "text/html";
         else if (fileTarget.endsWith(".txt")) response = "text/plain";
         else if (fileTarget.endsWith(".css")) response = "text/css";
-        return response+="; charset=UTF8";
+        response+="; charset=UTF8";
+        return response;
     }
 
     private void writeOkResponse(Socket clientSocket, String responseTxt, String fileTarget) throws IOException {
@@ -144,7 +136,7 @@ public class Router {
 
         StringBuilder string = new StringBuilder();
 
-        for(Postable p : products){
+        for(Postable<String,String> p : products){
             if(p.getValue().equals(category)){
                 string.append("<li>");
                 string.append(p.getKey());
@@ -169,9 +161,7 @@ public class Router {
 
     private String[] getCategories() {
 
-        String[] categories = {"Katt", "Hund", "Hest", "Slange"};
-
-        return categories;
+        return new String[]{"Katt", "Hund", "Hest", "Slange"};
     }
 
 }
