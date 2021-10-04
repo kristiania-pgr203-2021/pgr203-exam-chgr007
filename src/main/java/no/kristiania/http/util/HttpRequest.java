@@ -41,12 +41,12 @@ public class HttpRequest extends HttpMessage {
             fileTarget = requestLineParts[1];
         }
         if (queryLine != null) {
-            return parseRequestLine(queryLine);
+            return parseQueryLine(queryLine);
         }
         return values;
     }
 
-    private Map<String,String> parseRequestLine(String queryLine) {
+    private Map<String,String> parseQueryLine(String queryLine) {
         HashMap<String, String> values = new HashMap<>();
 
         if (queryLine != null) {
@@ -72,7 +72,7 @@ public class HttpRequest extends HttpMessage {
 
     public Map<String,String> getPostParams() {
         if (requestType.equalsIgnoreCase("POST")) {
-            return parseRequestLine(getMessageBody());
+            return parseQueryLine(getMessageBody());
         }
         return null;
     }

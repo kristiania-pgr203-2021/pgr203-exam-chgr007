@@ -31,27 +31,27 @@ public class Router {
                 redirect("/index.html");
                 break;
             case "/api/products":
-                writeOkResponse(clientSocket, printProducts(), "/listProducts.html");
-
+                writeOkResponse(printProducts(), "/listProducts.html");
                 break;
             case "/api/categoryOptions":
-                writeOkResponse(clientSocket, printCategories(), "/newProduct.html");
+                writeOkResponse(printCategories(), "/newProduct.html");
                 break;
             default:
                 if (rootDirectory != null && Files.exists(rootDirectory.resolve(message.getFileTarget().substring(1)))) {
                     String responseTxt = Files.readString(rootDirectory.resolve(message.getFileTarget().substring(1)));
-                    writeOkResponse(clientSocket, responseTxt, message.getFileTarget());
+                    writeOkResponse(responseTxt, message.getFileTarget());
                 } else {
                     writeNotFoundResponse(message);
                 }
                 break;
         }
+        clientSocket.close();
     }
 
     private void writeNotFoundResponse(HttpRequest message) throws IOException {
         String responseText = "File not found: " + message.getFileTarget();
         String response = "HTTP/1.1 404 Not found\r\n" +
-                "Content-Length: " + responseText.length() + "\r\n" +
+                "Content-Length: " + responseText.getBytes(StandardCharsets.UTF_8).length+ "\r\n" +
                 "Connection: close\r\n" +
                 "\r\n" +
                 responseText;
@@ -61,9 +61,9 @@ public class Router {
     private void redirect(String location) throws IOException {
         String responseMessage = "HTTP/1.1 303 See Other\r\n" +
                 "Location: " + location + "\r\n" +
+                "Connection: close\r\n" +
                 "\r\n";
         clientSocket.getOutputStream().write(responseMessage.getBytes(StandardCharsets.UTF_8));
-        clientSocket.close();
     }
 
     private String getContentType(String fileTarget) {
@@ -75,7 +75,7 @@ public class Router {
         return response;
     }
 
-    private void writeOkResponse(Socket clientSocket, String responseTxt, String fileTarget) throws IOException {
+    private void writeOkResponse(String responseTxt, String fileTarget) throws IOException {
         String response = "HTTP/1.1 200 OK\r\n" +
                 "Content-Length: " + responseTxt.getBytes(StandardCharsets.UTF_8).length + "\r\n" +
                 "Content-Type: " + getContentType(fileTarget) + "\r\n" +
@@ -90,21 +90,21 @@ public class Router {
     }
 
     public String printProducts() {
-
+      
         StringBuilder string = new StringBuilder();
         String[] categories = getCategories();
-
+      
         string.append("<table>");
         string.append("<tr>");
 
         for (String category : categories) {
-            string.append("<th>" + category + "</th>");
+            string.append(String.format("<th>%s</th>",category));
         }
 
         string.append("</tr>");
         string.append("<tr>");
         for (String category : categories) {
-            string.append("<td>" + printProductsByCategory(category) + "</td>");
+            string.append(String.format("<td>%s</td>",printProductsByCategory(category)));
         }
         string.append("</tr>");
 
@@ -112,7 +112,7 @@ public class Router {
     }
 
     private String printProductsByCategory(String category) {
-
+      
         StringBuilder string = new StringBuilder();
 
         for(Product p : products){
@@ -132,7 +132,9 @@ public class Router {
         String[] categories = getCategories();
 
         for(String category : categories){
-            string.append("<option>" + category + "</option>");
+            string.append("<option>");
+            string.append(category);
+            string.append("</option>");
         }
 
         return string.toString();
