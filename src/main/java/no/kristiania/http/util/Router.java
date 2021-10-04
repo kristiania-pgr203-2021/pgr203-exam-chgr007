@@ -1,8 +1,6 @@
 package no.kristiania.http.util;
 
-import no.kristiania.http.factory.Postable;
-import no.kristiania.http.factory.Product;
-
+import no.kristiania.http.model.Product;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -13,73 +11,61 @@ import java.util.List;
 import java.util.Map;
 
 public class Router {
-    private Socket clientSocket;
+    private final Socket clientSocket;
+    private final List<Product> products;
     private Map<String,String> values;
-    private List<Postable<String,String>> products;
 
-    public Router(Socket clientSocket, List<Postable<String,String>> products) {
+    public Router(Socket clientSocket, List<Product> products) {
         this.clientSocket = clientSocket;
         this.products = products;
     }
 
     public void route(HttpRequest message, Path rootDirectory) throws IOException {
 
-        if (message.getFileTarget().equals("/api/newProduct")){
-            values = message.getPostParams();
-            String responseMessage = "HTTP/1.1 303 See Other\r\n" +
-                    "Location: /listProducts.html\r\n" +
-                    "\r\n";
-            clientSocket.getOutputStream().write(responseMessage.getBytes(StandardCharsets.UTF_8));
-            clientSocket.close();
+        switch (message.getFileTarget()) {
+            case "/api/newProduct":
+                values = message.getPostParams();
+                redirect("/listProducts.html");
+                break;
+            case "/":
+                redirect("/index.html");
+                break;
+            case "/api/products":
+                writeOkResponse(clientSocket, printProducts(), "/listProducts.html");
 
-        } else if (message.getFileTarget().equals("/")){
-            values = message.getPostParams();
-            String responseMessage = "HTTP/1.1 303 See Other\r\n" +
-                    "Location: /index.html\r\n" +
-                    "\r\n";
-            clientSocket.getOutputStream().write(responseMessage.getBytes(StandardCharsets.UTF_8));
-            clientSocket.close();
-
-        }
-        else if (message.getFileTarget().equals("/api/products")){
-            values = message.getPostParams();
-            String messageBody = printProducts();
-            String responseMessage = "HTTP/1.1 200 OK\r\n" +
-                    "Content-Length: " + messageBody.getBytes(StandardCharsets.UTF_8).length + "\r\n" +
-                    "Content-Type: text/html; charset=UTF8\r\n" +
-                    "Connection: close\r\n" +
-                    "\r\n" +
-                    messageBody;
-            clientSocket.getOutputStream().write(responseMessage.getBytes(StandardCharsets.UTF_8));
-        } else if (message.getFileTarget().equals("/api/categoryOptions")) {
-            values = message.getPostParams();
-          
-            String messageBody = printCategories();
-
-            String responseMessage = "HTTP/1.1 200 OK\r\n" +
-                    "Content-Length: " + messageBody.getBytes(StandardCharsets.UTF_8).length + "\r\n" +
-                    "Content-Type: " + getContentType(message.getFileTarget()) + "\r\n" +
-                    "Connection: close\r\n" +
-                    "\r\n" +
-                    messageBody;
-            clientSocket.getOutputStream().write(responseMessage.getBytes(StandardCharsets.UTF_8));
-        } else {
-
-            if(rootDirectory != null && Files.exists(rootDirectory.resolve(message.getFileTarget().substring(1)))){
-                String responseTxt = Files.readString(rootDirectory.resolve(message.getFileTarget().substring(1)));
-                writeOkResponse(clientSocket, responseTxt, message.getFileTarget());
-            } else {
-                String responseText = "File not found: " + message.getFileTarget();
-
-                String response = "HTTP/1.1 404 Not found\r\n" +
-                        "Content-Length: " + responseText.length() + "\r\n" +
-                        "Connection: close\r\n" +
-                        "\r\n" +
-                        responseText;
-                clientSocket.getOutputStream().write(response.getBytes(StandardCharsets.UTF_8));
-            }
+                break;
+            case "/api/categoryOptions":
+                writeOkResponse(clientSocket, printCategories(), "/newProduct.html");
+                break;
+            default:
+                if (rootDirectory != null && Files.exists(rootDirectory.resolve(message.getFileTarget().substring(1)))) {
+                    String responseTxt = Files.readString(rootDirectory.resolve(message.getFileTarget().substring(1)));
+                    writeOkResponse(clientSocket, responseTxt, message.getFileTarget());
+                } else {
+                    writeNotFoundResponse(message);
+                }
+                break;
         }
     }
+
+    private void writeNotFoundResponse(HttpRequest message) throws IOException {
+        String responseText = "File not found: " + message.getFileTarget();
+        String response = "HTTP/1.1 404 Not found\r\n" +
+                "Content-Length: " + responseText.length() + "\r\n" +
+                "Connection: close\r\n" +
+                "\r\n" +
+                responseText;
+        clientSocket.getOutputStream().write(response.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private void redirect(String location) throws IOException {
+        String responseMessage = "HTTP/1.1 303 See Other\r\n" +
+                "Location: " + location + "\r\n" +
+                "\r\n";
+        clientSocket.getOutputStream().write(responseMessage.getBytes(StandardCharsets.UTF_8));
+        clientSocket.close();
+    }
+
     private String getContentType(String fileTarget) {
         String response = "text/plain";
         if(fileTarget.endsWith(".html")) response = "text/html";
@@ -122,13 +108,6 @@ public class Router {
         }
         string.append("</tr>");
 
-
-
-        /*
-        for(int i = 0; i<products.size(); i++){
-            string.append(products.get(i).printProduct());
-        }*/
-
         return string.toString();
     }
 
@@ -136,10 +115,10 @@ public class Router {
 
         StringBuilder string = new StringBuilder();
 
-        for(Postable<String,String> p : products){
-            if(p.getValue().equals(category)){
+        for(Product p : products){
+            if(p.getCategory().equals(category)){
                 string.append("<li>");
-                string.append(p.getKey());
+                string.append(p.getName());
                 string.append("</li>");
             }
         }
@@ -160,7 +139,6 @@ public class Router {
     }
 
     private String[] getCategories() {
-
         return new String[]{"Katt", "Hund", "Hest", "Slange"};
     }
 

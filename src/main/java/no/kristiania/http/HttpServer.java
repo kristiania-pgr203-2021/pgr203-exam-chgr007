@@ -1,28 +1,22 @@
 package no.kristiania.http;
 
-import no.kristiania.http.factory.Postable;
-import no.kristiania.http.factory.Product;
-import no.kristiania.http.factory.ProductFactory;
-import no.kristiania.http.util.HttpMessage;
+import no.kristiania.http.model.Product;
 import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.Router;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class HttpServer {
 
     private int port;
     private ServerSocket serverSocket;
     private Path rootDirectory;
-    private List<Postable<String,String>> products;
+    private List<Product> products;
 
     public HttpServer(int port) throws IOException {
         this.port = port;
@@ -40,7 +34,10 @@ public class HttpServer {
                 Router router = new Router(clientSocket, products);
                 router.route(message, rootDirectory);
                 if (message.getRequestType().equalsIgnoreCase("POST")) {
-                    products.add(new ProductFactory<String,String>().getPostable(router.getProducts().get("productName"),router.getProducts().get("category")));
+                    products.add(
+                            new Product(router.getProducts().get("productName"),
+                            router.getProducts().get("category"))
+                    );
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -56,7 +53,7 @@ public class HttpServer {
         return serverSocket.getLocalPort();
     }
 
-    public List<Postable<String,String>> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 

@@ -1,8 +1,7 @@
 package no.kristiania.http;
 
-import no.kristiania.http.factory.Postable;
-import no.kristiania.http.factory.Product;
-import no.kristiania.http.factory.ProductFactory;
+import no.kristiania.http.model.Product;
+import no.kristiania.http.util.PostValue;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -31,14 +30,14 @@ public class HttpServerTest {
     @Test
     void shouldPostNewProduct() throws IOException {
         HttpClient client = new HttpClient("localhost", server.getPort());
-        List<Postable> products = new ArrayList<>();
-        products.add(new ProductFactory<String,String>().getPostable("productName","Findus"));
-        products.add(new ProductFactory<String,String>().getPostable("category","Cat"));
+        List<PostValue<String,String>> products = new ArrayList<>();
+        products.add(new PostValue("productName","Findus"));
+        products.add(new PostValue("category","Cat"));
         client.post(products,"/api/newProduct");
         assertEquals(303, client.getStatusCode());
-        Postable product = server.getProducts().get(0);
-        assertEquals("Cat", product.getValue());
-        assertEquals("Findus", product.getKey());
+        Product product = server.getProducts().get(0);
+        assertEquals("Cat", product.getCategory());
+        assertEquals("Findus", product.getName());
 
     }
 
@@ -52,8 +51,9 @@ public class HttpServerTest {
     @Test
     void shouldRedirectOnPost() throws IOException {
         HttpClient client = new HttpClient("localhost", server.getPort());
-        List<Postable> products = new ArrayList<>();
-        products.add(new ProductFactory<String,String>().getPostable("Cat","Findus"));
+        List<PostValue<String,String>> products = new ArrayList<>();
+        products.add(new PostValue("productName","Findus"));
+        products.add(new PostValue("category","Cat"));
         client.post(products,"/api/newProduct");
         assertEquals(303, client.getStatusCode());
     }

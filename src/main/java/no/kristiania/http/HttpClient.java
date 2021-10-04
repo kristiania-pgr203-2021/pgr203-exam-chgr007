@@ -1,16 +1,13 @@
 package no.kristiania.http;
 
-import no.kristiania.http.factory.Postable;
 import no.kristiania.http.util.HttpMessage;
 import no.kristiania.http.util.HttpResponse;
+import no.kristiania.http.util.PostValue;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 public class HttpClient {
     private int port;
@@ -42,7 +39,7 @@ public class HttpClient {
         statusCode = message.getStatusCode();
     }
 
-    public void post(List<Postable> postables, String target) throws IOException {
+    public void post(List<PostValue<String,String>> postables, String target) throws IOException {
         StringBuilder keyValueString = new StringBuilder();
         postables.forEach((postable) -> keyValueString.append(postable.getKey()+"="+postable.getValue()+"&"));
         // remove the last "&" appended
