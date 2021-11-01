@@ -16,12 +16,13 @@ public class QuestionaireDaoTest {
 
     @Test
     void getPropertiesWorksWithResourcesFile() {
+        //TODO: Fjerne denne før man merger. Github actions vil nødvendigvis ikke ha filen :P
         Properties props = getProperties();
         assertEquals("test", props.getProperty("test"));
     }
     //used for internal databases
     private DataSource createDataSource() {
-
+        //TODO: Oppdatere til dataSource.username osv. ihht. specs fra Johannes
         Properties prop = getProperties();
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         dataSource.setUser(prop.getProperty("username"));
@@ -36,8 +37,8 @@ public class QuestionaireDaoTest {
     private Properties getProperties() {
         Properties properties = new Properties();
 
-        try (InputStream fileReader = getClass().getClassLoader().getResourceAsStream("pgr203.properties")) {
-            properties.load(fileReader);
+        try (InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("pgr203.properties")) {
+            properties.load(resourceAsStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
