@@ -1,17 +1,24 @@
 package no.kristiania.http;
 
 import org.flywaydb.core.Flyway;
+import org.junit.jupiter.api.Test;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class QuestionaireDaoTest {
 
 
-
+    @Test
+    void getPropertiesWorksWithResourcesFile() {
+        Properties props = getProperties();
+        assertEquals("test", props.getProperty("test"));
+    }
     //used for internal databases
     private DataSource createDataSource() {
 
@@ -28,13 +35,12 @@ public class QuestionaireDaoTest {
 
     private Properties getProperties() {
         Properties properties = new Properties();
-        try {
-            properties.load(new FileInputStream("src/main/resources/pgr203.properties"));
+
+        try (InputStream fileReader = getClass().getClassLoader().getResourceAsStream("pgr203.properties")) {
+            properties.load(fileReader);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return properties;
     }
-
-
 }
