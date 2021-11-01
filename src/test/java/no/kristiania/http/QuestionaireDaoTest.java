@@ -29,7 +29,7 @@ public class QuestionaireDaoTest {
     private Properties getProperties() {
         Properties properties = new Properties();
         try {
-            properties.load(new FileInputStream("src/main/resources/config.properties"));
+            properties.load(new FileInputStream("src/main/resources/pgr203.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }

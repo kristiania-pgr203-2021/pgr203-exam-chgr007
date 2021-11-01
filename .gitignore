@@ -2,4 +2,3 @@
 *.iml
 target/
 /src/main/resources/pgr203.properties
-/src/main/resources/config.properties
