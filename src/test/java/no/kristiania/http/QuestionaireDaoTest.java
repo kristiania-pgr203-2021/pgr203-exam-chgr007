@@ -1,5 +1,7 @@
 package no.kristiania.http;
 
+import no.kristiania.dao.QuestionDao;
+import no.kristiania.http.model.Question;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.Test;
 import org.postgresql.ds.PGSimpleDataSource;
@@ -7,12 +9,27 @@ import org.postgresql.ds.PGSimpleDataSource;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.Properties;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class QuestionaireDaoTest {
 
+    @Test
+    void shouldSaveQuestionToDatabase() throws IOException, SQLException {
+        QuestionDao questionDao = new QuestionDao(createDataSource());
+        Question question = new Question();
+        question.setQuestion("Hva heter svenskekongen?");
+        question.setAmswer("Carl-Gustav");
+        questionDao.save(question);
+
+        Question questionFromDB = questionDao.retrieveById("question",question.getId());
+        assertThat(question)
+                .isEqualTo(questionFromDB)
+                .usingRecursiveComparison();
+    }
 
     @Test
     void getPropertiesWorksWithResourcesFile() {
