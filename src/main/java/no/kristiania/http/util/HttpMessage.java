@@ -2,17 +2,17 @@ package no.kristiania.http.util;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class HttpMessage {
 
-    private int statusCode;
-    private Map<String, String> headerFields;
-    private Socket socket;
-    private String body;
-    private String startLine;
+    protected final Map<String, String> headerFields;
+    protected Socket socket;
+    protected String messageBody;
+    protected String startLine;
 
     public HttpMessage(Socket socket) throws IOException {
 
@@ -22,17 +22,28 @@ public class HttpMessage {
         getHeaders();
         readMessageBody(getContentLength());
     }
-
+    public HttpMessage(){
+        headerFields = new HashMap<>();
+    };
     private void readMessageBody(int contentLength) throws IOException {
 
         StringBuilder body = new StringBuilder();
-
         for (int i = 0; i < contentLength; i++) {
             body.append((char)socket.getInputStream().read());
         }
-        this.body = body.toString();
+        this.messageBody = body.toString();
     }
 
+
+    public void setHeaderField(String key, String value) {
+        Objects.requireNonNull(key, "key can not be null");
+        Objects.requireNonNull(value, "value can not be null");
+        headerFields.put(key,value);
+    }
+
+    public void setMessageBody(String message) {
+        messageBody = message;
+    }
 
     private String readLine() throws IOException {
         StringBuilder buffer = new StringBuilder();
@@ -70,13 +81,27 @@ public class HttpMessage {
 
     public String getMessageBody() {
         if (getContentLength() > 0) {
-            System.out.println("body:" + body);
-            return body;}
+            System.out.println("body:" + messageBody);
+            return messageBody;}
         return null;
     }
 
     public String getStartLine(){
         return startLine;
+    }
+
+    public void write(Socket socket) throws IOException {
+        StringBuilder headers = new StringBuilder();
+
+        // Formats headers to key: value\r\n
+        headerFields.forEach((k,v) -> headers.append(k+": "+v+"\r\n"));
+
+        String response = startLine+"\r\n"
+                + headers
+                + "\r\n"
+                + messageBody;
+
+        socket.getOutputStream().write(response.getBytes(StandardCharsets.UTF_8));
     }
 
 }

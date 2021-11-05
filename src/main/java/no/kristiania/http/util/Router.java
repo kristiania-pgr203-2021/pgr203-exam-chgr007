@@ -49,13 +49,16 @@ public class Router {
     }
 
     private void writeNotFoundResponse(HttpRequest message) throws IOException {
-        String responseText = "File not found: " + message.getFileTarget();
-        String response = "HTTP/1.1 404 Not found\r\n" +
-                "Content-Length: " + responseText.getBytes(StandardCharsets.UTF_8).length+ "\r\n" +
-                "Connection: close\r\n" +
-                "\r\n" +
-                responseText;
-        clientSocket.getOutputStream().write(response.getBytes(StandardCharsets.UTF_8));
+        HttpResponse httpResponse = new HttpResponse(404, "File not found");
+        httpResponse.setHeaderField("Connection","close");
+        httpResponse.write(clientSocket);
+//        String responseText = "File not found: " + message.getFileTarget();
+//        String response = "HTTP/1.1 404 Not found\r\n" +
+//                "Content-Length: " + responseText.getBytes(StandardCharsets.UTF_8).length+ "\r\n" +
+//                "Connection: close\r\n" +
+//                "\r\n" +
+//                responseText;
+//        clientSocket.getOutputStream().write(response.getBytes(StandardCharsets.UTF_8));
     }
 
     private void redirect(String location) throws IOException {
