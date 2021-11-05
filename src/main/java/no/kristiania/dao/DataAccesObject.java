@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public abstract class DataAccesObject<T> {
 
-    private DataSource dataSource;
+    public DataSource dataSource;
     public DataAccesObject(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -16,9 +16,9 @@ public abstract class DataAccesObject<T> {
 
     public T retrieveById(String db, long id)  throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("select * from ? where id = ?")) {
-                statement.setString(1, db);
-                statement.setLong(2, id);
+            try (PreparedStatement statement = connection.prepareStatement("select * from question where id = ?")) {
+                //statement.setString(2, db);
+                statement.setLong(1, id);
                 try (ResultSet rs = statement.executeQuery()) {
                     rs.next();
                     return mapValuesToObject(rs);
@@ -27,7 +27,7 @@ public abstract class DataAccesObject<T> {
         }
     }
 
-    public abstract void save(T model);
+    public abstract void save(T model) throws SQLException;
 
     protected abstract T mapValuesToObject(ResultSet rs) throws SQLException;
 

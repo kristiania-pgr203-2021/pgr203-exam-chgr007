@@ -4,7 +4,8 @@ public class Question {
 
     private long id;
     private String question;
-    private String amswer;
+    private String answer;
+    private Answer[] allAnswers;
 
     public void setQuestion(String question) {
         this.question = question;
@@ -14,12 +15,12 @@ public class Question {
         return question;
     }
 
-    public void setAmswer(String amswer) {
-        this.amswer = amswer;
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 
-    public String getAmswer() {
-        return amswer;
+    public String getAnswer() {
+        return answer;
     }
 
     public long getId() {

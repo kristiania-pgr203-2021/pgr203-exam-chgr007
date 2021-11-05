@@ -1,12 +1,16 @@
 package no.kristiania.http;
 
+import no.kristiania.dao.AnswerDao;
 import no.kristiania.dao.QuestionDao;
+import no.kristiania.http.model.Answer;
 import no.kristiania.http.model.Question;
+import org.checkerframework.checker.units.qual.A;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.Test;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -22,13 +26,47 @@ public class QuestionaireDaoTest {
         QuestionDao questionDao = new QuestionDao(createDataSource());
         Question question = new Question();
         question.setQuestion("Hva heter svenskekongen?");
-        question.setAmswer("Carl-Gustav");
+        question.setAnswer("Carl-Gustav");
         questionDao.save(question);
+        System.out.println(question.getId() + ":" + question.getQuestion() + " | " + question.getAnswer());
 
         Question questionFromDB = questionDao.retrieveById("question",question.getId());
+
+        System.out.println(questionFromDB.getId() + ":" + questionFromDB.getQuestion() + " | " + questionFromDB.getAnswer());
+
         assertThat(question)
-                .isEqualTo(questionFromDB)
-                .usingRecursiveComparison();
+                .usingRecursiveComparison()
+                .isEqualTo(questionFromDB);
+    }
+
+    @Test
+    void shouldSaveQuestionAndAnswersToDatabase() throws SQLException {
+        QuestionDao questionDao = new QuestionDao(createDataSource());
+        AnswerDao answerDao = new AnswerDao(createDataSource());
+        Question question = new Question();
+        question.setQuestion("Hva heter svenskekongen?");
+        question.setAnswer("Carl-Gustav");
+
+        questionDao.save(question);
+
+        Answer answer1 = new Answer();
+        answer1.setQuestionId(question.getId());
+        answer1.setAnswer("Harald");
+
+        Answer answer2 = new Answer();
+        answer2.setQuestionId(question.getId());
+        answer2.setAnswer("Magnus");
+
+        Answer answer3 = new Answer();
+        answer3.setQuestionId(question.getId());
+        answer3.setAnswer("Carl-Gustav");
+
+        assertThat(answerDao.retrieveByID(question.getId())
+                .usingRecursiveComparison()
+                .contains(answer1)
+                .contains(answer2)
+                .contains(answer3);
+    }
     }
 
     @Test
