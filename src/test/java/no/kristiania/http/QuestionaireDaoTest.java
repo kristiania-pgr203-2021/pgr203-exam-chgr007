@@ -4,13 +4,11 @@ import no.kristiania.dao.AnswerDao;
 import no.kristiania.dao.QuestionDao;
 import no.kristiania.http.model.Answer;
 import no.kristiania.http.model.Question;
-import org.checkerframework.checker.units.qual.A;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.Test;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -23,17 +21,14 @@ public class QuestionaireDaoTest {
 
     @Test
     void shouldSaveQuestionToDatabase() throws IOException, SQLException {
-        QuestionDao questionDao = new QuestionDao(createDataSource());
+        QuestionDao questionDao = new QuestionDao(createDataSource(), "question");
         Question question = new Question();
         question.setQuestion("Hva heter svenskekongen?");
         question.setAnswer("Carl-Gustav");
         questionDao.save(question);
         System.out.println(question.getId() + ":" + question.getQuestion() + " | " + question.getAnswer());
-
-        Question questionFromDB = questionDao.retrieveById("question",question.getId());
-
+        Question questionFromDB = questionDao.retrieveById(question.getId());
         System.out.println(questionFromDB.getId() + ":" + questionFromDB.getQuestion() + " | " + questionFromDB.getAnswer());
-
         assertThat(question)
                 .usingRecursiveComparison()
                 .isEqualTo(questionFromDB);
@@ -41,8 +36,8 @@ public class QuestionaireDaoTest {
 
     @Test
     void shouldSaveQuestionAndAnswersToDatabase() throws SQLException {
-        QuestionDao questionDao = new QuestionDao(createDataSource());
-        AnswerDao answerDao = new AnswerDao(createDataSource());
+        QuestionDao questionDao = new QuestionDao(createDataSource(), "question");
+        AnswerDao answerDao = new AnswerDao(createDataSource(), "answer");
         Question question = new Question();
         question.setQuestion("Hva heter svenskekongen?");
         question.setAnswer("Carl-Gustav");
@@ -52,36 +47,57 @@ public class QuestionaireDaoTest {
         Answer answer1 = new Answer();
         answer1.setQuestionId(question.getId());
         answer1.setAnswer("Harald");
-
+        answerDao.save(answer1);
         Answer answer2 = new Answer();
         answer2.setQuestionId(question.getId());
         answer2.setAnswer("Magnus");
-
+        answerDao.save(answer2);
         Answer answer3 = new Answer();
         answer3.setQuestionId(question.getId());
         answer3.setAnswer("Carl-Gustav");
+        answerDao.save(answer3);
 
-//        assertThat(answerDao.retrieveByID(question.getId()))
-//                .contains(answer1)
-//                .contains(answer2)
-//                .contains(answer3);
+        assertThat(answerDao.listByQuestionId(question.getId()))
+                .extracting(Answer::getId)
+                .contains(answer1.getId())
+                .contains(answer2.getId())
+                .contains(answer3.getId())
+                .usingRecursiveComparison();
     }
 
 
     @Test
-    void getPropertiesWorksWithResourcesFile() {
-        //TODO: Fjerne denne før man merger. Github actions vil nødvendigvis ikke ha filen :P
-        Properties props = getProperties();
-        assertEquals("test", props.getProperty("test"));
+    void shouldUpdateSavedQuestion() throws SQLException {
+        QuestionDao questionDao = new QuestionDao(createDataSource(), "question");
+        AnswerDao answerDao = new AnswerDao(createDataSource(), "answer");
+        Question question = new Question();
+        question.setQuestion("Hva heter svenskekongen?");
+        question.setAnswer("Carl-Gustav");
+
+        questionDao.save(question);
+
+        Answer answer1 = new Answer();
+        answer1.setQuestionId(question.getId());
+        answer1.setAnswer("Harald");
+        answerDao.save(answer1);
+
+        question.setQuestion("Hva heter norskekongen?");
+        questionDao.update(question);
+
+        Question questionFromServer = questionDao.retrieveById(question.getId());
+        assertThat(questionFromServer)
+                .usingRecursiveComparison()
+                .isEqualTo(question);
     }
+
     //used for internal databases
     private DataSource createDataSource() {
         //TODO: Oppdatere til dataSource.username osv. ihht. specs fra Johannes
         Properties prop = getProperties();
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        dataSource.setUser(prop.getProperty("username"));
-        dataSource.setPassword(prop.getProperty("password"));
-        dataSource.setURL(prop.getProperty("URL"));
+        dataSource.setUser(prop.getProperty("dataSource.username"));
+        dataSource.setPassword(prop.getProperty("dataSource.password"));
+        dataSource.setURL(prop.getProperty("dataSource.url"));
 
         Flyway.configure().dataSource(dataSource).load().migrate();
 

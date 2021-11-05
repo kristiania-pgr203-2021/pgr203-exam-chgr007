@@ -6,25 +6,26 @@ import javax.sql.DataSource;
 import java.sql.*;
 
 public class QuestionDao extends DataAccesObject<Question> {
-    public QuestionDao(DataSource dataSource) {
-        super(dataSource);
+    public QuestionDao(DataSource dataSource, String dbName) {
+        super(dataSource, dbName);
     }
 
     @Override
-    public void save(Question question) throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("insert into question(question, correct_answer) values(?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-                statement.setString(1, question.getQuestion());
-                statement.setString(2, question.getAnswer());
-                statement.executeUpdate();
-                try (ResultSet rs = statement.getGeneratedKeys()) {
-                    rs.next();
-                    question.setId(rs.getLong("id"));
-                }
-            }
-        }
-
+    protected PreparedStatement createPreparedStatementForSave(Connection connection) throws SQLException {
+        return connection.prepareStatement("insert into question(question,correct_answer) values(?,?)", Statement.RETURN_GENERATED_KEYS);
     }
+
+    @Override
+    protected void setGeneratedKeys(Question model, ResultSet generatedKeys) throws SQLException {
+        model.setId(generatedKeys.getLong("id"));
+    }
+
+    @Override
+    public void setFieldsToUpdateInDB(Question question, PreparedStatement statement) throws SQLException {
+        statement.setString(1, question.getQuestion());
+        statement.setString(2, question.getAnswer());
+    }
+
 
     @Override
     protected Question mapValuesToObject(ResultSet rs) throws SQLException {
@@ -32,7 +33,6 @@ public class QuestionDao extends DataAccesObject<Question> {
         question.setQuestion(rs.getString("question"));
         question.setId(rs.getLong("id"));
         question.setAnswer(rs.getString("correct_answer"));
-
         return question;
     }
 
