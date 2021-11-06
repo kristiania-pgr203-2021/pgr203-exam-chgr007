@@ -11,6 +11,11 @@ public class QuestionDao extends DataAccesObject<Question> {
     }
 
     @Override
+    protected PreparedStatement createPreparedStatementForUpdate(Connection connection) throws SQLException {
+        return connection.prepareStatement("update question set question = ?, correct_answer = ?");
+    }
+
+    @Override
     protected PreparedStatement createPreparedStatementForSave(Connection connection) throws SQLException {
         return connection.prepareStatement("insert into question(question,correct_answer) values(?,?)", Statement.RETURN_GENERATED_KEYS);
     }

@@ -2,6 +2,7 @@ package no.kristiania.http;
 
 import no.kristiania.dao.AnswerDao;
 import no.kristiania.dao.QuestionDao;
+import no.kristiania.dao.UserDao;
 import no.kristiania.http.model.Answer;
 import no.kristiania.http.model.Question;
 import org.flywaydb.core.Flyway;
@@ -88,6 +89,21 @@ public class QuestionaireDaoTest {
         assertThat(questionFromServer)
                 .usingRecursiveComparison()
                 .isEqualTo(question);
+    }
+
+    @Test
+    void shouldAddUser() throws SQLException {
+        User user = new User();
+        user.setEmail("test@persson.no");
+        user.setFirstName("test");
+        user.setLastName("Persson");
+
+        UserDao userDao = new UserDao(createDataSource());
+        userDao.save(user);
+
+        assertThat(user)
+                .usingRecursiveComparison()
+                .isEqualTo(userDao.retrieveById(user.getId()));
     }
 
     //used for internal databases

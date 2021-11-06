@@ -1,5 +1,7 @@
 package no.kristiania.dao;
 
+import no.kristiania.http.model.Question;
+
 import javax.sql.DataSource;
 import java.sql.*;
 
@@ -37,10 +39,20 @@ public abstract class DataAccesObject<T> {
             }
         }
     }
+    public void update(T model) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = createPreparedStatementForUpdate(connection)) {
+                setFieldsToUpdateInDB(model, statement);
+                statement.executeUpdate();
+            }
+        }
+    }
+
+    protected abstract PreparedStatement createPreparedStatementForUpdate(Connection connection) throws SQLException;
 
     protected abstract PreparedStatement createPreparedStatementForSave(Connection connection) throws SQLException;
     protected abstract void setGeneratedKeys(T model, ResultSet generatedKeys) throws SQLException;
-    public abstract void setFieldsToUpdateInDB(T model, PreparedStatement statement) throws SQLException;
+    protected abstract void setFieldsToUpdateInDB(T model, PreparedStatement statement) throws SQLException;
     protected abstract T mapValuesToObject(ResultSet rs) throws SQLException;
 
 }

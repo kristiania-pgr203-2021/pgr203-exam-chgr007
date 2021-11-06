@@ -13,6 +13,11 @@ public class AnswerDao extends DataAccesObject<Answer> {
     }
 
     @Override
+    protected PreparedStatement createPreparedStatementForUpdate(Connection connection) throws SQLException {
+        return connection.prepareStatement("update answer set answer = ?, question_id = ?");
+    }
+
+    @Override
     protected PreparedStatement createPreparedStatementForSave(Connection connection) throws SQLException {
         return connection.prepareStatement("insert into answer(answer, question_id) values(?,?)", Statement.RETURN_GENERATED_KEYS);
     }
@@ -36,6 +41,7 @@ public class AnswerDao extends DataAccesObject<Answer> {
         answer.setAnswer(rs.getString("answer"));
         return answer;
     }
+
 
     public List<Answer> listByQuestionId(long id) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
