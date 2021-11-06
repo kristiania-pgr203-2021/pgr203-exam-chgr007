@@ -22,7 +22,7 @@ public class Router {
         this.products = products;
     }
 
-    public void route(HttpRequest message, Path rootDirectory) throws IOException {
+    public void route(HttpRequest message, Path rootDirectory) throws IOException, SQLException {
 
         switch (message.getFileTarget()) {
             case "/api/newProduct":
