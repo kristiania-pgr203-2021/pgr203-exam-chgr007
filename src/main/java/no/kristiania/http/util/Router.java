@@ -24,6 +24,8 @@ public class Router {
 
     public void route(HttpRequest message, Path rootDirectory) throws IOException, SQLException {
 
+        FileController fileController = new FileController();
+
         switch (message.getFileTarget()) {
             case "/api/newProduct":
                 values = message.getPostParams();
@@ -32,33 +34,17 @@ public class Router {
             case "/":
                 redirect("/index.html");
                 break;
-            //case "/api/questionaires":
-              //  writeOkResponse(printQuestionaires(), "/index.html");
             case "/api/products":
-                writeOkResponse(printProducts(), "/listProducts.html");
+                fileController.handle(message);
                 break;
             case "/api/categoryOptions":
-                writeOkResponse(printCategories(), "/newProduct.html");
+                fileController.handle(message);
                 break;
             default:
-                FileController fileController = new FileController();
                 fileController.handle(message).write(clientSocket);
                 break;
         }
         clientSocket.close();
-    }
-
-    private void writeNotFoundResponse(HttpRequest message) throws IOException {
-        HttpResponse httpResponse = new HttpResponse(404, "File not found");
-        httpResponse.setHeaderField("Connection","close");
-        httpResponse.write(clientSocket);
-//        String responseText = "File not found: " + message.getFileTarget();
-//        String response = "HTTP/1.1 404 Not found\r\n" +
-//                "Content-Length: " + responseText.getBytes(StandardCharsets.UTF_8).length+ "\r\n" +
-//                "Connection: close\r\n" +
-//                "\r\n" +
-//                responseText;
-//        clientSocket.getOutputStream().write(response.getBytes(StandardCharsets.UTF_8));
     }
 
     private void redirect(String location) throws IOException {
@@ -67,25 +53,6 @@ public class Router {
                 "Connection: close\r\n" +
                 "\r\n";
         clientSocket.getOutputStream().write(responseMessage.getBytes(StandardCharsets.UTF_8));
-    }
-
-    private String getContentType(String fileTarget) {
-        String response = "text/plain";
-        if(fileTarget.endsWith(".html")) response = "text/html";
-        else if (fileTarget.endsWith(".txt")) response = "text/plain";
-        else if (fileTarget.endsWith(".css")) response = "text/css";
-        response+="; charset=UTF8";
-        return response;
-    }
-
-    private void writeOkResponse(String responseTxt, String fileTarget) throws IOException {
-        String response = "HTTP/1.1 200 OK\r\n" +
-                "Content-Length: " + responseTxt.getBytes(StandardCharsets.UTF_8).length + "\r\n" +
-                "Content-Type: " + getContentType(fileTarget) + "\r\n" +
-                "Connection: close\r\n" +
-                "\r\n" +
-                responseTxt;
-        clientSocket.getOutputStream().write(response.getBytes(StandardCharsets.UTF_8));
     }
 
     public Map<String,String> getProducts() {

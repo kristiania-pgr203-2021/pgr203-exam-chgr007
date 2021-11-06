@@ -23,15 +23,25 @@ public class FileController implements HttpController {
             HttpResponse httpResponse = new HttpResponse(200, "OK");
             request.setHeaderField("Connection: ", "close");
             request.setHeaderField("Content-Length", String.valueOf(contentLength));
+            request.setHeaderField("Content-type", getContentType(request.getFileTarget()));
             httpResponse.setMessageBody(buffer.toString());
             return httpResponse;
         } else {
             HttpResponse httpResponse = new HttpResponse(404, "File not found");
-            String messageBody = String.format("<h3>File %s could not be found</h3>", request.getFileTarget().substring(1,request.getFileTarget().length()));
-            httpResponse.setHeaderField("Connection: ", "Close");
-            httpResponse.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8)));
-            httpResponse.setMessageBody(messageBody.toString());
+            String messageBody = String.format("<h1>File %s could not be found", request.getFileTarget());
+            request.setHeaderField("Connection: ", "Close");
+            request.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8)));
+            request.setMessageBody(messageBody);
             return httpResponse;
         }
+    }
+
+    private String getContentType(String fileTarget) {
+        String response = "text/plain";
+        if(fileTarget.endsWith(".html")) response = "text/html";
+        else if (fileTarget.endsWith(".txt")) response = "text/plain";
+        else if (fileTarget.endsWith(".css")) response = "text/css";
+        response+="; charset=UTF8";
+        return response;
     }
 }
