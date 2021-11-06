@@ -4,19 +4,29 @@ import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.HttpResponse;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.SQLException;
 
 public class FileController implements HttpController {
     @Override
     public HttpResponse handle(HttpRequest request) throws SQLException, IOException {
         // TODO: Fjerne dev-mode
+        if (Files.exists(Path.of("/src/java/resources" + request.getFileTarget()))) {
+            String messageBody = Files.readString(Path.of("/src/java/resources" + request.getFileTarget()));
+            HttpResponse httpResponse = new HttpResponse(200, "OK");
+            request.setHeaderField("Connection: ", "close");
+            request.setHeaderField("Content-Length", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
+            request.setHeaderField("Content-type", getContentType(request.getFileTarget()));
+            httpResponse.setMessageBody(messageBody);
+            return httpResponse;
+        }
         InputStream fileStream = getClass().getResourceAsStream(request.getFileTarget());
-        // TODO: Hva faen skjer med != null her? Funker jo ikke
         if (fileStream != null) {
-            // TODO: Legge inn content type
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             fileStream.transferTo(buffer);
             int contentLength = buffer.toString().getBytes(StandardCharsets.UTF_8).length;
