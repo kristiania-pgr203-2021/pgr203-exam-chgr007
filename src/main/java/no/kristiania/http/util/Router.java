@@ -30,6 +30,8 @@ public class Router {
             case "/":
                 redirect("/index.html");
                 break;
+            //case "/api/questionaires":
+              //  writeOkResponse(printQuestionaires(), "/index.html");
             case "/api/products":
                 writeOkResponse(printProducts(), "/listProducts.html");
                 break;
@@ -127,6 +129,12 @@ public class Router {
         }
         return string.toString();
     }
+
+    /*private String printQuestionaires() {
+        StringBuilder string = new StringBuilder();
+
+        String[] categories;
+    }*/
 
     private String printCategories() {
 

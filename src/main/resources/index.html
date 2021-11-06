@@ -2,16 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Webshop</title>
+    <title>Questionaire</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <main>
-        <h1>Welcome to the web shop</h1>
+        <h1>Welcome to the Questionaire</h1>
+
+        <div id="questionaireList"></div>
+
+        <script>
+            fetch("/api/questionaires").then(function (res) {
+                return res.text()
+            }).then(function (text) {
+                document.querySelector("#questionaireList").innerHTML = text;
+            });
+        </script>
     
         <ul>
-            <li><a href="/listProducts.html">List existing products</a></li>
-            <li><a href="/newProduct.html">Add new product</a></li>
+            <!--<li><a href="/listQuestionaires.html">List existing questionaires</a></li>-->
+            <li><a href="/newQuestionaire.html">Add new questionnaire</a></li>
         </ul>
     </main>
 </body>

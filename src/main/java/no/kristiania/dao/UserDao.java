@@ -5,7 +5,7 @@ import no.kristiania.http.User;
 import javax.sql.DataSource;
 import java.sql.*;
 
-public class UserDao extends DataAccesObject<User> {
+public class UserDao extends DataAccessObject<User> {
 
     public UserDao(DataSource dataSource) {
         super(dataSource, "person");

@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnswerDao extends DataAccesObject<Answer> {
+public class AnswerDao extends DataAccessObject<Answer> {
     public AnswerDao(DataSource dataSource, String dbName) {
         super(dataSource, dbName);
     }
