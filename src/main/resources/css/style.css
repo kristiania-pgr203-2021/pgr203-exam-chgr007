@@ -76,8 +76,7 @@ li{
      flex: auto;
  }
 
-.questionaire{
-    /*background-image: url("../images/seagull.jpeg");*/
+.questionnaire{
     margin: 5px;
     padding: 10px;
     width: 200px;
