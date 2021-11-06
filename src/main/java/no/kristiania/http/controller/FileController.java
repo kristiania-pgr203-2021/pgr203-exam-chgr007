@@ -12,6 +12,7 @@ import java.sql.SQLException;
 public class FileController implements HttpController {
     @Override
     public HttpResponse handle(HttpRequest request) throws SQLException, IOException {
+        // TODO: Fjerne dev-mode
         InputStream fileStream = getClass().getResourceAsStream(request.getFileTarget());
         // TODO: Hva faen skjer med != null her? Funker jo ikke
         if (fileStream != null) {
@@ -26,10 +27,10 @@ public class FileController implements HttpController {
             return httpResponse;
         } else {
             HttpResponse httpResponse = new HttpResponse(404, "File not found");
-            String messageBody = String.format("<h1>File %s could not be found", request.getFileTarget());
-            request.setHeaderField("Connection: ", "Close");
-            request.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8)));
-            request.setMessageBody(messageBody);
+            String messageBody = String.format("<h3>File %s could not be found</h3>", request.getFileTarget().substring(1,request.getFileTarget().length()));
+            httpResponse.setHeaderField("Connection: ", "Close");
+            httpResponse.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8)));
+            httpResponse.setMessageBody(messageBody.toString());
             return httpResponse;
         }
     }

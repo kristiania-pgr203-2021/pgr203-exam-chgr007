@@ -42,7 +42,7 @@ public class HttpMessage {
     }
 
     public void setMessageBody(String message) {
-        messageBody = message;
+        this.messageBody = message;
     }
 
     private String readLine() throws IOException {
