@@ -6,23 +6,92 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <main>
-        <h1>Welcome to the Questionaire</h1>
-
-        <div id="questionaireList"></div>
-
-        <script>
-            fetch("/api/questionaires").then(function (res) {
-                return res.text()
-            }).then(function (text) {
-                document.querySelector("#questionaireList").innerHTML = text;
-            });
-        </script>
-    
-        <ul>
-            <!--<li><a href="/listQuestionaires.html">List existing questionaires</a></li>-->
+    <div class="top-bar">
+        <h1>Welcome to the Questionnaire</h1>
+        <div class="nav-bar">
             <li><a href="/newQuestionaire.html">Add new questionnaire</a></li>
-        </ul>
+        </div>
+    </div>
+    <main>
+        <div class="flex-container">
+            <div class="questionaire flex-content">
+                <h1>Avansert Java</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Hvilken Burrito er du?</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Hva skal du ha til middag?</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Hvordan går det?</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Dagbok</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Hemmelige passord</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+            <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+            <div class="questionaire flex-content">
+                <h1>Tacoingredienser</h1>
+            </div>
+
+        </div>
+
+
     </main>
+    <script>
+    </script>
 </body>
 </html>

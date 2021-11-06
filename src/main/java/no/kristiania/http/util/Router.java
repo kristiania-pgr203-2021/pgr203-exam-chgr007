@@ -1,12 +1,17 @@
 package no.kristiania.http.util;
 
+import no.kristiania.dao.QuestionDao;
+import no.kristiania.dao.QuestionnaireDao;
 import no.kristiania.http.model.Product;
+import no.kristiania.http.model.Questionnaire;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +35,6 @@ public class Router {
             case "/":
                 redirect("/index.html");
                 break;
-            //case "/api/questionaires":
-              //  writeOkResponse(printQuestionaires(), "/index.html");
             case "/api/products":
                 writeOkResponse(printProducts(), "/listProducts.html");
                 break;
@@ -130,13 +133,8 @@ public class Router {
         return string.toString();
     }
 
-    /*private String printQuestionaires() {
-        StringBuilder string = new StringBuilder();
-
-        String[] categories;
-    }*/
-
     private String printCategories() {
+
 
         StringBuilder string = new StringBuilder();
 

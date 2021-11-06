@@ -50,11 +50,11 @@ public class QuestionnaireDaoTest {
 
         //adds questions
         Question question = new Question();
-        question.setQuestionaireId(questionnaire.getId());
+        question.setQuestionnaireId(questionnaire.getId());
         question.setQuestion("Hva tenker du om eksamen i Avansert Java?");
 
         Question question1 = new Question();
-        question1.setQuestionaireId(questionnaire.getId());
+        question1.setQuestionnaireId(questionnaire.getId());
         question1.setQuestion("På en skala fra 1-5, hvor stresset er du?");
 
         questionDao.save(question);
@@ -101,7 +101,7 @@ public class QuestionnaireDaoTest {
 
         Question question = new Question();
         question.setQuestion("Hvordan har du det i dag?");
-        question.setQuestionaireId(questionnaire.getId());
+        question.setQuestionnaireId(questionnaire.getId());
 
         questionDao.save(question);
 
@@ -117,7 +117,7 @@ public class QuestionnaireDaoTest {
 
         Question question = new Question();
         question.setQuestion("Hvordan har du det i dag?");
-        question.setQuestionaireId(questionnaire.getId());
+        question.setQuestionnaireId(questionnaire.getId());
         questionDao.save(question);
 
         Answer answer1 = new Answer();
@@ -150,7 +150,7 @@ public class QuestionnaireDaoTest {
 
         Question question = new Question();
         question.setQuestion("Hvordan har du det i dag?");
-        question.setQuestionaireId(questionnaire.getId());
+        question.setQuestionnaireId(questionnaire.getId());
         questionDao.save(question);
 
         Answer answer1 = new Answer();

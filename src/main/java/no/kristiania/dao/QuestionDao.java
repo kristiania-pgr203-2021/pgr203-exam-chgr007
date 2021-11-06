@@ -28,7 +28,7 @@ public class QuestionDao extends DataAccessObject<Question> {
     @Override
     public void setFieldsToUpdateInDB(Question question, PreparedStatement statement) throws SQLException {
         statement.setString(1, question.getQuestion());
-        statement.setLong(2, question.getQuestionaireId());
+        statement.setLong(2, question.getQuestionnaireId());
     }
 
 
@@ -37,7 +37,7 @@ public class QuestionDao extends DataAccessObject<Question> {
         Question question = new Question();
         question.setQuestion(rs.getString("question"));
         question.setId(rs.getLong("id"));
-        question.setQuestionaireId(rs.getLong("questionnaire_id"));
+        question.setQuestionnaireId(rs.getLong("questionnaire_id"));
         return question;
     }
 
