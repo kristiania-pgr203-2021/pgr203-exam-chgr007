@@ -22,7 +22,7 @@ public class Router {
         this.products = products;
     }
 
-    public void route(HttpRequest message, Path rootDirectory) throws IOException, SQLException {
+    public void route(HttpRequest message, Path rootDirectory) throws IOException {
 
         switch (message.getFileTarget()) {
             case "/api/newProduct":
@@ -128,13 +128,8 @@ public class Router {
         return string.toString();
     }
 
-    /*private String printQuestionaires() {
-        StringBuilder string = new StringBuilder();
-
-        String[] categories;
-    }*/
-
     private String printCategories() {
+
 
         StringBuilder string = new StringBuilder();
 

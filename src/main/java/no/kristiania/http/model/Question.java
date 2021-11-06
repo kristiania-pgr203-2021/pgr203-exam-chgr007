@@ -7,7 +7,7 @@ public class Question {
 
     private long id;
     private String question;
-    private long questionaireId;
+    private long questionnaireId;
 
 
     public void setQuestion(String question) {
@@ -26,12 +26,12 @@ public class Question {
         this.id = id;
     }
 
-    public long getQuestionaireId() {
-        return questionaireId;
+    public long getQuestionnaireId() {
+        return questionnaireId;
     }
 
-    public void setQuestionaireId(long questionaireId) {
-        this.questionaireId = questionaireId;
+    public void setQuestionnaireId(long questionnaireId) {
+        this.questionnaireId = questionnaireId;
     }
 
     @Override
