@@ -1,5 +1,6 @@
 package no.kristiania.http.util;
 
+import no.kristiania.http.controller.FileController;
 import no.kristiania.http.model.Product;
 
 import java.io.IOException;
@@ -7,6 +8,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +22,7 @@ public class Router {
         this.products = products;
     }
 
-    public void route(HttpRequest message, Path rootDirectory) throws IOException {
+    public void route(HttpRequest message, Path rootDirectory) throws IOException, SQLException {
 
         switch (message.getFileTarget()) {
             case "/api/newProduct":
@@ -39,12 +41,8 @@ public class Router {
                 writeOkResponse(printCategories(), "/newProduct.html");
                 break;
             default:
-                if (rootDirectory != null && Files.exists(rootDirectory.resolve(message.getFileTarget().substring(1)))) {
-                    String responseTxt = Files.readString(rootDirectory.resolve(message.getFileTarget().substring(1)));
-                    writeOkResponse(responseTxt, message.getFileTarget());
-                } else {
-                    writeNotFoundResponse(message);
-                }
+                FileController fileController = new FileController();
+                fileController.handle(message).write(clientSocket);
                 break;
         }
         clientSocket.close();
