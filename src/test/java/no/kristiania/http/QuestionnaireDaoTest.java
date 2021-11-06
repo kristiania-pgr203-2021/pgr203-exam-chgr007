@@ -4,6 +4,7 @@ import no.kristiania.dao.*;
 import no.kristiania.http.model.Answer;
 import no.kristiania.http.model.Question;
 import no.kristiania.http.model.Questionnaire;
+import no.kristiania.http.util.Authenticator;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import java.util.Properties;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class QuestionnaireDaoTest {
@@ -38,7 +40,7 @@ public class QuestionnaireDaoTest {
         user.setEmail("start@persson.no");
         user.setFirstName("start");
         user.setLastName("Persson");
-
+        user.setPassword("420");
         userDao.save(user);
 
         //adds questionnaire
@@ -173,12 +175,29 @@ public class QuestionnaireDaoTest {
         user.setEmail("test@persson.no");
         user.setFirstName("test");
         user.setLastName("Persson");
-
+        user.setPassword("123");
         userDao.save(user);
 
         assertThat(user)
                 .usingRecursiveComparison()
                 .isEqualTo(userDao.retrieveById(user.getId()));
+    }
+
+    @Test
+    void shouldAuthenticateUser() throws SQLException {
+        UserDao userDao = new UserDao(createDataSource());
+        User user = new User();
+        user.setFirstName("Person");
+        user.setLastName("Per");
+        user.setEmail("perpersson@person.no");
+        String password = "superSe<r3tP4ssw0rd";
+        String encryptedPass = Authenticator.encryptPass(password);
+        user.setPassword(encryptedPass);
+
+        userDao.save(user);
+
+        User userFromServer = userDao.retrieveById(user.getId());
+        assertTrue(Authenticator.validatePassword(password, userFromServer.getPassword()));
     }
 
     //used for internal databases

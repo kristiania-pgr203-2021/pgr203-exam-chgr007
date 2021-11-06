@@ -24,8 +24,8 @@ public class QuestionController implements HttpController{
             Question question = questionDao.retrieveById(id);
             String messageBody = "question="+question.getQuestion();
             httpResponse.setMessageBody(messageBody);
-            httpResponse.setHeaderField("Connection: ", "close");
-            httpResponse.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
+            httpResponse.setHeaderField("Connection", "close");
+            httpResponse.setHeaderField("Content-Length", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
             return httpResponse;
         } else if (request.getRequestType().equalsIgnoreCase("post")) {
             // Add question to DB

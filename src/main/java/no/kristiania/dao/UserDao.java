@@ -13,12 +13,12 @@ public class UserDao extends DataAccessObject<User> {
 
     @Override
     protected PreparedStatement createPreparedStatementForUpdate(Connection connection) throws SQLException {
-        return connection.prepareStatement("update person set first_name = ?, last_name = ?, email = ?");
+        return connection.prepareStatement("update person set first_name = ?, last_name = ?, email = ?, password = ?");
     }
 
     @Override
     protected PreparedStatement createPreparedStatementForSave(Connection connection) throws SQLException {
-        return connection.prepareStatement("insert into person(first_name,last_name,email) values (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+        return connection.prepareStatement("insert into person(first_name,last_name,email,password) values (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
     }
 
     @Override
@@ -31,6 +31,7 @@ public class UserDao extends DataAccessObject<User> {
         statement.setString(1, model.getFirstName());
         statement.setString(2, model.getLastName());
         statement.setString(3, model.getEmail());
+        statement.setString(4, model.getPassword());
     }
 
     @Override
@@ -40,6 +41,7 @@ public class UserDao extends DataAccessObject<User> {
         user.setFirstName(rs.getString("first_name"));
         user.setLastName(rs.getString("last_name"));
         user.setEmail(rs.getString("email"));
+        user.setPassword(rs.getString("password"));
         return user;
     }
 }
