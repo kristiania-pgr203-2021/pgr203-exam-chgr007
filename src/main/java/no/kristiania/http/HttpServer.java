@@ -1,16 +1,23 @@
 package no.kristiania.http;
 
+import no.kristiania.dao.QuestionDao;
+import no.kristiania.http.controller.QuestionController;
 import no.kristiania.http.model.Product;
 import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.Router;
+import org.flywaydb.core.Flyway;
+import org.postgresql.ds.PGSimpleDataSource;
 
+import javax.sql.DataSource;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class HttpServer {
 
@@ -33,6 +40,7 @@ public class HttpServer {
                 Socket clientSocket = serverSocket.accept();
                 HttpRequest message = new HttpRequest(clientSocket);
                 Router router = new Router(clientSocket, products);
+                router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource(), "question")));
                 router.route(message, rootDirectory);
                 if (message.getRequestType().equalsIgnoreCase("POST")) {
                     products.add(
@@ -44,6 +52,28 @@ public class HttpServer {
                 e.printStackTrace();
             }
         }
+    }
+    private DataSource createDataSource() {
+        //TODO: Oppdatere til dataSource.username osv. ihht. specs fra Johannes
+        Properties prop = getProperties();
+        PGSimpleDataSource dataSource = new PGSimpleDataSource();
+        dataSource.setUser(prop.getProperty("dataSource.username"));
+        dataSource.setPassword(prop.getProperty("dataSource.password"));
+        dataSource.setURL(prop.getProperty("dataSource.url"));
+
+        Flyway.configure().dataSource(dataSource).load().migrate();
+
+        return dataSource;
+    }
+    private Properties getProperties() {
+        Properties properties = new Properties();
+
+        try (InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("pgr203.properties")) {
+            properties.load(resourceAsStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return properties;
     }
 
     public void setRoot(String root){

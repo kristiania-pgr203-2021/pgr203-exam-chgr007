@@ -38,7 +38,7 @@ public class FileController implements HttpController {
             return httpResponse;
         } else {
             HttpResponse httpResponse = new HttpResponse(404, "File not found");
-            String messageBody = String.format("<h1>File %s could not be found", request.getFileTarget());
+            String messageBody = String.format("<h2>File %s could not be found</h2>", request.getFileTarget());
             httpResponse.setHeaderField("Connection: ", "Close");
             httpResponse.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8)));
             httpResponse.setMessageBody(messageBody);
