@@ -1,14 +1,20 @@
-body {
-    background-color: aliceblue;
-    font-family: Arial;
+html, body {
+    background-color: #2a2e2f;
+    font-family: Arial, serif;
+    padding: 2em;
 }
 
 main {
+    position: fixed;
+    top: 10em;
+    left: 50%;
+    margin-left: -31em;
     padding: 1em;
-    background-color: white;
-    max-width: 60em;
-    margin: auto;
-    border-radius: .5em;
+    background-color: #ffffff;
+    color: white;
+    height: 44em;
+    max-height: 60em;
+    width: 60em;
 }
 
 h1{
@@ -38,4 +44,48 @@ td{
 li{
     list-style-type: none;
 
+}
+
+.top-bar{
+    z-index: 10;
+    position: fixed;
+    top: 1em;
+    left: 50%;
+    margin-left: -31em;
+    padding: 1em;
+    background-color: #54696d;
+    color: white;
+    height: 7em;
+    width: 60em;
+    border-top-left-radius: .5em;
+    border-top-right-radius: .5em;
+
+}
+
+.flex-container{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    height: auto;
+    max-height: 44em;
+    overflow: scroll;
+
+}
+
+ .flex-content{
+     flex: auto;
+ }
+
+.questionaire{
+    /*background-image: url("../images/seagull.jpeg");*/
+    margin: 5px;
+    padding: 10px;
+    width: 200px;
+    height: 200px;
+    background-color: #eeb10d;
+    overflow-wrap: break-word;
+}
+
+a{
+    color: white;
 }

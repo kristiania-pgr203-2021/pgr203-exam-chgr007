@@ -1,15 +1,17 @@
 package no.kristiania.dao;
 
-import no.kristiania.http.model.Question;
-
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
-public abstract class DataAccesObject<T> {
+public abstract class DataAccessObject<T> {
 
     public DataSource dataSource;
     public String dbName;
-    public DataAccesObject(DataSource dataSource, String dbName) {
+    public DataAccessObject(DataSource dataSource, String dbName) {
         this.dataSource = dataSource;
         this.dbName = dbName;
     }
@@ -25,6 +27,21 @@ public abstract class DataAccesObject<T> {
                 }
             }
         }
+    }
+
+    public ArrayList<T> retrieveAll() throws SQLException{
+
+        ArrayList<T> arrayList = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("select * from " + dbName)) {
+                try (ResultSet rs = statement.executeQuery()) {
+                    rs.next();
+                    arrayList.add(mapValuesToObject(rs));
+                }
+            }
+        }
+
+        return arrayList;
     }
 
     public void save(T model) throws SQLException {

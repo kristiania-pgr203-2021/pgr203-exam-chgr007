@@ -31,5 +31,6 @@ public class Program {
 
         System.out.println("Token valid?: " + JWT.validateToken(token));
 
+        HttpServer server = new HttpServer(0);
     }
 }

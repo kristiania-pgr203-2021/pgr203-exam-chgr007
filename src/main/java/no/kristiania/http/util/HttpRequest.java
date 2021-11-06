@@ -22,7 +22,9 @@ public class HttpRequest extends HttpMessage {
         super(clientSocket);
         queryParams = parseRequestLine();
     }
-
+    public boolean hasQueryParam(String param) {
+        return queryParams.containsKey(param);
+    }
     public String getFileTarget() {
         return fileTarget;
     }
