@@ -13,19 +13,19 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Authenticator {
-    public static String ENCRYPTION = "bcrypt";
-    private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final String ENCRYPTION = "bcrypt";
+    private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public static PasswordEncoder passwordEncoder =
+    public PasswordEncoder passwordEncoder =
             PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    public static String encryptPass(String pass) {
+    public String encryptPass(String pass) {
         return passwordEncoder.encode("{"+ENCRYPTION+"}"+pass);
     }
-    public static boolean validatePassword(String pass, String encryptedPass) {
+    public boolean validatePassword(String pass, String encryptedPass) {
         return passwordEncoder.matches(pass,encryptedPass);
     }
 
-    public static String generateToken(long id, String userName) {
+    public String generateToken(long id, String userName) {
         // https://github.com/jwtk/jjwt#install-jdk-maven
         Calendar c = Calendar.getInstance();
         Date now = new Date();
@@ -44,7 +44,7 @@ public class Authenticator {
 
         return jws;
     }
-    public static boolean validateToken(String token) {
+    public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(key)

@@ -185,25 +185,27 @@ public class QuestionnaireDaoTest {
 
     @Test
     void shouldAuthenticateUser() throws SQLException {
+        Authenticator authenticator = new Authenticator();
         UserDao userDao = new UserDao(createDataSource());
         User user = new User();
         user.setFirstName("Person");
         user.setLastName("Per");
         user.setEmail("perpersson@person.no");
         String password = "superSe<r3tP4ssw0rd";
-        String encryptedPass = Authenticator.encryptPass(password);
+        String encryptedPass = authenticator.encryptPass(password);
         user.setPassword(encryptedPass);
 
         userDao.save(user);
 
         User userFromServer = userDao.retrieveById(user.getId());
-        assertTrue(Authenticator.validatePassword(password, userFromServer.getPassword()));
+        assertTrue(authenticator.validatePassword(password, userFromServer.getPassword()));
     }
 
     //used for internal databases
     private DataSource createDataSource() {
         //TODO: Oppdatere til dataSource.username osv. ihht. specs fra Johannes
         Properties prop = getProperties();
+
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         dataSource.setUser(prop.getProperty("dataSource.username"));
         dataSource.setPassword(prop.getProperty("dataSource.password"));
