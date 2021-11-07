@@ -9,6 +9,8 @@ import no.kristiania.http.util.HttpResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 public class SignupController implements HttpController {
@@ -37,11 +39,16 @@ public class SignupController implements HttpController {
                 user.setLastName(lastName);
 
                 userDao.save(user);
+
+                Calendar c = Calendar.getInstance();
+                c.add(Calendar.DATE, 1);
+                Date expiration = c.getTime();
+                //TODO: legge inn redirect 303 her kanskje?
                 String responseMsg = "<h1>Successfully signed up!</h1>";
                 HttpResponse response = new HttpResponse(200, "OK");
                 response.setHeaderField("Connection", "close");
                 response.setHeaderField("Content-Length", String.valueOf(responseMsg.getBytes(StandardCharsets.UTF_8).length));
-                response.setHeaderField("Set-Cookie", "AuthToken="+auth.generateToken(user.getId(),userName));
+                response.setHeaderField("Set-Cookie", "AuthToken="+auth.generateToken(user.getId(),userName)+";Expires="+expiration.toString());
                 response.setMessageBody(responseMsg);
                 return response;
             };
