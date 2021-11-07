@@ -13,32 +13,38 @@
         </div>
     </div>
     <main>
-        <div class="flex-container">
-            <div class="questionaire flex-content">
-                <h1>Avansert Java</h1>
-            </div>
-            <div class="questionaire flex-content">
-                <h1>Hvilken Burrito er du?</h1>
-            </div>
-            <div class="questionaire flex-content">
-                <h1>Hva skal du ha til middag?</h1>
-            </div>
-            <div class="questionaire flex-content">
-                <h1>Hvordan går det?</h1>
-            </div>
-            <div class="questionaire flex-content">
-                <h1>Dagbok</h1>
-            </div>
-            <div class="questionaire flex-content">
-                <h1>Hemmelige passord</h1>
-            </div>
-            <div class="questionaire flex-content">
-                <h1>Tacoingredienser</h1>
-            </div>
+        <div class="flex-container" id="questionnaireContainer">
         </div>
 
     </main>
     <script>
+        fetch("/api/questionnaires").then(function (res) {
+            return res.text()
+        }).then(function (text) {
+            document.querySelector("#questionnaireContainer").innerHTML = text;
+
+            let questionnaires = document.getElementsByClassName("questionnaire");
+
+            for(let i = 0; i<questionnaires.length; i++){
+                console.log("RUNNING!")
+
+                let r = Math.floor(Math.random()*255+1);
+                let g = Math.floor(Math.random()*255+1);
+                let b = Math.floor(Math.random()*255+1);
+
+
+                const brightness = Math.round(((r * 299) +
+                    (g * 587) +
+                    (b * 114)) / 1000);
+
+                const textColour = (brightness > 125) ? 'black' : 'white';
+
+                questionnaires[i].style.backgroundColor = 'rgb(' + r + ',' + g + ',' + b + ')'
+                questionnaires[i].style.color = textColour;
+            }
+        });
+
+
     </script>
 </body>
 </html>

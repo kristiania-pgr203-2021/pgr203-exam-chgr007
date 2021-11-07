@@ -35,8 +35,9 @@ public abstract class DataAccessObject<T> {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("select * from " + dbName)) {
                 try (ResultSet rs = statement.executeQuery()) {
-                    rs.next();
-                    arrayList.add(mapValuesToObject(rs));
+                    while(rs.next()){
+                        arrayList.add(mapValuesToObject(rs));
+                    }
                 }
             }
         }

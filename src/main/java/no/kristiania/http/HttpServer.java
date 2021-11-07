@@ -1,7 +1,9 @@
 package no.kristiania.http;
 
 import no.kristiania.dao.QuestionDao;
+import no.kristiania.dao.QuestionnaireDao;
 import no.kristiania.http.controller.QuestionController;
+import no.kristiania.http.controller.QuestionnaireController;
 import no.kristiania.http.model.Product;
 import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.Router;
@@ -23,12 +25,11 @@ public class HttpServer {
 
     private int port;
     private ServerSocket serverSocket;
+    private List<Product> products;
 
     public HttpServer(int port) throws IOException {
         this.port = port;
         this.serverSocket = new ServerSocket(port);
-
-        //TODO: replace with thread pool
         new Thread(this::handleClient).start();
     }
 
@@ -39,11 +40,8 @@ public class HttpServer {
                 Socket clientSocket = serverSocket.accept();
                 HttpRequest message = new HttpRequest(clientSocket);
                 Router router = new Router(clientSocket);
-                router.addController("/api/question",
-                        new QuestionController(
-                                new QuestionDao(createDataSource(), "question")
-                        ));
-
+                router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource(), "question")));
+                router.addController("/api/questionnaires", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire")));
                 router.route(message);
                 // TODO: håndtere feil i router, skrive ut feilmeldinger til nettleser
             } catch (IOException | SQLException e) {
