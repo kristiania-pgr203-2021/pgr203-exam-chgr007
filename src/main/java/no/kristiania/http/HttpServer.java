@@ -45,6 +45,7 @@ public class HttpServer {
                 Router router = new Router(clientSocket);
                 router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource(), "question")));
                 router.addController("/api/questionnaires", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire")));
+                router.addController("/api/questionnaire", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire"), new QuestionDao(createDataSource(), "question")));
                 router.addController("/api/login", new LoginController(new UserDao(createDataSource())));
                 router.addController("/api/signup", new SignupController(new UserDao(createDataSource())));
                 router.route(message);

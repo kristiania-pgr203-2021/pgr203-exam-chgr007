@@ -9,7 +9,13 @@
 <body>
 
 <div class="top-bar">
-    <h1>New Questionnaire</h1>
+    <div class="centred">
+        <h1 id="questionnaire-name" style="display: inline-block; text-align: center">New Questionnaire</h1>
+        <svg id="edit-questionnaire-name" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="" class="bi bi-pencil-square"  viewBox="0 0 16 16">
+            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+        </svg>
+    </div>
     <div class="nav-bar">
         <li><a href="/index.html">Main Menu</a></li>
     </div>
@@ -17,13 +23,59 @@
 </div>
 
 <main>
-    <button id="add-new-question-btn">Add new Question</button>
+    <div id="pop-up-container"></div>
+    <div class="flex-container">
+        <div id="add-new-question-button" class="flexbox-box flex-content">
+            <h2 class="centred">Add new question</h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" fill="currentColor" class="margin-auto bi bi-plus-square" display="block" viewBox="0 0 16 16">
+                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+        </div>
+    </div>
 </main>
 
 <div id="add-question-div"></div>
 
 
 <script>
+
+    const editQuestinnaireName = document.getElementById("edit-questionnaire-name");
+    const questonnaireName = document.getElementById("questionnaire-name");
+    const addNewQuestionButton = document.getElementById("add-new-question-button");
+    const popUpContainer = document.getElementById("pop-up-container");
+
+
+    addNewQuestionButton.onclick = questionFormPopup;
+    editQuestinnaireName.onclick = changeName;
+
+    function changeName(){
+        popUpContainer.innerHTML = `<div id="new-question-popup" class="popup">
+            <div class=popup-header><h1>CHANGE QUESTIONNAIRE NAME</h1></div>
+                <form action="/api/changeQuestionnaireName" method="POST">
+                    <input type="text" maxlength="250" name="questionnaireName" placeholder="Write your new name here"></p>
+                    <button>ADD</button>
+                </form>
+            </div>
+        </div>`
+
+        popUpContainer.innerHTML += `<div class="background-panel main"></div>`
+    }
+
+    function questionFormPopup(){
+
+        popUpContainer.innerHTML = `<div id="new-question-popup" class="popup">
+            <div class=popup-header><h1>ADD QUESTION</h1></div>
+                <form action="/api/newQuestion" method="POST">
+                    <input type="text" maxlength="250" name="question" placeholder="Write your question here"></p>
+                    <button>ADD</button>
+                </form>
+            </div>
+        </div>`
+
+        popUpContainer.innerHTML += `<div class="background-panel main"></div>`
+    }
+
 </script>
 </body>
 </html>
