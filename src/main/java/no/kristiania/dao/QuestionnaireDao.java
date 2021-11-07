@@ -12,7 +12,7 @@ public class QuestionnaireDao extends DataAccessObject<Questionnaire> {
 
     @Override
     protected PreparedStatement createPreparedStatementForUpdate(Connection connection) throws SQLException {
-        return connection.prepareStatement("update questionnaire set name = ?");
+        return connection.prepareStatement("update questionnaire set name = ? where id = ?");
 
     }
 

@@ -1,9 +1,12 @@
 package no.kristiania.dao;
 
+import no.kristiania.http.model.Answer;
 import no.kristiania.http.model.Question;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QuestionDao extends DataAccessObject<Question> {
     public QuestionDao(DataSource dataSource, String dbName) {
@@ -41,4 +44,20 @@ public class QuestionDao extends DataAccessObject<Question> {
         return question;
     }
 
+    public List<Question> listByQuestionnaireId(long id) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("select * from question where questionnaire_id = ?")) {
+                statement.setLong(1, id);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    List<Question> questions = new ArrayList<>();
+                    while(resultSet.next()) {
+                        questions.add(
+                                mapValuesToObject(resultSet)
+                        );
+                    }
+                    return questions;
+                }
+            }
+        }
+    }
 }
