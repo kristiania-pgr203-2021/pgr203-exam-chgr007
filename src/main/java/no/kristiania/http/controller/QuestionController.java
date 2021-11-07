@@ -34,6 +34,7 @@ public class QuestionController implements HttpController{
 
             questionDao.save(question);
 
+
         }else if (request.getRequestType().equalsIgnoreCase("post")) {
             // Add question to DB
         } else if (request.getRequestType().equalsIgnoreCase("put")) {
