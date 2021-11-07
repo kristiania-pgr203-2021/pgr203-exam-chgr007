@@ -27,7 +27,14 @@ public class QuestionController implements HttpController{
             httpResponse.setHeaderField("Connection", "close");
             httpResponse.setHeaderField("Content-Length", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
             return httpResponse;
-        } else if (request.getRequestType().equalsIgnoreCase("post")) {
+        } else if(request.getRequestType().equalsIgnoreCase("post") && request.getFileTarget().equalsIgnoreCase("/api/newQuestion")){
+            Question question = new Question();
+            question.setQuestion(request.getPostParams().get("question"));
+            question.setQuestionnaireId(1);
+
+            questionDao.save(question);
+
+        }else if (request.getRequestType().equalsIgnoreCase("post")) {
             // Add question to DB
         } else if (request.getRequestType().equalsIgnoreCase("put")) {
             // Add question to DB

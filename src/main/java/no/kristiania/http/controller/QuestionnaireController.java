@@ -68,7 +68,7 @@ public class QuestionnaireController implements HttpController{
         StringBuilder stringBuilder = new StringBuilder();
         for(Questionnaire questionnaire : questionnaireDao.retrieveAll()){
             stringBuilder.append("<a href=\"questionnaire.html\">");
-            stringBuilder.append("<div class=\"flexbox-box flex-content questionnaire\" id=\"questionnaire_" + questionnaire.getId() + "\">");
+            stringBuilder.append("<div class=\"random-color flexbox-box flex-content questionnaire\" id=\"questionnaire_" + questionnaire.getId() + "\">");
             stringBuilder.append("<h1>").append(questionnaire.getName()).append("</h1>");
             stringBuilder.append("</div>");
             stringBuilder.append("</a>");
@@ -82,7 +82,7 @@ public class QuestionnaireController implements HttpController{
 
         StringBuilder stringBuilder = new StringBuilder();
         for(Question question : questions){
-            stringBuilder.append("<div class=\"flexbox-box flex-content question\">");
+            stringBuilder.append("<div class=\"random-color flexbox-box flex-content question\">");
             stringBuilder.append(question.getQuestion());
             stringBuilder.append("</div>");
         }

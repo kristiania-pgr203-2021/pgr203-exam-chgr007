@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Questionaire</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="javascript/javascript.js"></script>
 </head>
 <body>
     <div class="top-bar">
@@ -14,8 +15,8 @@
     </div>
     <main>
         <div class="flex-container" id="questionnaireContainer">
-            <a href="/newQuestionaire.html">
-                <div class="flexbox-box flex-content">
+            <a href="/newQuestionnaire.html">
+                <div class="random-color flexbox-box flex-content">
                     <h2 class="centred">Add new questionnaire</h2>
                     <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" fill="currentColor" class="margin-auto bi bi-plus-square" display="block" viewBox="0 0 16 16">
                         <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
@@ -24,50 +25,30 @@
                 </div>
             </a>
         </div>
-
     </main>
-    <script>+
+
+    
+
+    <script>
         fetch("/api/questionnaires").then(function (res) {
             return res.text()
         }).then(function (text) {
 
             document.querySelector("#questionnaireContainer").innerHTML += text;
 
-            console.log(text)
-
-            let flexboxBoxes = document.getElementsByClassName("flexbox-box");
-
-            for(let i = 0; i<flexboxBoxes.length; i++){
-                console.log("RUNNING!")
-                console.log(flexboxBoxes[i])
-
-                let r = Math.floor(Math.random()*255+1);
-                let g = Math.floor(Math.random()*255+1);
-                let b = Math.floor(Math.random()*255+1);
-
-
-                const brightness = Math.round(((r * 299) +
-                    (g * 587) +
-                    (b * 114)) / 1000);
-
-                const textColour = (brightness > 125) ? 'black' : 'white';
-
-                flexboxBoxes[i].style.backgroundColor = 'rgb(' + r + ',' + g + ',' + b + ')'
-                flexboxBoxes[i].style.color = textColour;
-            }
-
             questionnaires = document.querySelector("#questionnaire");
 
+            /*
             for(let i = 0; i<questionnaires.length; i++){
                 questionnaires[i].addEventListener("click", function () {
 
                 })
-            }
+            }*/
+            randomColor();
         });
-
-
-
-
     </script>
+
+
+
 </body>
 </html>

@@ -51,6 +51,7 @@ public class HttpServer {
                 router.addController("/api/questionnaire", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire"), new QuestionDao(createDataSource(), "question")));
                 router.addController("/api/login", new LoginController(new UserDao(createDataSource())));
                 router.addController("/api/signup", new SignupController(new UserDao(createDataSource())));
+                router.addController("/api/newQuestion", new QuestionController(new QuestionDao(createDataSource(), "question")));
                 router.route(message);
                 // TODO: håndtere feil i router, skrive ut feilmeldinger til nettleser
             } catch (IOException | SQLException e) {
