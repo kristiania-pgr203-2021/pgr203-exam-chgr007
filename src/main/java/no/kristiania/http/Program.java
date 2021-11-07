@@ -5,7 +5,6 @@ import java.io.IOException;
 
 public class Program {
     public static void main(String[] args) throws IOException {
-        HttpServer server = new HttpServer(8080);
-        //server.addControler()
+        HttpServer server = new HttpServer(0);
     }
 }
