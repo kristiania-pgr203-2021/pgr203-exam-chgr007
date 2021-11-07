@@ -85,6 +85,10 @@ li{
     overflow-wrap: break-word;
 }
 
+.flexbox-box:hover{
+    filter:brightness(85%)
+}
+
 .centred{
     text-align: center;
 }
@@ -95,6 +99,7 @@ li{
 
 a{
     color: white;
+    text-decoration: none;
 }
 
 .popup{
