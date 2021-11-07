@@ -31,8 +31,10 @@ public class QuestionController implements HttpController{
             Question question = new Question();
             question.setQuestion(request.getPostParams().get("question"));
             question.setQuestionnaireId(1);
-
+            httpResponse.setHeaderField("Connection", "close");
             questionDao.save(question);
+            // Kan sende tilbake ID i body her kanskje?
+            return httpResponse;
 
 
         }else if (request.getRequestType().equalsIgnoreCase("post")) {
