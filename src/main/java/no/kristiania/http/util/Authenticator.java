@@ -22,7 +22,7 @@ public class Authenticator {
         return passwordEncoder.encode("{"+ENCRYPTION+"}"+pass);
     }
     public boolean validatePassword(String pass, String encryptedPass) {
-        return passwordEncoder.matches(pass,encryptedPass);
+        return passwordEncoder.matches("{"+ENCRYPTION+"}"+pass,encryptedPass);
     }
 
     public String generateToken(long id, String userName) {
