@@ -48,9 +48,18 @@ public class QuestionnaireController implements HttpController{
             httpResponse.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
             return httpResponse;
         } else if (request.getRequestType().equalsIgnoreCase("get") && request.getFileTarget().equals("/api/questionnaire")) {
-            Map<String,String> postValues = request.getPostParams();
-
-            String messageBody = printAllQuestionnaireQuestions(1);
+            Integer questionnaireId = Integer.parseInt(request.getQueryParam("questionnaireId"));
+            System.out.println(questionnaireId);
+            String messageBody = printAllQuestionnaireQuestions(questionnaireId);
+            httpResponse.setMessageBody(messageBody);
+            httpResponse.setHeaderField("Connection: ", "close");
+            httpResponse.setHeaderField("Content-Length: " , String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
+            return httpResponse;
+            // Add question to DB
+        } else if (request.getRequestType().equalsIgnoreCase("get") && request.getFileTarget().equals("/api/questionnaireName")) {
+            Integer questionnaireId = Integer.parseInt(request.getQueryParam("questionnaireId"));
+            System.out.println(questionnaireId);
+            String messageBody = printQuestionnaireName(questionnaireId);
             httpResponse.setMessageBody(messageBody);
             httpResponse.setHeaderField("Connection: ", "close");
             httpResponse.setHeaderField("Content-Length: " , String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
@@ -60,21 +69,23 @@ public class QuestionnaireController implements HttpController{
             // Add question to DB
         }
 
-        return null;
+        return httpResponse;
     }
 
     private String printAllQuestionnaires() throws SQLException {
-
         StringBuilder stringBuilder = new StringBuilder();
         for(Questionnaire questionnaire : questionnaireDao.retrieveAll()){
-            stringBuilder.append("<a href=\"questionnaire.html\">");
+            stringBuilder.append("<a href=\"questionnaire.html?questionnaireId=" + questionnaire.getId()  + "\">");
             stringBuilder.append("<div class=\"random-color flexbox-box flex-content questionnaire\" id=\"questionnaire_" + questionnaire.getId() + "\">");
-            stringBuilder.append("<h1>").append(questionnaire.getName()).append("</h1>");
+            stringBuilder.append("<h2>").append(questionnaire.getName()).append("</h2>");
             stringBuilder.append("</div>");
             stringBuilder.append("</a>");
         }
-
         return stringBuilder.toString();
+    }
+
+    private String printQuestionnaireName(long questinnaireId) throws SQLException {
+        return "<h1 id=\"questionnaire-name\" style=\"display: inline-block; text-align: center\">" + questionnaireDao.retrieveById(questinnaireId).getName() +"</h1>";
     }
 
     private String printAllQuestionnaireQuestions(long questionnaireId) throws SQLException {

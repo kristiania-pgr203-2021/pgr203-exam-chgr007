@@ -29,13 +29,13 @@ public class HttpServer {
     private int port;
     private ServerSocket serverSocket;
     private List<Product> products;
-    private Logger logger;
+    //private Logger logger;
 
     public HttpServer(int port) throws IOException {
         this.port = port;
         this.serverSocket = new ServerSocket(port);
         new Thread(this::handleClient).start();
-        logger = new Logevents();
+        //logger = new Logevents();
     }
 
     private void handleClient() {
@@ -48,9 +48,10 @@ public class HttpServer {
                 Router router = new Router(clientSocket);
                 router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource(), "question")));
                 router.addController("/api/questionnaires", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire")));
+                router.addController("/api/questionnaireName", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire")));
                 router.addController("/api/questionnaire", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire"), new QuestionDao(createDataSource(), "question")));
                 router.addController("/api/login", new LoginController(new UserDao(createDataSource())));
-                router.addController("/api/signup", new SignupController(new UserDao(createDataSource())));
+               // router.addController("/api/signup", new SignupController(new UserDao(createDataSource())));
                 router.addController("/api/newQuestion", new QuestionController(new QuestionDao(createDataSource(), "question")));
                 router.route(message);
                 // TODO: håndtere feil i router, skrive ut feilmeldinger til nettleser

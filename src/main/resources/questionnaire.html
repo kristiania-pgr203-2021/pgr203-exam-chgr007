@@ -21,7 +21,7 @@
 </div>
 <main>
     <div id="pop-up-container"></div>
-    <div class="flex-container">
+    <div class="flex-container" id="questionContainer">
         <div id="add-new-question-button" class="flexbox-box flex-content">
             <h2 class="centred">Add new question</h2>
             <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" fill="currentColor" class="margin-auto bi bi-plus-square" display="block" viewBox="0 0 16 16">
@@ -35,12 +35,21 @@
 </main>
 <script>
 
-    addNewQuestionButton = document.getElementById("add-new-question-button")
-    popUpContainer = document.getElementById("pop-up-container")
+    const addNewQuestionButton = document.getElementById("add-new-question-button")
+    const popUpContainer = document.getElementById("pop-up-container")
 
     addNewQuestionButton.onclick = questionFormPopup;
 
-    fetch("/api/questionnaire").then(function (res) {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const questionnaireId = urlSearchParams.get("questionnaireId");
+
+    fetch(`/api/questionnaireName?questionnaireId=${questionnaireId}`).then(function (res) {
+        return res.text()
+    }).then(function (text) {
+        document.querySelector("#questionnaire-name").innerHTML = text;
+    });
+
+    fetch(`/api/questionnaire?questionnaireId=${questionnaireId}`).then(function (res) {
         return res.text()
     }).then(function (text) {
 
