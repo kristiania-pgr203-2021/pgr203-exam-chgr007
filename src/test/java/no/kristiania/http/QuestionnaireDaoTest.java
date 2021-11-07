@@ -217,6 +217,27 @@ public class QuestionnaireDaoTest {
                 .contains("AuthToken");
 
     }
+
+    @Test
+    void shouldRegisterUser() throws IOException, SQLException {
+        HttpServer server = new HttpServer(0);
+        HttpClient client = new HttpClient("localhost", server.getPort());
+
+        PostValue<String,String> firstName = new PostValue<>("firstName", "Per");
+        PostValue<String,String> lastName = new PostValue<>("lastName", "Persson");
+        PostValue<String,String> userName = new PostValue<>("userName", "perpersson@person.no");
+        PostValue<String,String> password = new PostValue<>("password", "superSe<r3tP4ssw0rd");
+
+        client.post(List.of(userName,password,firstName,lastName), "/api/signup");
+
+        UserDao userDao = new UserDao(createDataSource());
+        User user = userDao.retrieveByEmail("perpersson@person.no");
+
+        assertThat(user)
+                .extracting(User::getEmail)
+                .isEqualTo("perpersson@person.no");
+    }
+
     //used for internal databases
     private DataSource createDataSource() {
         //TODO: Oppdatere til dataSource.username osv. ihht. specs fra Johannes

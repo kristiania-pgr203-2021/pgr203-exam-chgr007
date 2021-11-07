@@ -36,11 +36,12 @@ public class Authenticator {
 
         String jws = Jwts.builder()
                 .setIssuedAt(now)
-                .setId("myId")
-                .setIssuer("C&M")
-                .setAudience("Johannes")
+                .setId(String.valueOf(id))
+                .setIssuer("Stigen & Gregersen")
+                .setAudience(userName)
                 .setExpiration(expiration)
-                .signWith(key).compact();
+                .signWith(key)
+                .compact();
 
         return jws;
     }
