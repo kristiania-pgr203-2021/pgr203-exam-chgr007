@@ -12,6 +12,8 @@ import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.Router;
 import org.flywaydb.core.Flyway;
 import org.postgresql.ds.PGSimpleDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -29,20 +31,19 @@ public class HttpServer {
     private int port;
     private ServerSocket serverSocket;
     private List<Product> products;
-    private Logger logger;
+    private static final Logger logger = LoggerFactory.getLogger(HttpServer.class);
 
     public HttpServer(int port) throws IOException {
         this.port = port;
         this.serverSocket = new ServerSocket(port);
         new Thread(this::handleClient).start();
-        logger = new Logevents();
     }
 
     private void handleClient() {
         while(true){
             try{
 
-                System.out.printf("Server running at port: %s%n", getPort());
+                logger.info("Server running at http://localhost:{}/", getPort());
                 Socket clientSocket = serverSocket.accept();
                 HttpRequest message = new HttpRequest(clientSocket);
                 Router router = new Router(clientSocket);
