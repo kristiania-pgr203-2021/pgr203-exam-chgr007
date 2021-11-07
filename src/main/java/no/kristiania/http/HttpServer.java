@@ -29,16 +29,19 @@ public class HttpServer {
     private int port;
     private ServerSocket serverSocket;
     private List<Product> products;
+    private Logger logger;
 
     public HttpServer(int port) throws IOException {
         this.port = port;
         this.serverSocket = new ServerSocket(port);
         new Thread(this::handleClient).start();
+        logger = new Logevents();
     }
 
     private void handleClient() {
         while(true){
             try{
+
                 System.out.printf("Server running at port: %s%n", getPort());
                 Socket clientSocket = serverSocket.accept();
                 HttpRequest message = new HttpRequest(clientSocket);

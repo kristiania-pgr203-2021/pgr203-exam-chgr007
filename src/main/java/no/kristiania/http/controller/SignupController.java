@@ -44,12 +44,10 @@ public class SignupController implements HttpController {
                 c.add(Calendar.DATE, 1);
                 Date expiration = c.getTime();
                 //TODO: legge inn redirect 303 her kanskje?
-                String responseMsg = "<h1>Successfully signed up!</h1>";
-                HttpResponse response = new HttpResponse(200, "OK");
+                HttpResponse response = new HttpResponse(303, "See other");
                 response.setHeaderField("Connection", "close");
-                response.setHeaderField("Content-Length", String.valueOf(responseMsg.getBytes(StandardCharsets.UTF_8).length));
-                response.setHeaderField("Set-Cookie", "AuthToken="+auth.generateToken(user.getId(),userName)+";Expires="+expiration.toString());
-                response.setMessageBody(responseMsg);
+                response.setHeaderField("Set-Cookie", "AuthToken="+auth.generateToken(user.getId(),userName)+" ;Expires="+expiration.toString()+ "; Path=/");
+                response.setHeaderField("Location", "/questionnaire.html");
                 return response;
             };
 
