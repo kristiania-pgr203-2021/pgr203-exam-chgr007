@@ -37,6 +37,7 @@ public class SignupController implements HttpController {
                 user.setLastName(lastName);
 
                 userDao.save(user);
+                //TODO: legge inn redirect 303 her kanskje?
                 String responseMsg = "<h1>Successfully signed up!</h1>";
                 HttpResponse response = new HttpResponse(200, "OK");
                 response.setHeaderField("Connection", "close");

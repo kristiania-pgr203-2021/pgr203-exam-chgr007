@@ -4,6 +4,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,8 +39,8 @@ public class Authenticator {
                 .setIssuedAt(now)
                 .setId(String.valueOf(id))
                 .setIssuer("Stigen & Gregersen")
-                .setAudience(userName)
-                .setExpiration(expiration)
+                .setSubject(userName)
+                //.setExpiration(expiration)
                 .signWith(key)
                 .compact();
 
