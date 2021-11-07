@@ -7,3 +7,9 @@ function parseJwt (token) {
     }).join(''));
     return JSON.parse(jsonPayload);
 };
+
+const cookie = document.cookie;
+const tokenEncoded = cookie.substr(cookie.indexOf("=")+1,cookie.length)
+const token = parseJwt(tokenEncoded);
+console.info("User has token")
+console.info(token);

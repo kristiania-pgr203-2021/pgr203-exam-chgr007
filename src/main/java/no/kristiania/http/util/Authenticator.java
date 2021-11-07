@@ -40,7 +40,7 @@ public class Authenticator {
                 .setId(String.valueOf(id))
                 .setIssuer("Stigen & Gregersen")
                 .setSubject(userName)
-                //.setExpiration(expiration)
+                .setExpiration(expiration)
                 .signWith(key)
                 .compact();
 
