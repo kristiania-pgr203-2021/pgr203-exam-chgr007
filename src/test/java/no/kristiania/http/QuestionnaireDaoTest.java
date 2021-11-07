@@ -5,6 +5,7 @@ import no.kristiania.http.model.Answer;
 import no.kristiania.http.model.Question;
 import no.kristiania.http.model.Questionnaire;
 import no.kristiania.http.util.Authenticator;
+import no.kristiania.http.util.PostValue;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
@@ -201,6 +203,20 @@ public class QuestionnaireDaoTest {
         assertTrue(authenticator.validatePassword(password, userFromServer.getPassword()));
     }
 
+    @Test
+    void shouldGenerateTokenForUser() throws IOException {
+        HttpServer server = new HttpServer(0);
+        HttpClient client = new HttpClient("localhost", server.getPort());
+        PostValue<String,String> userName = new PostValue<>("userName", "perpersson@person.no");
+        PostValue<String,String> password = new PostValue<>("password", "superSe<r3tP4ssw0rd");
+        client.post(List.of(userName,password), "/api/login");
+
+        String token = client.getHeader("Set-Cookie");
+        System.out.println(token);
+        assertThat(token)
+                .contains("AuthToken");
+
+    }
     //used for internal databases
     private DataSource createDataSource() {
         //TODO: Oppdatere til dataSource.username osv. ihht. specs fra Johannes

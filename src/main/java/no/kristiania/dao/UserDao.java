@@ -44,4 +44,16 @@ public class UserDao extends DataAccessObject<User> {
         user.setPassword(rs.getString("password"));
         return user;
     }
+
+    public User retrieveByEmail(String userName) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("select * from person where email = ?")) {
+                statement.setString(1, userName);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    resultSet.next();
+                    return mapValuesToObject(resultSet);
+                }
+            }
+        }
+    }
 }

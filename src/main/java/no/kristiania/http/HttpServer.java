@@ -2,6 +2,8 @@ package no.kristiania.http;
 
 import no.kristiania.dao.QuestionDao;
 import no.kristiania.dao.QuestionnaireDao;
+import no.kristiania.dao.UserDao;
+import no.kristiania.http.controller.LoginController;
 import no.kristiania.http.controller.QuestionController;
 import no.kristiania.http.controller.QuestionnaireController;
 import no.kristiania.http.model.Product;
@@ -42,6 +44,7 @@ public class HttpServer {
                 Router router = new Router(clientSocket);
                 router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource(), "question")));
                 router.addController("/api/questionnaires", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire")));
+                router.addController("/api/login", new LoginController(new UserDao(createDataSource())));
                 router.route(message);
                 // TODO: håndtere feil i router, skrive ut feilmeldinger til nettleser
             } catch (IOException | SQLException e) {
@@ -62,7 +65,6 @@ public class HttpServer {
     }
     private Properties getProperties() {
         Properties properties = new Properties();
-
         try (InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("pgr203.properties")) {
             properties.load(resourceAsStream);
         } catch (IOException e) {
