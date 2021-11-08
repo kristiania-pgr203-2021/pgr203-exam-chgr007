@@ -1,11 +1,29 @@
 package no.kristiania.http.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Questionnaire {
 
     private long id;
     private long personId;
     private String name;
+    private List<Question> questions;
 
+    public Questionnaire() {
+        this.questions = new ArrayList<>();
+    }
+
+    public Questionnaire(List<Question> questions) {
+        this.questions = questions;
+    }
+
+    public void addQuestion(Question question) {
+        questions.add(question);
+    }
+    public List<Question> getQuestions() {
+        return this.questions;
+    }
     public long getId(){
         return id;
     }

@@ -8,6 +8,7 @@ public class Question {
     private long id;
     private String question;
     private long questionnaireId;
+    private boolean hasAnswerOptions = false;
 
 
     public void setQuestion(String question) {
@@ -49,4 +50,11 @@ public class Question {
         return result;
     }
 
+    public boolean getHasAnswerOptions() {
+        return hasAnswerOptions;
+    }
+
+    public void setHasAnswerOptions(boolean hasAnswerOptions) {
+        this.hasAnswerOptions = hasAnswerOptions;
+    }
 }

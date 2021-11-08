@@ -26,7 +26,7 @@ public class HttpMessage {
         headerFields = new HashMap<>();
     };
     private void readMessageBody(int contentLength) throws IOException {
-
+        if (contentLength <= 0) return;
         StringBuilder body = new StringBuilder();
         for (int i = 0; i < contentLength; i++) {
             body.append((char)socket.getInputStream().read());
@@ -76,7 +76,7 @@ public class HttpMessage {
         if (getHeader("Content-Length") != null) {
             return Integer.parseInt(getHeader("Content-Length"));
         }
-        return 0;
+        return -1;
     }
 
     public String getMessageBody() {

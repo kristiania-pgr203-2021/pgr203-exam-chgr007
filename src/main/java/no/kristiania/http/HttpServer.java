@@ -40,25 +40,31 @@ public class HttpServer {
     }
 
     private void handleClient() {
-        while(true){
-            try{
-
-                logger.info("Server running at http://localhost:{}/", getPort());
+        logger.info("Server running at http://localhost:{}/", getPort());
+        while (true) {
+            try {
                 Socket clientSocket = serverSocket.accept();
-                HttpRequest message = new HttpRequest(clientSocket);
-                Router router = new Router(clientSocket);
-                router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource(), "question")));
-                router.addController("/api/questionnaires", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire")));
-                router.addController("/api/questionnaireName", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire")));
-                router.addController("/api/questionnaire", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire"), new QuestionDao(createDataSource(), "question")));
-                router.addController("/api/login", new LoginController(new UserDao(createDataSource())));
-                router.addController("/api/signup", new SignupController(new UserDao(createDataSource())));
-                router.addController("/api/newQuestion", new QuestionController(new QuestionDao(createDataSource(), "question")));
-                router.route(message);
-                // TODO: håndtere feil i router, skrive ut feilmeldinger til nettleser
-            } catch (IOException | SQLException e) {
+                new Thread(() -> session(clientSocket)).start();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void session(Socket clientSocket) {
+        try {
+            HttpRequest message = new HttpRequest(clientSocket);
+            Router router = new Router(clientSocket);
+            router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource(), "question")));
+            router.addController("/api/questionnaires", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire"), new QuestionDao(createDataSource(), "question")));
+            router.addController("/api/questionnaireName", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire")));
+            router.addController("/api/questionnaire", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire"), new QuestionDao(createDataSource(), "question")));
+            router.addController("/api/login", new LoginController(new UserDao(createDataSource())));
+            router.addController("/api/signup", new SignupController(new UserDao(createDataSource())));
+            router.addController("/api/newQuestion", new QuestionController(new QuestionDao(createDataSource(), "question")));
+            router.route(message);
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -72,6 +78,7 @@ public class HttpServer {
         Flyway.configure().dataSource(dataSource).load().migrate();
         return dataSource;
     }
+
     private Properties getProperties() {
         Properties properties = new Properties();
         try (InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("pgr203.properties")) {

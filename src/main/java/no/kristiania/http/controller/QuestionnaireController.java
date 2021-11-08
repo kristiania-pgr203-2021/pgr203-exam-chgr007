@@ -6,6 +6,8 @@ import no.kristiania.http.model.Question;
 import no.kristiania.http.model.Questionnaire;
 import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.HttpResponse;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.http.codec.json.Jackson2JsonEncoder;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -36,9 +38,21 @@ public class QuestionnaireController implements HttpController{
         if (request.getRequestType().equalsIgnoreCase("get") && request.hasQueryParam("id")) {
             Long id = Long.valueOf(request.getQueryParam("id"));
             Questionnaire questionnaire = questionnaireDao.retrieveById(id);
+
+// ********************             Alternativ måte å gjøre ting på:
+//            questionDao.listByQuestionnaireId(id).forEach(q -> questionnaire.addQuestion(q));
+//
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            String questionnaireJSON = objectMapper.writeValueAsString(questionnaire);
+//            httpResponse.setHeaderField("Connection: ", "close");
+//            httpResponse.setHeaderField("Content-Type", "application/json");
+//            httpResponse.setHeaderField("Content-Length", String.valueOf(questionnaireJSON.getBytes(StandardCharsets.UTF_8).length));
+//            httpResponse.setMessageBody(questionnaireJSON);
+// *******************************************************************************************************************************************
+
+            httpResponse.setHeaderField("Connection: ", "close");
             String messageBody = "questionnaire="+questionnaire.getName();
             httpResponse.setMessageBody(messageBody);
-            httpResponse.setHeaderField("Connection: ", "close");
             httpResponse.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
             return httpResponse;
         } else if (request.getRequestType().equalsIgnoreCase("get") && request.getFileTarget().equals("/api/questionnaires")) {
