@@ -53,7 +53,6 @@ public class QuestionController implements HttpController{
             return httpResponse;
             // Kan sende tilbake ID i body her kanskje?
         } else if (request.getRequestType().equalsIgnoreCase("get") && request.getFileTarget().equalsIgnoreCase("/api/question")) {
-            System.out.println("Question:" + request.getQueryParam("questionId"));
             Long questionId = Long.parseLong(request.getQueryParam("questionId"));
             String messageBody = printAllQuestionAnswers(questionId);
             httpResponse.setMessageBody(messageBody);
@@ -63,7 +62,6 @@ public class QuestionController implements HttpController{
 
         } else if (request.getRequestType().equalsIgnoreCase("get") && request.getFileTarget().equals("/api/questionName")) {
             Long questionId = Long.parseLong(request.getQueryParam("questionId"));
-            System.out.println("RUNNING PRINT NAME " + printQuestionName(questionId));
             String messageBody = printQuestionName(questionId);
             httpResponse.setMessageBody(messageBody);
             httpResponse.setHeaderField("Connection: ", "close");
@@ -82,7 +80,6 @@ public class QuestionController implements HttpController{
     }
 
     private String printQuestionName(long questionId) throws SQLException {
-        System.out.println("question name:"+questionDao.retrieveById(questionId));
         return questionDao.retrieveById(questionId).getQuestion();
     }
 

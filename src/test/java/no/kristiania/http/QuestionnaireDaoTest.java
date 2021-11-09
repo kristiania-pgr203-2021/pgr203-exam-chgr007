@@ -47,7 +47,7 @@ public class QuestionnaireDaoTest {
 
         //adds questionnaire
         Questionnaire questionnaire = new Questionnaire();
-        questionnaire.setName("Test Questionaire");
+        questionnaire.setName("Eksamensundersøkelse");
         questionnaire.setPersonId(user.getId());
 
         questionnaireDao.save(questionnaire);
@@ -99,6 +99,7 @@ public class QuestionnaireDaoTest {
 
     }
 
+    /*
     @Test
     void shouldSaveQuestionToDatabase() throws IOException, SQLException {
         Questionnaire questionnaire = randomFromDatabase(questionnaireDao);
@@ -183,7 +184,7 @@ public class QuestionnaireDaoTest {
         assertThat(user)
                 .usingRecursiveComparison()
                 .isEqualTo(userDao.retrieveById(user.getId()));
-    }
+    }*/
 
     @Test
     void shouldAuthenticateUser() throws SQLException {

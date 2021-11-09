@@ -4,10 +4,7 @@ import no.kristiania.dao.AnswerDao;
 import no.kristiania.dao.QuestionDao;
 import no.kristiania.dao.QuestionnaireDao;
 import no.kristiania.dao.UserDao;
-import no.kristiania.http.controller.LoginController;
-import no.kristiania.http.controller.QuestionController;
-import no.kristiania.http.controller.QuestionnaireController;
-import no.kristiania.http.controller.SignupController;
+import no.kristiania.http.controller.*;
 import no.kristiania.http.model.Product;
 import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.Router;
@@ -56,7 +53,8 @@ public class HttpServer {
                 router.addController("/api/signup", new SignupController(new UserDao(createDataSource())));
                 router.addController("/api/newQuestion", new QuestionController(new QuestionDao(createDataSource(), "question")));
                 router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource(), "question"), new AnswerDao(createDataSource(), "answer")));
-                router.addController("/api/questionName", new QuestionController(new QuestionDao(createDataSource(), "questionnaire")));
+                router.addController("/api/questionName", new QuestionController(new QuestionDao(createDataSource(), "question")));
+                router.addController("/api/newAnswer", new AnswerController(new AnswerDao(createDataSource(), "answer")));
                 router.route(message);
                 // TODO: håndtere feil i router, skrive ut feilmeldinger til nettleser
             } catch (IOException | SQLException e) {

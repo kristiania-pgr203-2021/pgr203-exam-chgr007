@@ -1,5 +1,7 @@
 package no.kristiania.http;
 
+import org.flywaydb.core.Flyway;
+
 import java.io.IOException;
 
 
