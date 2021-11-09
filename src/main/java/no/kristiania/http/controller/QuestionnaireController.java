@@ -81,12 +81,15 @@ public class QuestionnaireController implements HttpController{
             // Add question to DB
         } else if(request.getRequestType().equalsIgnoreCase("post") && request.getFileTarget().equalsIgnoreCase("/api/newQuestionnaire")){
             Questionnaire questionnaire = new Questionnaire();
-            questionnaire.setName("New Questionnaire");
-            questionnaire.setPersonId(1);
-            httpResponse.setHeaderField("Connection", "close");
+            questionnaire.setName(request.getPostParams().get("questionnaireName"));
+            questionnaire.setPersonId(Long.parseLong(request.getPostParams().get("userId")));
             questionnaireDao.save(questionnaire);
             // Kan sende tilbake ID i body her kanskje?
-            return httpResponse;
+
+            HttpResponse response = new HttpResponse(303, "See other");
+            response.setHeaderField("Connection", "close");
+            response.setHeaderField("Location", "/index.html");
+            return response;
 
         } else if (request.getRequestType().equalsIgnoreCase("delete")) {
             // Add question to DB
