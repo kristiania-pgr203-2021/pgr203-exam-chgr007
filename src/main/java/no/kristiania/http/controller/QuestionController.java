@@ -30,11 +30,18 @@ public class QuestionController implements HttpController{
         } else if(request.getRequestType().equalsIgnoreCase("post") && request.getFileTarget().equalsIgnoreCase("/api/newQuestion")){
             Question question = new Question();
             question.setQuestion(request.getPostParams().get("question"));
-            question.setQuestionnaireId(1);
+
+            long questionnaireId = Long.parseLong(request.getPostParams().get("questionnaireId"));
+
+            question.setQuestionnaireId(questionnaireId);
             httpResponse.setHeaderField("Connection", "close");
             questionDao.save(question);
-            // Kan sende tilbake ID i body her kanskje?
+
+            httpResponse = new HttpResponse(303, "See other");
+            httpResponse.setHeaderField("Connection", "close");
+            httpResponse.setHeaderField("Location", "/questionnaire.html?questionnaireId=" + questionnaireId);
             return httpResponse;
+            // Kan sende tilbake ID i body her kanskje?
 
 
         }else if (request.getRequestType().equalsIgnoreCase("post")) {
