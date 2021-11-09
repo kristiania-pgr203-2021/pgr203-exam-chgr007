@@ -62,8 +62,7 @@ public class QuestionnaireController implements HttpController{
             httpResponse.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
             return httpResponse;
         } else if (request.getRequestType().equalsIgnoreCase("get") && request.getFileTarget().equals("/api/questionnaire")) {
-            Integer questionnaireId = Integer.parseInt(request.getQueryParam("questionnaireId"));
-            System.out.println(questionnaireId);
+            Long questionnaireId = Long.parseLong(request.getQueryParam("questionnaireId"));
             String messageBody = printAllQuestionnaireQuestions(questionnaireId);
             httpResponse.setMessageBody(messageBody);
             httpResponse.setHeaderField("Connection: ", "close");
@@ -71,8 +70,7 @@ public class QuestionnaireController implements HttpController{
             return httpResponse;
             // Add question to DB
         } else if (request.getRequestType().equalsIgnoreCase("get") && request.getFileTarget().equals("/api/questionnaireName")) {
-            Integer questionnaireId = Integer.parseInt(request.getQueryParam("questionnaireId"));
-            System.out.println(questionnaireId);
+            Long questionnaireId = Long.parseLong(request.getQueryParam("questionnaireId"));
             String messageBody = printQuestionnaireName(questionnaireId);
             httpResponse.setMessageBody(messageBody);
             httpResponse.setHeaderField("Connection: ", "close");
@@ -105,7 +103,7 @@ public class QuestionnaireController implements HttpController{
             stringBuilder.append("<div class=\"random-color flexbox-box flex-content questionnaire\" id=\"questionnaire_" + questionnaire.getId() + "\">");
             stringBuilder.append("<h2>").append(questionnaire.getName()).append("</h2>");
             stringBuilder.append("</div>");
-            stringBuilder.append("</a>");
+
         }
         return stringBuilder.toString();
     }
@@ -119,9 +117,11 @@ public class QuestionnaireController implements HttpController{
 
         StringBuilder stringBuilder = new StringBuilder();
         for(Question question : questions){
+            stringBuilder.append("<a href=\"question.html?questionId=" + question.getId()  + "\">");
             stringBuilder.append("<div class=\"random-color flexbox-box flex-content question\">");
             stringBuilder.append(question.getQuestion());
             stringBuilder.append("</div>");
+            stringBuilder.append("</a>");
         }
 
         return stringBuilder.toString();
