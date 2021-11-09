@@ -79,6 +79,15 @@ public class QuestionnaireController implements HttpController{
             httpResponse.setHeaderField("Content-Length: " , String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
             return httpResponse;
             // Add question to DB
+        } else if(request.getRequestType().equalsIgnoreCase("post") && request.getFileTarget().equalsIgnoreCase("/api/newQuestionnaire")){
+            Questionnaire questionnaire = new Questionnaire();
+            questionnaire.setName("New Questionnaire");
+            questionnaire.setPersonId(1);
+            httpResponse.setHeaderField("Connection", "close");
+            questionnaireDao.save(questionnaire);
+            // Kan sende tilbake ID i body her kanskje?
+            return httpResponse;
+
         } else if (request.getRequestType().equalsIgnoreCase("delete")) {
             // Add question to DB
         }
@@ -99,7 +108,7 @@ public class QuestionnaireController implements HttpController{
     }
 
     private String printQuestionnaireName(long questinnaireId) throws SQLException {
-        return "<h1 id=\"questionnaire-name\" style=\"display: inline-block; text-align: center\">" + questionnaireDao.retrieveById(questinnaireId).getName() +"</h1>";
+        return questionnaireDao.retrieveById(questinnaireId).getName();
     }
 
     private String printAllQuestionnaireQuestions(long questionnaireId) throws SQLException {

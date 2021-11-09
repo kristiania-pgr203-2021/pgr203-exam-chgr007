@@ -44,27 +44,20 @@ public class HttpServer {
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                new Thread(() -> session(clientSocket)).start();
-            } catch (IOException e) {
+                HttpRequest message = new HttpRequest(clientSocket);
+                Router router = new Router(clientSocket);
+                router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource(), "question")));
+                router.addController("/api/questionnaires", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire")));
+                router.addController("/api/questionnaireName", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire")));
+                router.addController("/api/questionnaire", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire"), new QuestionDao(createDataSource(), "question")));
+                router.addController("/api/login", new LoginController(new UserDao(createDataSource())));
+                router.addController("/api/signup", new SignupController(new UserDao(createDataSource())));
+                router.addController("/api/newQuestion", new QuestionController(new QuestionDao(createDataSource(), "question")));
+                router.route(message);
+                // TODO: håndtere feil i router, skrive ut feilmeldinger til nettleser
+            } catch (IOException | SQLException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    private void session(Socket clientSocket) {
-        try {
-            HttpRequest message = new HttpRequest(clientSocket);
-            Router router = new Router(clientSocket);
-            router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource(), "question")));
-            router.addController("/api/questionnaires", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire"), new QuestionDao(createDataSource(), "question")));
-            router.addController("/api/questionnaireName", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire")));
-            router.addController("/api/questionnaire", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire"), new QuestionDao(createDataSource(), "question")));
-            router.addController("/api/login", new LoginController(new UserDao(createDataSource())));
-            router.addController("/api/signup", new SignupController(new UserDao(createDataSource())));
-            router.addController("/api/newQuestion", new QuestionController(new QuestionDao(createDataSource(), "question")));
-            router.route(message);
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
         }
     }
 

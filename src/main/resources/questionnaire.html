@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Questionnaire</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="javascript/javascript.js"></script>
+
 </head>
 <body>
 <div class="top-bar">
@@ -38,8 +38,10 @@
     const addNewQuestionButton = document.getElementById("add-new-question-button")
     const popUpContainer = document.getElementById("pop-up-container")
 
-    addNewQuestionButton.onclick = questionFormPopup;
+    //addNewQuestionButton.onclick =()=> questionFormPopup(popUpContainer);
+    addNewQuestionButton.onclick =()=> console.log("Clicked!");
 
+    console.log(addNewQuestionButton);
     const urlSearchParams = new URLSearchParams(window.location.search);
     const questionnaireId = urlSearchParams.get("questionnaireId");
 
@@ -47,6 +49,8 @@
         return res.text()
     }).then(function (text) {
         document.querySelector("#questionnaire-name").innerHTML = text;
+    }).catch(function(error) {
+        console.log(error)
     });
 
     fetch(`/api/questionnaire?questionnaireId=${questionnaireId}`).then(function (res) {
@@ -55,9 +59,13 @@
 
         document.querySelector("#questionContainer").innerHTML += text;
         randomColor();
+    }).catch(function(error) {
+        console.log(error)
     });
 
 </script>
+
+<script src="javascript/javascript.js"></script>
 
 
 

@@ -68,8 +68,11 @@ li{
     flex-direction: row;
     height: auto;
     max-height: 44em;
-    overflow: hidden;
+    overflow: scroll;
+}
 
+.flex-container::-webkit-scrollbar{
+    display: none;
 }
 
  .flex-content{

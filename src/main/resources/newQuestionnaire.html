@@ -47,37 +47,10 @@
     const popUpContainer = document.getElementById("pop-up-container");
 
 
-    addNewQuestionButton.onclick = questionFormPopup;
+    addNewQuestionButton.onclick =()=> questionFormPopup(popUpContainer);
     editQuestinnaireName.onclick = changeName;
 
-    function changeName(){
-        popUpContainer.innerHTML = `<div id="new-question-popup" class="popup">
-            <div class="random-color popup-header"><h1>CHANGE QUESTIONNAIRE NAME</h1></div>
-                <form action="/api/changeQuestionnaireName" method="POST">
-                    <input type="text" maxlength="250" name="questionnaireName" placeholder="Write your new name here"></p>
-                    <button>ADD</button>
-                </form>
-            </div>
-        </div>`
-
-        popUpContainer.innerHTML += `<div class="background-panel main"></div>`
-        randomColor();
-    }
-
-    function questionFormPopup(){
-
-        popUpContainer.innerHTML = `<div id="new-question-popup" class="popup">
-            <div class="random-color popup-header"><h1>ADD QUESTION</h1></div>
-                <form action="/api/newQuestion" method="POST">
-                    <input type="text" maxlength="250" name="question" placeholder="Write your question here"></p>
-                    <button>ADD</button>
-                </form>
-            </div>
-        </div>`
-
-        popUpContainer.innerHTML += `<div class="background-panel main"></div>`
-        randomColor();
-    }
+    
 
     randomColor();
 
