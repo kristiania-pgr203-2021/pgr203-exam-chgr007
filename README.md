@@ -1,7 +1,24 @@
 # PGR203 Avansert Java eksamen
 
+## Funksjonalitet utenfor beskrivelse
+* Serveren benytter JWT (JSON Web Tokens) for å autorisere bruker
+* Serveren benytter Spring Security og Bcryp for å autentisere bruker
+* Serializing til/fra server med JSON, Jackson-biblioteket er benyttet backend
+* Fancy random css farger :D
+
+## Kilder:
+* Decoding av Token i JavaScript:
+* Thread pool:
+
 
 ## Beskriv hvordan programmet skal testes:
+* Sensor bes legge inn følgende linje i pgr203.properties, for å sette key til HS256 algoritmen som benyttes til signering av
+  token: <token.key=w9z$C&F)J@McQfTjWnZr4u7x!A%D*G-K>
+  * Det presiseres at dette er en HTTP-server, ikke https. Alt vil bli sendt i klartekst mellom klient og tjener.
+    Vi har heller ikke bruk veldig mye tid på å forske på Spring Security, og må ta forbehold om feil i oppsett. Dette er ment som demo/POC.
+    Derfor fraråder vi på det sterkeste å benytte reelle passord ved registrering av ny bruker.
+    Nøkkelen til signering av token ville heller aldri blitt opplastet på github i en reell situasjon.
+
 
 ## Korreksjoner av eksamensteksten i Wiseflow:
 
@@ -11,6 +28,7 @@
 
 **Det er viktig å være klar over at eksempel HTML i eksamensoppgaven kun er til illustrasjon. Eksemplene er ikke tilstrekkelig for å løse alle ekstraoppgavene og kandidatene må endre HTML-en for å være tilpasset sin besvarelse**
 
+ 
 
 ## Sjekkliste
 
