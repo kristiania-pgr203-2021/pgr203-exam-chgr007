@@ -48,7 +48,7 @@ public class SignupController implements HttpController {
 
                 HttpResponse response = new HttpResponse(303, "See other");
                 response.setHeaderField("Connection", "close");
-                response.setHeaderField("Set-Cookie", "AuthToken="+auth.generateToken(user.getId(),userName)+" ;Expires="+expiration.toString()+ "; Path=/");
+                response.setHeaderField("Set-Cookie", "AuthToken="+auth.generateToken(user.getId(),userName)+"; Expires="+expiration.toString()+ "; Path=/");
                 response.setHeaderField("Location", "/index.html");
                 return response;
             };

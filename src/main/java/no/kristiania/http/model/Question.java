@@ -1,6 +1,7 @@
 package no.kristiania.http.model;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class Question {
@@ -9,7 +10,7 @@ public class Question {
     private String question;
     private long questionnaireId;
     private boolean hasAnswerOptions = false;
-
+    private List<AnswerOption> answerOptionList;
 
     public void setQuestion(String question) {
         this.question = question;
@@ -17,6 +18,18 @@ public class Question {
 
     public String getQuestion() {
         return question;
+    }
+
+    public boolean isHasAnswerOptions() {
+        return hasAnswerOptions;
+    }
+
+    public List<AnswerOption> getAnswerOptionList() {
+        return answerOptionList;
+    }
+
+    public void setAnswerOptionList(AnswerOption answerOptionList) {
+        this.answerOptionList.add(answerOptionList);
     }
 
     public long getId() {

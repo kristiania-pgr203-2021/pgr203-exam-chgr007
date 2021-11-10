@@ -39,9 +39,9 @@ public class LoginController implements HttpController {
                 c.add(Calendar.DATE, 1);
                 Date expiration = c.getTime();
 
-                HttpResponse response = new HttpResponse(303, "OK");
+                HttpResponse response = new HttpResponse(303, "See other");
                 response.setHeaderField("Connection","close");
-                response.setHeaderField("Set-Cookie", "AuthToken="+token+"; Path=/"+" ;Expires="+expiration);
+                response.setHeaderField("Set-Cookie", "AuthToken="+token+"; Path=/; Expires="+expiration);
                 response.setHeaderField("Location", "/index.html");
                 return response;
             }
