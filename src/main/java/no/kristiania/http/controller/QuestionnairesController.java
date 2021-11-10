@@ -75,8 +75,10 @@ public class QuestionnairesController implements HttpController {
             httpResponse.setHeaderField("Connection: ", "close");
             httpResponse.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
             return httpResponse;
+        } else if (request.getRequestType().equalsIgnoreCase("put")) {
+            // Update questionnaire in db
         } else if (request.getRequestType().equalsIgnoreCase("delete")) {
-            // Add question to DB
+            // remove question from DB
         }
 
         return httpResponse;

@@ -20,10 +20,10 @@ import java.util.concurrent.Executors;
 
 public class HttpServer {
 
-    private int port;
+    private final int port;
     private ServerSocket serverSocket;
-    private static final Logger logger = LoggerFactory.getLogger(HttpServer.class);
-    private ExecutorService threadPool;
+    private final Logger logger = LoggerFactory.getLogger(HttpServer.class);
+    private final ExecutorService threadPool;
     private Thread runningThread = null;
     public HttpServer(int port) throws IOException {
         this.port = port;
@@ -39,10 +39,12 @@ public class HttpServer {
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
+                logger.info("*** Accepted a client connection! ***");
                 this.threadPool.execute(() -> session(clientSocket));
                 // TODO: håndtere feil i router, skrive ut feilmeldinger til nettleser
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("*** I/O ERROR: Connection to client failed! ***");
+                logger.error(e.getMessage());
             }
 
         }
@@ -58,7 +60,7 @@ public class HttpServer {
             configureRouter(router);
             router.route(message);
         } catch (IOException e) {
-            logger.error("*** I/O ERROR: Connection to client failed! ***");
+            logger.error("*** ERROR: Failed to read from client socket! ***");
             logger.error(e.getMessage());
         }
     }

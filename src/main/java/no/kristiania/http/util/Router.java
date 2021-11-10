@@ -16,7 +16,7 @@ import java.util.Map;
 public class Router {
     private final Socket clientSocket;
     private final Map<String, HttpController> controllers;
-    private final Logger logger = LoggerFactory.getLogger(HttpServer.class);
+    private static final Logger logger = LoggerFactory.getLogger(Router.class);
     public Router(Socket clientSocket) {
         this.clientSocket = clientSocket;
         controllers = new HashMap<>();
