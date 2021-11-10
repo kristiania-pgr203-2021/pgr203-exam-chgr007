@@ -53,7 +53,13 @@ function addButton(container, type, id){
 
 
 function popUpForm(container, type, id){
-    container.innerHTML = `
+
+    container.innerHTML = `<div class="background-panel main"></div>`
+    container.innerHTML += `<div id="inner-pop-up-container" class="main"></div>`
+
+    let innerContainer = document.querySelector("#inner-pop-up-container");
+
+    innerContainer.innerHTML += `
     <div id="pop-up-div" class="popup">
         <div class="random-color popup-header">
             <h1>ADD NEW ${type.toUpperCase()} 
@@ -64,9 +70,7 @@ function popUpForm(container, type, id){
         </div>
     </div>`
 
-    console.log(id);
-
-    container.innerHTML += `<div class="background-panel main"></div>`
+    
     randomColor();
 
     const popUpDiv = document.querySelector("#pop-up-div");
@@ -115,7 +119,7 @@ function changeQuestionType(){
     const type = document.getElementById("input-types").value
     const selectedOptionDiv = document.getElementById("selected-option-div");
     const questionType = document.getElementById("question-type")
-    const popUpContainer = document.getElementById("pop-up-container");
+    const popUpContainer = document.getElementById("inner-pop-up-container");
     
 
 
@@ -186,10 +190,14 @@ function printRadioButtons(container, number){
 
         for(i=0; i<number; i++){
             
-            radioPopup.innerHTML += `<input type="radio" value="${radioButtonValues[i].value}" name="${radioButtonValues[i].value}" id="${radioButtonValues[i].value}">
-            <label for="${radioButtonValues[i].value}">${radioButtonValues[i].value}</label><br>`
+            radioPopup.innerHTML += `<div class="radio-answes">
+
+            <input type="radio" id="${radioButtonValues[i].value}" name="answer" value="${radioButtonValues[i].value}">
+            <label  for="${radioButtonValues[i].value}">${radioButtonValues[i].value}</label><br>`
 
         }
+
+        radioPopup.innerHTML += `</div>`
 
         console.log(container.innerHTML);
     console.log(number);

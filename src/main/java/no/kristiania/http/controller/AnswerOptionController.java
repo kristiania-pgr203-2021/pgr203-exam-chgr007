@@ -26,13 +26,11 @@ public class AnswerOptionController implements HttpController {
             Map<String,String> params = request.getPostParams();
             if (params.containsKey("answerOption")) {
                 AnswerOption answerOption = new AnswerOption();
-                int answerId = Integer.parseInt(params.get("answerId"));
-                int range = Integer.parseInt(params.get("range"));
-                answerOption.setAnswerOption(params.get("answerOption"));
-                answerOption.setAnswerId(answerId);
-                answerOption.setRange(range);
-                answerOption.setMinRangeName(params.get("minRangeName"));
-                answerOption.setMaxRangeName(params.get("maxRangeName"));
+                int questionId = Integer.parseInt(params.get("question_id"));
+                answerOption.setAnswerType(params.get("answer_type"));
+                answerOption.setQuestionId(questionId);
+                answerOption.setValue(params.get("value"));
+                answerOption.setName(params.get("name"));
                 answerOptionDao.save(answerOption);
                 return new HttpResponse(200, "OK");
             }

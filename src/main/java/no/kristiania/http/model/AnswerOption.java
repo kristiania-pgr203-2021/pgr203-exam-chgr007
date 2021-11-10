@@ -1,9 +1,10 @@
 package no.kristiania.http.model;
 
 public class AnswerOption {
-    private long id, answerId;
-    private int range;
-    private String answerOption, minRangeName, maxRangeName;
+    private long id, questionId;
+    private Enum<AnswerType> answerType;
+    private String value;
+    private String name;
 
     public long getId() {
         return id;
@@ -13,43 +14,35 @@ public class AnswerOption {
         this.id = id;
     }
 
-    public long getAnswerId() {
-        return answerId;
+    public long getQuestionId() {
+        return questionId;
     }
 
-    public void setAnswerId(long answerId) {
-        this.answerId = answerId;
+    public void setQuestionId(long questionId) {
+        this.questionId = questionId;
     }
 
-    public int getRange() {
-        return range;
+    public Enum<AnswerType> getAnswerType() {
+        return answerType;
     }
 
-    public void setRange(int range) {
-        this.range = range;
+    public void setAnswerType(String answerType) {
+        this.answerType = AnswerType.valueOf(answerType);
     }
 
-    public String getAnswerOption() {
-        return answerOption;
+    public String getValue() {
+        return value;
     }
 
-    public void setAnswerOption(String answerOption) {
-        this.answerOption = answerOption;
+    public void setValue(String value) {
+        this.value = value;
     }
 
-    public String getMinRangeName() {
-        return minRangeName;
+    public String getName() {
+        return name;
     }
 
-    public void setMinRangeName(String minRangeName) {
-        this.minRangeName = minRangeName;
-    }
-
-    public String getMaxRangeName() {
-        return maxRangeName;
-    }
-
-    public void setMaxRangeName(String maxRangeName) {
-        this.maxRangeName = maxRangeName;
+    public void setName(String name) {
+        this.name = name;
     }
 }

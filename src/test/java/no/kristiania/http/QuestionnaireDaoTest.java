@@ -236,31 +236,30 @@ public class QuestionnaireDaoTest {
     void shouldInsertAnswerOptionThrougAPI() throws IOException, SQLException {
         HttpServer server = new HttpServer(0);
         HttpClient client = new HttpClient("localhost", server.getPort());
-        Answer answer = randomFromDatabase(answerDao);
-        PostValue<String, String> answerOption = new PostValue("answerOption", "kake6792");
-        PostValue<String, String> answerId = new PostValue("answerId", String.valueOf(answer.getId()));
-        PostValue<String, String> range = new PostValue("range", "5");
-        PostValue<String, String> minRangeName = new PostValue("minRangeName", "min");
-        PostValue<String, String> maxRangeName = new PostValue("maxRangeName", "max");
+        Question question = randomFromDatabase(questionDao);
+        PostValue<String, String> answerType = new PostValue("answer_type", "range");
+        PostValue<String, String> questionId = new PostValue("questionId", String.valueOf(question.getId()));
+        PostValue<String, String> value = new PostValue("value", "5");
+        PostValue<String, String> name = new PostValue("name", "min");
 
-        client.post(List.of(answerOption, answerId, range, minRangeName, maxRangeName), "/api/answerOption");
+        client.post(List.of(answerType, questionId, value, name), "/api/answerOption");
         List<AnswerOption> answerOptions = answerOptionDao.retrieveAll();
 
+
         assertThat(answerOptions)
-                .extracting(AnswerOption::getAnswerOption)
-                .contains("kake6792");
+                .extracting(AnswerOption::getValue)
+                .contains("5");
     }
 
     @Test
     void shouldRegisterAnswerOption() throws SQLException {
-        Answer answer = randomFromDatabase(answerDao);
+        Question question = randomFromDatabase(questionDao);
 
         AnswerOption answerOption = new AnswerOption();
-        answerOption.setAnswerId(answer.getId());
-        answerOption.setAnswerOption("option");
-        answerOption.setRange(10);
-        answerOption.setMinRangeName("Ubrukelig");
-        answerOption.setMaxRangeName("Fantastisk");
+        answerOption.setAnswerType("range");
+        answerOption.setQuestionId(question.getId());
+        answerOption.setValue("0");
+        answerOption.setName("min");
 
         answerOptionDao.save(answerOption);
 
