@@ -44,17 +44,17 @@ public class HttpServer {
                 Socket clientSocket = serverSocket.accept();
                 HttpRequest message = new HttpRequest(clientSocket);
                 Router router = new Router(clientSocket);
-                router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource(), "question")));
-                router.addController("/api/questionnaires", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire")));
-                router.addController("/api/newQuestionnaire", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire")));
-                router.addController("/api/questionnaireName", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire")));
-                router.addController("/api/questionnaire", new QuestionnaireController(new QuestionnaireDao(createDataSource(), "questionnaire"), new QuestionDao(createDataSource(), "question")));
+                router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource())));
+                router.addController("/api/questionnaires", new QuestionnaireController(new QuestionnaireDao(createDataSource())));
+                router.addController("/api/newQuestionnaire", new QuestionnaireController(new QuestionnaireDao(createDataSource())));
+                router.addController("/api/questionnaireName", new QuestionnaireController(new QuestionnaireDao(createDataSource())));
+                router.addController("/api/questionnaire", new QuestionnaireController(new QuestionnaireDao(createDataSource()), new QuestionDao(createDataSource())));
                 router.addController("/api/login", new LoginController(new UserDao(createDataSource())));
                 router.addController("/api/signup", new SignupController(new UserDao(createDataSource())));
-                router.addController("/api/newQuestion", new QuestionController(new QuestionDao(createDataSource(), "question")));
-                router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource(), "question"), new AnswerDao(createDataSource(), "answer")));
-                router.addController("/api/questionName", new QuestionController(new QuestionDao(createDataSource(), "question")));
-                router.addController("/api/newAnswer", new AnswerController(new AnswerDao(createDataSource(), "answer")));
+                router.addController("/api/newQuestion", new QuestionController(new QuestionDao(createDataSource())));
+                router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource()), new AnswerDao(createDataSource())));
+                router.addController("/api/questionName", new QuestionController(new QuestionDao(createDataSource())));
+                router.addController("/api/newAnswer", new AnswerController(new AnswerDao(createDataSource())));
                 router.route(message);
                 // TODO: håndtere feil i router, skrive ut feilmeldinger til nettleser
             } catch (IOException | SQLException e) {

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AnswerDao extends DataAccessObject<Answer> {
-    public AnswerDao(DataSource dataSource, String dbName) {
-        super(dataSource, dbName);
+    public AnswerDao(DataSource dataSource) {
+        super(dataSource, "answer");
     }
 
     @Override

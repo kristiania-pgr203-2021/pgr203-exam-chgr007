@@ -29,20 +29,22 @@ public class QuestionnaireDaoTest {
 
     //DAOs
     UserDao userDao = new UserDao(createDataSource());
-    QuestionnaireDao questionnaireDao = new QuestionnaireDao(createDataSource(), "questionnaire");
-    QuestionDao questionDao = new QuestionDao(createDataSource(), "question");
-    AnswerDao answerDao = new AnswerDao(createDataSource(), "answer");
+    QuestionnaireDao questionnaireDao = new QuestionnaireDao(createDataSource());
+    QuestionDao questionDao = new QuestionDao(createDataSource());
+    AnswerDao answerDao = new AnswerDao(createDataSource());
 
 
     @BeforeAll
     void addStartData() throws SQLException {
 
         //adds user
+        Authenticator authenticator = new Authenticator();
         User user = new User();
         user.setEmail("start@persson.no");
         user.setFirstName("start");
         user.setLastName("Persson");
-        user.setPassword("420");
+        String password = authenticator.encryptPass("420");
+        user.setPassword(password);
         userDao.save(user);
 
         //adds questionnaire
@@ -224,9 +226,9 @@ public class QuestionnaireDaoTest {
         HttpServer server = new HttpServer(0);
         HttpClient client = new HttpClient("localhost", server.getPort());
 
-        PostValue<String,String> firstName = new PostValue<>("firstName", "Per");
+        PostValue<String,String> firstName = new PostValue<>("firstName", "Perry");
         PostValue<String,String> lastName = new PostValue<>("lastName", "Persson");
-        PostValue<String,String> userName = new PostValue<>("userName", "perpersson@person.no");
+        PostValue<String,String> userName = new PostValue<>("userName", "perrypersson@person.no");
         PostValue<String,String> password = new PostValue<>("password", "superSe<r3tP4ssw0rd");
 
         client.post(List.of(userName,password,firstName,lastName), "/api/signup");
@@ -239,9 +241,12 @@ public class QuestionnaireDaoTest {
                 .isEqualTo("perpersson@person.no");
     }
 
+    @Test
+    void shouldRegisterAnswerOption() {
+        //AnswerDao = answerDao.
+    }
     //used for internal databases
     private DataSource createDataSource() {
-        //TODO: Oppdatere til dataSource.username osv. ihht. specs fra Johannes
         Properties prop = getProperties();
 
         PGSimpleDataSource dataSource = new PGSimpleDataSource();

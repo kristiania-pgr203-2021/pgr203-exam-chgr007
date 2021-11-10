@@ -6,8 +6,8 @@ import javax.sql.DataSource;
 import java.sql.*;
 
 public class QuestionnaireDao extends DataAccessObject<Questionnaire> {
-    public QuestionnaireDao(DataSource dataSource, String dbName) {
-        super(dataSource, dbName);
+    public QuestionnaireDao(DataSource dataSource) {
+        super(dataSource, "questionnaire");
     }
 
     @Override

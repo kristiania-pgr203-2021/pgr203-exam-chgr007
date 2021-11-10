@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuestionDao extends DataAccessObject<Question> {
-    public QuestionDao(DataSource dataSource, String dbName) {
-        super(dataSource, dbName);
+    public QuestionDao(DataSource dataSource) {
+        super(dataSource, "question");
     }
 
     @Override
