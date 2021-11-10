@@ -4,12 +4,11 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.http.codec.json.Jackson2JsonEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.security.Key;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -28,19 +27,20 @@ public class Authenticator {
 
     public String generateToken(long id, String userName) {
         // https://github.com/jwtk/jjwt#install-jdk-maven
+
+
         Calendar c = Calendar.getInstance();
-        Date now = new Date();
         Date expiration = new Date();
         c.setTime(expiration);
         c.add(Calendar.DATE, 1);
         expiration = c.getTime();
 
         String jws = Jwts.builder()
-                .setIssuedAt(now)
+                .setIssuedAt(new Date())
+                .setExpiration(expiration)
                 .setId(String.valueOf(id))
                 .setIssuer("Stigen & Gregersen")
                 .setSubject(userName)
-                .setExpiration(expiration)
                 .signWith(key)
                 .compact();
 

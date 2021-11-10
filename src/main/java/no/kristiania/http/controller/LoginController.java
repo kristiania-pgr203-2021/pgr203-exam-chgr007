@@ -8,6 +8,8 @@ import no.kristiania.http.util.HttpResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 public class LoginController implements HttpController {
@@ -28,19 +30,24 @@ public class LoginController implements HttpController {
             userName = postValues.containsKey("userName") ? postValues.get("userName") : null;
             password = postValues.containsKey("password") ? postValues.get("password") : null;
 
+            // TODO: legge inn sjekk på om brukeren eksisterer
             User user = userDao.retrieveByEmail(userName);
 
             if(user != null && authenticator.validatePassword(password,user.getPassword())) {
                 String token = authenticator.generateToken(user.getId(),userName);
-                HttpResponse response = new HttpResponse(200, "OK");
+                Calendar c = Calendar.getInstance();
+                c.add(Calendar.DATE, 1);
+                Date expiration = c.getTime();
+
+                HttpResponse response = new HttpResponse(303, "OK");
                 response.setHeaderField("Connection","close");
-                response.setHeaderField("Set-Cookie", "AuthToken="+token);
-                response.setMessageBody("<h1>Hello "+userName + ", welcome back!</h1>");
+                response.setHeaderField("Set-Cookie", "AuthToken="+token+"; Path=/"+" ;Expires="+expiration);
+                response.setHeaderField("Location", "/index.html");
                 return response;
             }
         } else {
             // show login form
         }
-        return null;
+        return new HttpResponse(500, "Internal server error");
     }
 }

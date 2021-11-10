@@ -7,42 +7,63 @@
     <script src="javascript/javascript.js"></script>
 </head>
 <body>
-    <div class="top-bar">
-        <h1>Welcome, [name]</h1>
-        <div class="nav-bar">
-            <li></li>
-        </div>
+<div class="top-bar">
+    <h1 id="welcome-msg">Welcome, [name]</h1>
+    <div class="nav-bar">
+        <li></li>
     </div>
-    <main>
-        <div id="pop-up-container"></div>
-        <div class="flex-container" id="questionnaire-container">
-            
-        </div>
-    </main>
+</div>
+<main>
+    <div id="pop-up-container"></div>
+    <div class="flex-container" id="questionnaire-container">
 
-    
+    </div>
+</main>
 
-    <script>
 
-        const popUpContainer = document.getElementById("pop-up-container")
-        const questionnaire = "questionnaire"
-        const questionnaireContainer = document.getElementById("questionnaire-container");
+<script>
 
-        addButton(questionnaireContainer, "questionnaire", 1);
+    const popUpContainer = document.getElementById("pop-up-container")
+    const questionnaire = "questionnaire"
+    const questionnaireContainer = document.getElementById("questionnaire-container");
 
-        fetch("/api/questionnaires").then(function (res) {
-            return res.text()
-        }).then(function (text) {
+    addButton(questionnaireContainer, "questionnaire", 1);
 
-            document.querySelector("#questionnaire-container").innerHTML += text;
+    fetch("/api/questionnaires").then(function (res) {
+        return res.text()
+    }).then(function (text) {
 
-            questionnaires = document.querySelector("#questionnaire");
+        document.querySelector("#questionnaire-container").innerHTML += text;
 
-            randomColor();
-        });
+        questionnaires = document.querySelector("#questionnaire");
 
-    </script>
+        randomColor();
+    });
+    function showLoginForm() {
+        document.getElementById("welcome-msg").innerHTML = "<a href='/login.html'>login</a><br>or <a href='/signup.html'>sign up</a>";
+    }
+    function parseJwt(token) {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    };
 
+    // datoene må ganges med 1000 for å få millisekunder som js bruker i date.
+    const cookie = document.cookie;
+    if (cookie.length > 0) {
+        console.info("Found token");
+
+        const tokenEncoded = cookie.substr(cookie.indexOf("=") + 1, cookie.length)
+        const token = parseJwt(tokenEncoded);
+        if (new Date(token.exp*1000) > new Date()) showLoginForm();
+        document.getElementById("welcome-msg").innerHTML = `Welcome, ${token.sub}`;
+    } else {
+        showLoginForm();
+    }
+</script>
 
 
 </body>

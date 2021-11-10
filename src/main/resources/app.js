@@ -8,6 +8,7 @@ function parseJwt (token) {
     return JSON.parse(jsonPayload);
 };
 
+// datoene må ganges med 1000 for å få millisekunder som js bruker i date.
 const cookie = document.cookie;
 const tokenEncoded = cookie.substr(cookie.indexOf("=")+1,cookie.length)
 const token = parseJwt(tokenEncoded);
