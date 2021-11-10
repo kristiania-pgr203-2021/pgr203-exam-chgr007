@@ -57,8 +57,9 @@ public class HttpServer {
             Router router = new Router(clientSocket);
             configureRouter(router);
             router.route(message);
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            logger.error("*** I/O ERROR: Connection to client failed! ***");
+            logger.error(e.getMessage());
         }
     }
 
