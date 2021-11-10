@@ -4,21 +4,21 @@ import no.kristiania.dao.QuestionDao;
 import no.kristiania.dao.QuestionnaireDao;
 import no.kristiania.http.model.Question;
 import no.kristiania.http.model.Questionnaire;
+import no.kristiania.http.util.Authenticator;
+import no.kristiania.http.util.HttpMessage;
 import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.HttpResponse;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.http.codec.json.Jackson2JsonEncoder;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
-public class QuestionnaireController implements HttpController{
+public class QuestionnaireController implements HttpController {
 
-    QuestionnaireDao questionnaireDao;
-    QuestionDao questionDao;
+    private QuestionnaireDao questionnaireDao;
+    private QuestionDao questionDao;
+    private boolean validToken = false;
 
     public QuestionnaireController(QuestionnaireDao questionnaireDao) {
         this.questionnaireDao = questionnaireDao;
@@ -30,15 +30,31 @@ public class QuestionnaireController implements HttpController{
     }
 
 
-
-
     @Override
     public HttpResponse handle(HttpRequest request) throws SQLException, IOException {
         HttpResponse httpResponse = new HttpResponse(200, "OK");
+        String cookieString;
+        long userId = -1;
+        if (request.getPostParams() != null && request.getPostParams().containsKey("cookie")) {
+            Authenticator authenticator = new Authenticator();
+            cookieString = request.getPostParams().get("cookie");
+            int equalPosition = cookieString.indexOf("=");
+            if (equalPosition != -1) {
+                validToken = authenticator.validateToken(cookieString.substring(equalPosition + 1));
+                if (validToken) {
+                    userId = authenticator.getIdFromToken(cookieString.substring(equalPosition + 1));
+                }
+            }
+        }
+
+
         if (request.getRequestType().equalsIgnoreCase("get") && request.hasQueryParam("id")) {
             Long id = Long.valueOf(request.getQueryParam("id"));
             Questionnaire questionnaire = questionnaireDao.retrieveById(id);
 
+            if (!validToken || questionnaire.getPersonId() != userId) {
+                return new HttpResponse(401, "Unauthorized");
+            }
 // ********************             Alternativ måte å gjøre ting på:
 //            questionDao.listByQuestionnaireId(id).forEach(q -> questionnaire.addQuestion(q));
 //
@@ -51,7 +67,7 @@ public class QuestionnaireController implements HttpController{
 // *******************************************************************************************************************************************
 
             httpResponse.setHeaderField("Connection: ", "close");
-            String messageBody = "questionnaire="+questionnaire.getName();
+            String messageBody = "questionnaire=" + questionnaire.getName();
             httpResponse.setMessageBody(messageBody);
             httpResponse.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
             return httpResponse;
@@ -66,7 +82,7 @@ public class QuestionnaireController implements HttpController{
             String messageBody = printAllQuestionnaireQuestions(questionnaireId);
             httpResponse.setMessageBody(messageBody);
             httpResponse.setHeaderField("Connection: ", "close");
-            httpResponse.setHeaderField("Content-Length: " , String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
+            httpResponse.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
             return httpResponse;
             // Add question to DB
         } else if (request.getRequestType().equalsIgnoreCase("get") && request.getFileTarget().equals("/api/questionnaireName")) {
@@ -74,10 +90,10 @@ public class QuestionnaireController implements HttpController{
             String messageBody = printQuestionnaireName(questionnaireId);
             httpResponse.setMessageBody(messageBody);
             httpResponse.setHeaderField("Connection: ", "close");
-            httpResponse.setHeaderField("Content-Length: " , String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
+            httpResponse.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
             return httpResponse;
             // Add question to DB
-        } else if(request.getRequestType().equalsIgnoreCase("post") && request.getFileTarget().equalsIgnoreCase("/api/newQuestionnaire")){
+        } else if (request.getRequestType().equalsIgnoreCase("post") && request.getFileTarget().equalsIgnoreCase("/api/newQuestionnaire")) {
             Questionnaire questionnaire = new Questionnaire();
             questionnaire.setName(request.getPostParams().get("questionnaireName"));
             questionnaire.setPersonId(Long.parseLong(request.getPostParams().get("userId")));
@@ -98,8 +114,8 @@ public class QuestionnaireController implements HttpController{
 
     private String printAllQuestionnaires() throws SQLException {
         StringBuilder stringBuilder = new StringBuilder();
-        for(Questionnaire questionnaire : questionnaireDao.retrieveAll()){
-            stringBuilder.append("<a href=\"questionnaire.html?questionnaireId=" + questionnaire.getId()  + "\">");
+        for (Questionnaire questionnaire : questionnaireDao.retrieveAll()) {
+            stringBuilder.append("<a href=\"questionnaire.html?questionnaireId=" + questionnaire.getId() + "\">");
             stringBuilder.append("<div class=\"random-color flexbox-box flex-content questionnaire\" id=\"questionnaire_" + questionnaire.getId() + "\">");
             stringBuilder.append("<h2>").append(questionnaire.getName()).append("</h2>");
             stringBuilder.append("</div>");
@@ -116,8 +132,8 @@ public class QuestionnaireController implements HttpController{
         List<Question> questions = questionDao.listByQuestionnaireId(questionnaireId);
 
         StringBuilder stringBuilder = new StringBuilder();
-        for(Question question : questions){
-            stringBuilder.append("<a href=\"question.html?questionId=" + question.getId()  + "\">");
+        for (Question question : questions) {
+            stringBuilder.append("<a href=\"question.html?questionId=" + question.getId() + "\">");
             stringBuilder.append("<div class=\"random-color flexbox-box flex-content question\">");
             stringBuilder.append(question.getQuestion());
             stringBuilder.append("</div>");
