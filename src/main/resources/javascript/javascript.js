@@ -4,8 +4,6 @@
     function randomColor(){
         let randomColor = document.getElementsByClassName("random-color");
         for(let i = 0; i<randomColor.length; i++){
-            console.log("RUNNING!")
-            console.log(randomColor[i])
         
             let r = Math.floor(Math.random()*255+1);
             let g = Math.floor(Math.random()*255+1);
@@ -23,16 +21,34 @@
 
     }
 }
+function changeName(type, id){
 
-function changeName(){
-    popUpContainer.innerHTML = `<div id="new-question-popup" class="popup">
-        <div class="random-color popup-header"><h1>CHANGE QUESTIONNAIRE NAME</h1></div>
-            <form action="/api/changeQuestionnaireName" method="POST">
-                <input type="text" maxlength="250" name="questionnaireName" placeholder="Write your new name here"></p>
-                <button>ADD</button>
-            </form>
+    popUpContainer.innerHTML = `<div class="background-panel main"></div>`
+    popUpContainer.innerHTML += `<div id="inner-pop-up-container" class="main"></div>`
+
+    let innerContainer = document.querySelector("#inner-pop-up-container");
+    let currentName = document.querySelector(`#${type}-name`).innerHTML;
+
+    console.log(currentName)
+    console.log(id)
+
+    innerContainer.innerHTML = `
+    <div id="pop-up-div" class="popup">
+        <div class="random-color popup-header">
+            <h1>CHANGE ${type.toUpperCase()} NAME 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" onclick="closePopUp()" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                </svg>
+            </h1>
         </div>
+        
+        <form action="/api/${type.toLowerCase()}Name" method="POST">
+            <input type="hidden" name="${type}Id" value="${id}">
+            <input type="text" maxlength="250" name="name" value="${currentName}"></p>
+            <button type="submit">CHANGE</button>
+        </form>
     </div>`
+
 
     popUpContainer.innerHTML += `<div class="background-panel main"></div>`
     randomColor();
