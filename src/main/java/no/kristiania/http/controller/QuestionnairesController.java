@@ -70,7 +70,7 @@ public class QuestionnairesController implements HttpController {
             httpResponse.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
             return httpResponse;
         } else if (request.getRequestType().equalsIgnoreCase("get")) {
-            String messageBody = printAllQuestionnaires(userId);
+            String messageBody = printAllQuestionnaires();
             httpResponse.setMessageBody(messageBody);
             httpResponse.setHeaderField("Connection: ", "close");
             httpResponse.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
@@ -82,16 +82,11 @@ public class QuestionnairesController implements HttpController {
         return httpResponse;
     }
 
-    private String printAllQuestionnaires(long userId) throws SQLException {
+    private String printAllQuestionnaires() throws SQLException {
         StringBuilder stringBuilder = new StringBuilder();
 
-        // Only get the logged in users questionnaires
-        List<Questionnaire> questionnaires = questionnaireDao.retrieveAll()
-                .stream()
-                .filter(q -> q.getPersonId() == userId)
-                .collect(Collectors.toList());
 
-        for (Questionnaire questionnaire : questionnaires) {
+        for (Questionnaire questionnaire : questionnaireDao.retrieveAll()) {
             stringBuilder.append("<a href=\"questionnaire.html?questionnaireId=" + questionnaire.getId() + "\">");
             stringBuilder.append("<div class=\"random-color flexbox-box flex-content questionnaire\" id=\"questionnaire_" + questionnaire.getId() + "\">");
             stringBuilder.append("<h2>").append(questionnaire.getName()).append("</h2>");
