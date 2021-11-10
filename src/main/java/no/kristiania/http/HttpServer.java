@@ -75,7 +75,7 @@ public class HttpServer {
         router.addController("/api/signup", new SignupController(new UserDao(createDataSource())));
         router.addController("/api/newQuestion", new QuestionController(new QuestionDao(createDataSource())));
         router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource()), new AnswerDao(createDataSource())));
-        router.addController("/api/questionName", new QuestionController(new QuestionDao(createDataSource())));
+        router.addController("/api/questionName", new QuestionNameController(new QuestionDao(createDataSource())));
         router.addController("/api/newAnswer", new AnswerController(new AnswerDao(createDataSource())));
         router.addController("/api/answerOption", new AnswerOptionController(new AnswerOptionDao(createDataSource())));
     }

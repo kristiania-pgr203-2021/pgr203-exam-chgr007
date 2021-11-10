@@ -62,14 +62,6 @@ public class QuestionController implements HttpController{
             httpResponse.setHeaderField("Connection", "close");
             httpResponse.setHeaderField("Content-Length", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
             return httpResponse;
-
-        } else if (request.getRequestType().equalsIgnoreCase("get") && request.getFileTarget().equals("/api/questionName")) {
-            Long questionId = Long.parseLong(request.getQueryParam("questionId"));
-            String messageBody = printQuestionName(questionId);
-            httpResponse.setMessageBody(messageBody);
-            httpResponse.setHeaderField("Connection: ", "close");
-            httpResponse.setHeaderField("Content-Length: " , String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
-            return httpResponse;
             // Add question to DB
         } else if (request.getRequestType().equalsIgnoreCase("post")) {
             // Add question to DB
@@ -80,10 +72,6 @@ public class QuestionController implements HttpController{
         }
 
         return null;
-    }
-
-    private String printQuestionName(long questionId) throws SQLException {
-        return questionDao.retrieveById(questionId).getQuestion();
     }
 
     private String printAllQuestionAnswers(Long questionId) throws SQLException {

@@ -105,7 +105,7 @@ public class QuestionnaireDaoTest {
 
     }
 
-    /*
+
     @Test
     void shouldSaveQuestionToDatabase() throws IOException, SQLException {
         Questionnaire questionnaire = randomFromDatabase(questionnaireDao);
@@ -190,7 +190,7 @@ public class QuestionnaireDaoTest {
         assertThat(user)
                 .usingRecursiveComparison()
                 .isEqualTo(userDao.retrieveById(user.getId()));
-    }*/
+    }
 
     @Test
     void shouldAuthenticateUser() throws SQLException {

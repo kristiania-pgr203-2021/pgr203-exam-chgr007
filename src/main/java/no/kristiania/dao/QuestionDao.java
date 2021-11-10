@@ -15,7 +15,7 @@ public class QuestionDao extends DataAccessObject<Question> {
 
     @Override
     protected PreparedStatement createPreparedStatementForUpdate(Connection connection) throws SQLException {
-        return connection.prepareStatement("update question set question = ?, questionnaire_id = ?");
+        return connection.prepareStatement("update question set question = ? where id = ?");
     }
 
     @Override
@@ -31,7 +31,7 @@ public class QuestionDao extends DataAccessObject<Question> {
     @Override
     public void setFieldsToUpdateInDB(Question question, PreparedStatement statement) throws SQLException {
         statement.setString(1, question.getQuestion());
-        statement.setLong(2, question.getQuestionnaireId());
+        statement.setLong(2, question.getId());
     }
 
 
