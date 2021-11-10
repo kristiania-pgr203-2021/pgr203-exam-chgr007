@@ -2,6 +2,7 @@ package no.kristiania.http;
 
 import no.kristiania.dao.*;
 import no.kristiania.http.model.Answer;
+import no.kristiania.http.model.AnswerOption;
 import no.kristiania.http.model.Question;
 import no.kristiania.http.model.Questionnaire;
 import no.kristiania.http.util.Authenticator;
@@ -32,21 +33,24 @@ public class QuestionnaireDaoTest {
     QuestionnaireDao questionnaireDao = new QuestionnaireDao(createDataSource());
     QuestionDao questionDao = new QuestionDao(createDataSource());
     AnswerDao answerDao = new AnswerDao(createDataSource());
+    AnswerOptionDao answerOptionDao = new AnswerOptionDao(createDataSource());
 
 
     @BeforeAll
     void addStartData() throws SQLException {
 
         //adds user
-        Authenticator authenticator = new Authenticator();
-        User user = new User();
-        user.setEmail("start@persson.no");
-        user.setFirstName("start");
-        user.setLastName("Persson");
-        String password = authenticator.encryptPass("420");
-        user.setPassword(password);
-        userDao.save(user);
-
+        User user = userDao.retrieveByEmail("start@persson.no");
+        if (user == null) {
+            Authenticator authenticator = new Authenticator();
+            user = new User();
+            user.setEmail("start@persson.no");
+            user.setFirstName("start");
+            user.setLastName("Persson");
+            String password = authenticator.encryptPass("420");
+            user.setPassword(password);
+            userDao.save(user);
+        }
         //adds questionnaire
         Questionnaire questionnaire = new Questionnaire();
         questionnaire.setName("Eksamensundersøkelse");
@@ -191,28 +195,20 @@ public class QuestionnaireDaoTest {
     @Test
     void shouldAuthenticateUser() throws SQLException {
         Authenticator authenticator = new Authenticator();
-        UserDao userDao = new UserDao(createDataSource());
-        User user = new User();
-        user.setFirstName("Person");
-        user.setLastName("Per");
-        user.setEmail("perpersson@person.no");
-        String password = "superSe<r3tP4ssw0rd";
+        User user = userDao.retrieveByEmail("start@persson.no");
+        String password = "420";
         String encryptedPass = authenticator.encryptPass(password);
-        user.setPassword(encryptedPass);
-
-        userDao.save(user);
-
         User userFromServer = userDao.retrieveById(user.getId());
-        assertTrue(authenticator.validatePassword(password, userFromServer.getPassword()));
+        assertTrue(authenticator.validatePassword(password, user.getPassword()));
     }
 
     @Test
     void shouldGenerateTokenForUser() throws IOException {
         HttpServer server = new HttpServer(0);
         HttpClient client = new HttpClient("localhost", server.getPort());
-        PostValue<String,String> userName = new PostValue<>("userName", "perpersson@person.no");
-        PostValue<String,String> password = new PostValue<>("password", "superSe<r3tP4ssw0rd");
-        client.post(List.of(userName,password), "/api/login");
+        PostValue<String, String> userName = new PostValue<>("userName", "start@persson.no");
+        PostValue<String, String> password = new PostValue<>("password", "420");
+        client.post(List.of(userName, password), "/api/login");
 
         String token = client.getHeader("Set-Cookie");
         System.out.println(token);
@@ -221,30 +217,27 @@ public class QuestionnaireDaoTest {
 
     }
 
-    @Test
-    void shouldRegisterUser() throws IOException, SQLException {
-        HttpServer server = new HttpServer(0);
-        HttpClient client = new HttpClient("localhost", server.getPort());
-
-        PostValue<String,String> firstName = new PostValue<>("firstName", "Perry");
-        PostValue<String,String> lastName = new PostValue<>("lastName", "Persson");
-        PostValue<String,String> userName = new PostValue<>("userName", "perrypersson@person.no");
-        PostValue<String,String> password = new PostValue<>("password", "superSe<r3tP4ssw0rd");
-
-        client.post(List.of(userName,password,firstName,lastName), "/api/signup");
-
-        UserDao userDao = new UserDao(createDataSource());
-        User user = userDao.retrieveByEmail("perpersson@person.no");
-
-        assertThat(user)
-                .extracting(User::getEmail)
-                .isEqualTo("perpersson@person.no");
-    }
 
     @Test
-    void shouldRegisterAnswerOption() {
-        //AnswerDao = answerDao.
+    void shouldRegisterAnswerOption() throws SQLException {
+        Answer answer = randomFromDatabase(answerDao);
+
+        AnswerOption answerOption = new AnswerOption();
+        answerOption.setAnswerId(answer.getId());
+        answerOption.setAnswerOption("option");
+        answerOption.setRange(10);
+        answerOption.setMinRangeName("Ubrukelig");
+        answerOption.setMaxRangeName("Fantastisk");
+
+        answerOptionDao.save(answerOption);
+
+        AnswerOption answerOptionFromServer = answerOptionDao.retrieveById(answerOption.getId());
+        assertThat(answerOptionFromServer)
+                .usingRecursiveComparison()
+                .isEqualTo(answerOption);
+
     }
+
     //used for internal databases
     private DataSource createDataSource() {
         Properties prop = getProperties();

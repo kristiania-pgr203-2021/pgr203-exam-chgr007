@@ -50,6 +50,7 @@ public class UserDao extends DataAccessObject<User> {
             try (PreparedStatement statement = connection.prepareStatement("select * from person where email = ?")) {
                 statement.setString(1, userName);
                 try (ResultSet resultSet = statement.executeQuery()) {
+                    if (!resultSet.isBeforeFirst()) return null;
                     resultSet.next();
                     return mapValuesToObject(resultSet);
                 }
