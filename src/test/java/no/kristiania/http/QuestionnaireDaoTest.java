@@ -7,6 +7,7 @@ import no.kristiania.http.model.Question;
 import no.kristiania.http.model.Questionnaire;
 import no.kristiania.http.util.Authenticator;
 import no.kristiania.http.util.PostValue;
+import no.kristiania.http.util.Properties;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,11 +16,9 @@ import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -273,7 +272,7 @@ public class QuestionnaireDaoTest {
 
     //used for internal databases
     private DataSource createDataSource() {
-        Properties prop = getProperties();
+        Properties prop = new Properties();
 
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         dataSource.setUser(prop.getProperty("dataSource.username"));
@@ -285,16 +284,6 @@ public class QuestionnaireDaoTest {
         return dataSource;
     }
 
-    private Properties getProperties() {
-        Properties properties = new Properties();
-
-        try (InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("pgr203.properties")) {
-            properties.load(resourceAsStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return properties;
-    }
 
     private <T> T randomFromDatabase(DataAccessObject<T> dataAccessObject) throws SQLException {
 

@@ -42,6 +42,7 @@
     function showLoginForm() {
         document.getElementById("welcome-msg").innerHTML = "<a href='/login.html'>login</a><br>or <a href='/signup.html'>sign up</a>";
     }
+    // Denne må vi referere til kilde på!
     function parseJwt(token) {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

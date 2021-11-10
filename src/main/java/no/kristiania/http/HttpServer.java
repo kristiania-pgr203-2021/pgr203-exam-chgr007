@@ -2,8 +2,8 @@ package no.kristiania.http;
 
 import no.kristiania.dao.*;
 import no.kristiania.http.controller.*;
-import no.kristiania.http.model.Product;
 import no.kristiania.http.util.HttpRequest;
+import no.kristiania.http.util.Properties;
 import no.kristiania.http.util.Router;
 import org.flywaydb.core.Flyway;
 import org.postgresql.ds.PGSimpleDataSource;
@@ -12,20 +12,14 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
 
 public class HttpServer {
 
     private int port;
     private ServerSocket serverSocket;
-    private List<Product> products;
     private static final Logger logger = LoggerFactory.getLogger(HttpServer.class);
 
     public HttpServer(int port) throws IOException {
@@ -43,9 +37,9 @@ public class HttpServer {
                 HttpRequest message = new HttpRequest(clientSocket);
                 Router router = new Router(clientSocket);
                 router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource())));
-                router.addController("/api/questionnaires", new QuestionnaireController(new QuestionnaireDao(createDataSource())));
-                router.addController("/api/newQuestionnaire", new QuestionnaireController(new QuestionnaireDao(createDataSource())));
-                router.addController("/api/questionnaireName", new QuestionnaireController(new QuestionnaireDao(createDataSource())));
+                router.addController("/api/questionnaires", new QuestionnairesController(new QuestionnaireDao(createDataSource())));
+                router.addController("/api/newQuestionnaire", new NewQuestionnaireController(new QuestionnaireDao(createDataSource())));
+                router.addController("/api/questionnaireName", new QuestionnaireNameController(new QuestionnaireDao(createDataSource())));
                 router.addController("/api/questionnaire", new QuestionnaireController(new QuestionnaireDao(createDataSource()), new QuestionDao(createDataSource())));
                 router.addController("/api/login", new LoginController(new UserDao(createDataSource())));
                 router.addController("/api/signup", new SignupController(new UserDao(createDataSource())));
@@ -64,7 +58,7 @@ public class HttpServer {
 
     // TODO: Kanskje flytte datasource og properties ut til en egen klasse
     private DataSource createDataSource() {
-        Properties prop = getProperties();
+        Properties prop = new Properties();
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         dataSource.setUser(prop.getProperty("dataSource.username"));
         dataSource.setPassword(prop.getProperty("dataSource.password"));
@@ -73,15 +67,7 @@ public class HttpServer {
         return dataSource;
     }
 
-    private Properties getProperties() {
-        Properties properties = new Properties();
-        try (InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("pgr203.properties")) {
-            properties.load(resourceAsStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return properties;
-    }
+
 
     public int getPort() {
         return serverSocket.getLocalPort();
