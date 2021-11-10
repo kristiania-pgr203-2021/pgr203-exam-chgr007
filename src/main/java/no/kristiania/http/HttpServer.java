@@ -1,9 +1,6 @@
 package no.kristiania.http;
 
-import no.kristiania.dao.AnswerDao;
-import no.kristiania.dao.QuestionDao;
-import no.kristiania.dao.QuestionnaireDao;
-import no.kristiania.dao.UserDao;
+import no.kristiania.dao.*;
 import no.kristiania.http.controller.*;
 import no.kristiania.http.model.Product;
 import no.kristiania.http.util.HttpRequest;
@@ -55,6 +52,7 @@ public class HttpServer {
                 router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource()), new AnswerDao(createDataSource())));
                 router.addController("/api/questionName", new QuestionController(new QuestionDao(createDataSource())));
                 router.addController("/api/newAnswer", new AnswerController(new AnswerDao(createDataSource())));
+                router.addController("/api/answerOption", new AnswerOptionController(new AnswerOptionDao(createDataSource())));
                 router.route(message);
                 // TODO: håndtere feil i router, skrive ut feilmeldinger til nettleser
             } catch (IOException | SQLException e) {

@@ -219,6 +219,25 @@ public class QuestionnaireDaoTest {
 
 
     @Test
+    void shouldInsertAnswerOptionThrougAPI() throws IOException, SQLException {
+        HttpServer server = new HttpServer(0);
+        HttpClient client = new HttpClient("localhost",server.getPort());
+        Answer answer = randomFromDatabase(answerDao);
+        PostValue<String,String> answerOption = new PostValue("answerOption","kake6792");
+        PostValue<String,String> answerId = new PostValue("answerId",String.valueOf(answer.getId()));
+        PostValue<String,String> range = new PostValue("range","5");
+        PostValue<String,String> minRangeName = new PostValue("minRangeName","min");
+        PostValue<String,String> maxRangeName = new PostValue("maxRangeName","max");
+
+        client.post(List.of(answerOption,answerId,range,minRangeName,maxRangeName),"/api/answerOption");
+        List<AnswerOption> answerOptions = answerOptionDao.retrieveAll();
+
+        assertThat(answerOptions)
+                .extracting(AnswerOption::getAnswerOption)
+                .contains("kake6792");
+    }
+
+    @Test
     void shouldRegisterAnswerOption() throws SQLException {
         Answer answer = randomFromDatabase(answerDao);
 
