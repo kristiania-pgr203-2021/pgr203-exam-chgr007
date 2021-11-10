@@ -238,13 +238,12 @@ public class QuestionnaireDaoTest {
         HttpClient client = new HttpClient("localhost", server.getPort());
         Question question = randomFromDatabase(questionDao);
         PostValue<String, String> answerType = new PostValue("answer_type", "range");
-        PostValue<String, String> questionId = new PostValue("questionId", String.valueOf(question.getId()));
+        PostValue<String, String> questionId = new PostValue("question_id", String.valueOf(question.getId()));
         PostValue<String, String> value = new PostValue("value", "5");
         PostValue<String, String> name = new PostValue("name", "min");
 
         client.post(List.of(answerType, questionId, value, name), "/api/answerOption");
         List<AnswerOption> answerOptions = answerOptionDao.retrieveAll();
-
 
         assertThat(answerOptions)
                 .extracting(AnswerOption::getValue)

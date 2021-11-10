@@ -24,7 +24,7 @@ public class AnswerOptionController implements HttpController {
         } else if (request.getRequestType().equalsIgnoreCase("post")) {
 
             Map<String,String> params = request.getPostParams();
-            if (params.containsKey("answerOption")) {
+            if (params.containsKey("answer_type")) {
                 AnswerOption answerOption = new AnswerOption();
                 int questionId = Integer.parseInt(params.get("question_id"));
                 answerOption.setAnswerType(params.get("answer_type"));

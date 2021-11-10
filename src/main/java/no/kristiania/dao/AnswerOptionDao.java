@@ -29,9 +29,10 @@ public class AnswerOptionDao extends DataAccessObject<AnswerOption> {
     @Override
     protected void setFieldsToUpdateInDB(AnswerOption model, PreparedStatement statement) throws SQLException {
         statement.setObject(1, model.getAnswerType().toString(), Types.OTHER);
-        statement.setLong(2, model.getQuestionId());
-        statement.setString(3, model.getValue());
-        statement.setString(4, model.getName());
+        statement.setString(2, model.getValue());
+        statement.setString(3, model.getName());
+        statement.setLong(4, model.getQuestionId());
+
     }
 
     @Override
