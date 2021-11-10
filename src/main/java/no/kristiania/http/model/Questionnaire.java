@@ -48,4 +48,13 @@ public class Questionnaire {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "Questionnaire{" +
+                "id=" + id +
+                ", personId=" + personId +
+                ", name='" + name + '\'' +
+                ", questions=" + questions +
+                '}';
+    }
 }

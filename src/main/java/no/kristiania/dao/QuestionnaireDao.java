@@ -31,7 +31,7 @@ public class QuestionnaireDao extends DataAccessObject<Questionnaire> {
     @Override
     protected void setFieldsToUpdateInDB(Questionnaire questionnaire, PreparedStatement statement) throws SQLException {
         statement.setString(1, questionnaire.getName());
-        statement.setLong(2, questionnaire.getPersonId());
+        statement.setLong(2, questionnaire.getId());
     }
 
     @Override

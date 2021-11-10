@@ -38,7 +38,7 @@ public class QuestionNameController implements HttpController{
 
             httpResponse = new HttpResponse(303, "See other");
             httpResponse.setHeaderField("Connection", "close");
-            httpResponse.setHeaderField("Location", "/question.html?question=" + questionId);
+            httpResponse.setHeaderField("Location", "/question.html?questionId=" + questionId);
             return httpResponse;
         }
         return new HttpResponse(500, "Internal server error");
