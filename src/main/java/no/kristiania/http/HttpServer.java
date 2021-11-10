@@ -31,6 +31,7 @@ public class HttpServer {
     public HttpServer(int port) throws IOException {
         this.port = port;
         this.serverSocket = new ServerSocket(port);
+        //TODO: add thread pool
         new Thread(this::handleClient).start();
     }
 
