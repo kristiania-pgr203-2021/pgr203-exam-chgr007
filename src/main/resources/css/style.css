@@ -105,21 +105,30 @@ a{
     text-decoration: none;
 }
 
-
-.popup{
+#inner-pop-up-container{
     z-index: 11;
-    background-color: white;
-    width: 40em;
-    padding: 1em;
     position: fixed;
+    width: 40em;
+    height: auto;
+    max-height: 60em;
+    padding: 0.2em;
     left: 50%;
+    background-color: lightgray;
     transform: translate(-50%, 0);
 }
 
-.under-popup{
-    background-color: #2a2e2f;
-    position: absolute;
-    bottom: 15em;
+.popup {
+    position: relative;
+    z-index: 11;
+    padding: 1em;
+    margin: 1em;
+    background-color: white;
+    color: black
+}
+
+.radio-answers {
+    border: lightgreen;
+    border-style: dashed;
 }
 
 .popup-header{
@@ -134,11 +143,20 @@ a{
     margin-top: 0;
 }
 
-input {
-    width: 100%;
+.height-em {
     height: 3em;
+}
+
+
+input{
+    width: 100%;
+    height: auto;
     background-color: lightgray;
     border-style: none;
+}
+
+input[type=radio]{
+    width: 2em;
 }
 
 select {
@@ -159,16 +177,15 @@ button {
 }
 
 .background-panel{
+    z-index: 0;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -1em;
+    left: 50%;
+    transform: translate(-50%, 0);
     background-color: #54696d88;
     height: 46em;
     width: 62em;
 }
 
-input::radio{
-    width: 5px;
-}
 
 

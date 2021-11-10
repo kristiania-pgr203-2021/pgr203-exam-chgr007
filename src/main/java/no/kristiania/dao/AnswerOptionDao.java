@@ -12,13 +12,13 @@ public class AnswerOptionDao extends DataAccessObject<AnswerOption> {
 
     @Override
     protected PreparedStatement createPreparedStatementForUpdate(Connection connection) throws SQLException {
-        return connection.prepareStatement("update answer_option set answer_option = ?, answer_range = ?, answer_range_max_name = ?, answer_range_min_name = ?, answer_id = ?");
+        return connection.prepareStatement("update answer_option set answer_type = ?, question_id = ?, value = ?, name = ?");
     }
 
     @Override
     protected PreparedStatement createPreparedStatementForSave(Connection connection) throws SQLException {
-        return connection.prepareStatement("insert into answer_option(answer_option,answer_range," +
-                "answer_range_max_name,answer_range_min_name,answer_id) values(?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+        return connection.prepareStatement("insert into answer_option(answer_type," +
+                "value,name,question_id) values(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
     }
 
     @Override
@@ -28,22 +28,20 @@ public class AnswerOptionDao extends DataAccessObject<AnswerOption> {
 
     @Override
     protected void setFieldsToUpdateInDB(AnswerOption model, PreparedStatement statement) throws SQLException {
-        statement.setString(1, model.getAnswerOption());
-        statement.setInt(2, model.getRange());
-        statement.setString(3, model.getMaxRangeName());
-        statement.setString(4, model.getMinRangeName());
-        statement.setLong(5, model.getAnswerId());
+        statement.setObject(1, model.getAnswerType().toString(), Types.OTHER);
+        statement.setLong(2, model.getQuestionId());
+        statement.setString(3, model.getValue());
+        statement.setString(4, model.getName());
     }
 
     @Override
     protected AnswerOption mapValuesToObject(ResultSet rs) throws SQLException {
         AnswerOption answerOption = new AnswerOption();
-        answerOption.setAnswerOption(rs.getString("answer_option"));
-        answerOption.setRange(rs.getInt("answer_range"));
-        answerOption.setAnswerId(rs.getLong("answer_id"));
+        answerOption.setAnswerType(rs.getString("answer_type"));
+        answerOption.setQuestionId(rs.getLong("question_id"));
+        answerOption.setValue(rs.getString("value"));
         answerOption.setId(rs.getLong("id"));
-        answerOption.setMaxRangeName(rs.getString("answer_range_max_name"));
-        answerOption.setMinRangeName(rs.getString("answer_range_min_name"));
+        answerOption.setName(rs.getString("name"));
         return answerOption;
     }
 }
