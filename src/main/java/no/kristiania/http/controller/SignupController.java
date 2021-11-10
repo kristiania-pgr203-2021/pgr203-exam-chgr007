@@ -30,6 +30,8 @@ public class SignupController implements HttpController {
             String firstName = postValues.get("firstName");
             String lastName = postValues.get("lastName");
             if(validateUserData(firstName,lastName,userName,password)) {
+                if (userExists(userName)) return new HttpResponse(403, "Already exists");
+
                 Authenticator auth = new Authenticator();
 
                 User user = new User();
@@ -43,7 +45,7 @@ public class SignupController implements HttpController {
                 Calendar c = Calendar.getInstance();
                 c.add(Calendar.DATE, 1);
                 Date expiration = c.getTime();
-                //TODO: legge inn redirect 303 her kanskje?
+
                 HttpResponse response = new HttpResponse(303, "See other");
                 response.setHeaderField("Connection", "close");
                 response.setHeaderField("Set-Cookie", "AuthToken="+auth.generateToken(user.getId(),userName)+" ;Expires="+expiration.toString()+ "; Path=/");
@@ -53,6 +55,12 @@ public class SignupController implements HttpController {
 
         }
         return null;
+    }
+
+    private boolean userExists(String email) throws SQLException {
+        User user = userDao.retrieveByEmail(email);
+        if (user != null) return true;
+        return false;
     }
 
     private boolean validateUserData(String firstName, String lastName, String userName, String password) {

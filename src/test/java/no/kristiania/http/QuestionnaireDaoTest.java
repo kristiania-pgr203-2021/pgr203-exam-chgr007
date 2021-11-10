@@ -23,6 +23,7 @@ import java.util.Properties;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -217,19 +218,33 @@ public class QuestionnaireDaoTest {
 
     }
 
+    @Test
+    void userAlreadyExists() throws IOException {
+        HttpServer server = new HttpServer(0);
+        HttpClient client = new HttpClient("localhost", server.getPort());
+
+        PostValue<String,String> userName = new PostValue<>("userName", "start@persson.no");
+        PostValue<String,String> firstName = new PostValue<>("firstName", "start");
+        PostValue<String,String> lastName = new PostValue<>("lastName", "Persson");
+        PostValue<String,String> password = new PostValue<>("password", "420");
+
+        client.post(List.of(userName,firstName,lastName,password), "/api/signup");
+
+        assertEquals(403, client.getStatusCode());
+    }
 
     @Test
     void shouldInsertAnswerOptionThrougAPI() throws IOException, SQLException {
         HttpServer server = new HttpServer(0);
-        HttpClient client = new HttpClient("localhost",server.getPort());
+        HttpClient client = new HttpClient("localhost", server.getPort());
         Answer answer = randomFromDatabase(answerDao);
-        PostValue<String,String> answerOption = new PostValue("answerOption","kake6792");
-        PostValue<String,String> answerId = new PostValue("answerId",String.valueOf(answer.getId()));
-        PostValue<String,String> range = new PostValue("range","5");
-        PostValue<String,String> minRangeName = new PostValue("minRangeName","min");
-        PostValue<String,String> maxRangeName = new PostValue("maxRangeName","max");
+        PostValue<String, String> answerOption = new PostValue("answerOption", "kake6792");
+        PostValue<String, String> answerId = new PostValue("answerId", String.valueOf(answer.getId()));
+        PostValue<String, String> range = new PostValue("range", "5");
+        PostValue<String, String> minRangeName = new PostValue("minRangeName", "min");
+        PostValue<String, String> maxRangeName = new PostValue("maxRangeName", "max");
 
-        client.post(List.of(answerOption,answerId,range,minRangeName,maxRangeName),"/api/answerOption");
+        client.post(List.of(answerOption, answerId, range, minRangeName, maxRangeName), "/api/answerOption");
         List<AnswerOption> answerOptions = answerOptionDao.retrieveAll();
 
         assertThat(answerOptions)
