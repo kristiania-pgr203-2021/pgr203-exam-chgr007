@@ -276,9 +276,9 @@ public class QuestionnaireDaoTest {
         question.setQuestion("Is this working?");
         question.setHasAnswerOptions(true);
 
-        QuestionOptions questionOptions = new QuestionOptions();
+        RadioQuestion questionOptions = new RadioQuestion();
         questionOptions.setQuestion("Jas");
-        QuestionOptions questionOptions1 = new QuestionOptions();
+        RadioQuestion questionOptions1 = new RadioQuestion();
         questionOptions1.setQuestion("Nei ass");
 
         question.addAnswerOption(questionOptions);
@@ -296,7 +296,7 @@ public class QuestionnaireDaoTest {
                 .contains("Is this working?");
 
         RadioQuestionDao radioQuestionDao = new RadioQuestionDao(createDataSource());
-        List<QuestionOptions> radioQuestionOptions = radioQuestionDao.retrieveAll();
+        List<RadioQuestion> radioQuestionOptions = radioQuestionDao.retrieveAll();
 
         assertThat(radioQuestionOptions)
                 .extracting(QuestionOptions::getQuestion)
@@ -311,10 +311,11 @@ public class QuestionnaireDaoTest {
         question.setQuestion("What about this, then?");
         question.setHasAnswerOptions(true);
 
-        QuestionOptions questionOptions = new QuestionOptions();
-        questionOptions.setRange(10);
-        questionOptions.setNameMaxVal("Helt fantastisk bra");
-        questionOptions.setNameMinVal("Helt sjukt dårlig :(");
+        RangeQuestion questionOptions = new RangeQuestion();
+        questionOptions.setMin(0);
+        questionOptions.setMax(10);
+        questionOptions.setMaxLabel("Helt fantastisk bra");
+        questionOptions.setMinLabel("Helt sjukt dårlig :(");
         question.addAnswerOption(questionOptions);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -329,22 +330,22 @@ public class QuestionnaireDaoTest {
                 .contains("Is this working?");
 
         RangeQuestionDao rangeQuestionDao = new RangeQuestionDao(createDataSource());
-        List<QuestionOptions> rangeQuestionOptions = rangeQuestionDao.retrieveAll();
+        List<RangeQuestion> rangeQuestionOptions = rangeQuestionDao.retrieveAll();
 
         assertThat(rangeQuestionOptions)
-                .extracting(QuestionOptions::getNameMaxVal)
+                .extracting(RangeQuestion::getMaxLabel)
                 .contains("Helt fantastisk bra");
     }
     @Test
     void shouldRegisterAnswerOption() throws SQLException {
         Question question = randomFromDatabase(questionDao);
 
-        QuestionOptions questionOptions = new QuestionOptions();
+        RangeQuestion questionOptions = new RangeQuestion();
         question.setQuestionType(QuestionType.range);
         questionOptions.setQuestionId(question.getId());
-        questionOptions.setRange(0);
-        questionOptions.setNameMinVal("min");
-        questionOptions.setNameMaxVal("max");
+        questionOptions.setMin(0);
+        questionOptions.setMinLabel("min");
+        questionOptions.setMaxLabel("max");
 
         rangeQuestionDao.save(questionOptions);
 

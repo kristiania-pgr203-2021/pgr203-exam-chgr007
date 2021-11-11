@@ -34,7 +34,7 @@ public class Question {
         return hasAnswerOptions;
     }
 
-    public List<QuestionOptions> getAnswerOptionList() {
+    public List<QuestionOptions> getQuestionOptionList() {
         return questionOptionsList;
     }
 

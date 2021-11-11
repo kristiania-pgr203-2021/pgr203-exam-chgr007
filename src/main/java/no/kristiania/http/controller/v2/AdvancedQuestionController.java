@@ -3,13 +3,13 @@ package no.kristiania.http.controller.v2;
 import no.kristiania.dao.RadioQuestionDao;
 import no.kristiania.dao.RangeQuestionDao;
 import no.kristiania.dao.QuestionDao;
+import no.kristiania.dao.TextQuestionDao;
 import no.kristiania.http.controller.HttpController;
-import no.kristiania.http.model.QuestionOptions;
-import no.kristiania.http.model.Question;
-import no.kristiania.http.model.QuestionType;
+import no.kristiania.http.model.*;
 import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.HttpResponse;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -21,11 +21,13 @@ public class AdvancedQuestionController implements HttpController {
     private QuestionDao questionDao;
     private RangeQuestionDao rangeQuestionDao;
     private RadioQuestionDao radioQuestionDao;
+    private TextQuestionDao textQuestionDao;
 
-    public AdvancedQuestionController(QuestionDao questionDao, RangeQuestionDao rangeQuestionDao, RadioQuestionDao radioQuestionDao) {
+    public AdvancedQuestionController(QuestionDao questionDao, RangeQuestionDao rangeQuestionDao, RadioQuestionDao radioQuestionDao, TextQuestionDao textQuestionDao) {
         this.questionDao = questionDao;
         this.rangeQuestionDao = rangeQuestionDao;
         this.radioQuestionDao = radioQuestionDao;
+        this.textQuestionDao = textQuestionDao;
     }
 
     @Override
@@ -44,14 +46,19 @@ public class AdvancedQuestionController implements HttpController {
                 questionDao.save(question);
 
                 if (question.getHasAnswerOptions() && question.getQuestionType() == QuestionType.range) {
-                    for (QuestionOptions option : question.getAnswerOptionList()) {
+                    for (QuestionOptions option : question.getQuestionOptionList()) {
                         option.setQuestionId(question.getId());
-                        rangeQuestionDao.save(option);
+                        rangeQuestionDao.save((RangeQuestion) option);
                     }
                 } else if (question.getHasAnswerOptions() && question.getQuestionType() == QuestionType.radio) {
-                    for (QuestionOptions option : question.getAnswerOptionList()) {
+                    for (QuestionOptions option : question.getQuestionOptionList()) {
                         option.setQuestionId(question.getId());
-                        radioQuestionDao.save(option);
+                        radioQuestionDao.save((RadioQuestion) option);
+                    }
+                } else if (question.getHasAnswerOptions() && question.getQuestionType() == QuestionType.text) {
+                    for (QuestionOptions option : question.getQuestionOptionList()) {
+                        option.setQuestionId(question.getId());
+                        textQuestionDao.save((TextQuestion) option);
                     }
                 }
                 String responseBody = objectMapper.writeValueAsString(question);

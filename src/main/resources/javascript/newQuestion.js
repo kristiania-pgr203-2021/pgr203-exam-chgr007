@@ -178,6 +178,7 @@ function printTextInput(){
     const textAnswer = {}
 
     textAnswer.id = 0;
+    textAnswer.questionId = 0;
     textAnswer.maxChars = maxChars;
     textAnswer.placeHolderText = placeholderText;
 
@@ -222,7 +223,7 @@ function printRadioButtons(){
 
         radioAnswer.id = i;
         radioAnswer.questionId = -1;
-        radioAnswer.question = radioButtonValues[i].value;
+        radioAnswer.choice = radioButtonValues[i].value;
 
 
         document.querySelector("#selected-option-div").innerHTML += `

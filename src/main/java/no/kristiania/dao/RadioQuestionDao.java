@@ -1,22 +1,23 @@
 package no.kristiania.dao;
 
 import no.kristiania.http.model.QuestionOptions;
+import no.kristiania.http.model.RadioQuestion;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RadioQuestionDao extends DataAccessObject<QuestionOptions> {
+public class RadioQuestionDao extends DataAccessObject<RadioQuestion> {
     public RadioQuestionDao(DataSource dataSource) {
         super(dataSource, "radio_question");
     }
 
     @Override
-    protected void executeSave(Connection connection, QuestionOptions model) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement("insert into radio_question(question_id, question) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
+    protected void executeSave(Connection connection, RadioQuestion model) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement("insert into radio_question(question_id, choice) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
             statement.setLong(1, model.getQuestionId());
-            statement.setString(2, model.getQuestion());
+            statement.setString(2, model.getChoice());
             statement.executeUpdate();
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 generatedKeys.next();
@@ -26,30 +27,33 @@ public class RadioQuestionDao extends DataAccessObject<QuestionOptions> {
     }
 
     @Override
-    protected void executeUpdate(Connection connection, QuestionOptions model) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement("update radio_question set question = ? where id = ?")) {
+    protected void executeUpdate(Connection connection, RadioQuestion model) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement("update radio_question set choice = ? where id = ?")) {
+            statement.setString(1, model.getChoice());
+            statement.setLong(2, model.getId());
             statement.executeUpdate();
         }
     }
 
     @Override
-    protected QuestionOptions mapValuesToObject(ResultSet rs) throws SQLException {
-        QuestionOptions questionOptions = new QuestionOptions();
-        questionOptions.setId(rs.getLong("id"));
-        questionOptions.setQuestionId(rs.getLong("question_id"));
-        questionOptions.setQuestion(rs.getString("question"));
-        return questionOptions;
+    protected RadioQuestion mapValuesToObject(ResultSet rs) throws SQLException {
+        RadioQuestion radioQuestion = new RadioQuestion();
+        radioQuestion.setId(rs.getLong("id"));
+        radioQuestion.setQuestionId(rs.getLong("question_id"));
+        radioQuestion.setChoice(rs.getString("choice"));
+        return radioQuestion;
     }
-    public List<QuestionOptions> fetchAllByQuestionId(long id) throws SQLException {
+
+    public List<RadioQuestion> fetchAllByQuestionId(long id) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("select * from radio_question where question_id = ?")) {
                 statement.setLong(1,id);
                 try (ResultSet resultSet = statement.executeQuery()) {
-                    List<QuestionOptions> questionOptions = new ArrayList<>();
+                    List<RadioQuestion> radioQuestions = new ArrayList<>();
                     while(resultSet.next()) {
-                        questionOptions.add(mapValuesToObject(resultSet));
+                        radioQuestions.add(mapValuesToObject(resultSet));
                     }
-                    return questionOptions;
+                    return radioQuestions;
                 }
             }
         }
