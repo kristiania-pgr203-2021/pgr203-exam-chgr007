@@ -68,44 +68,14 @@ function addButton(container, type, id){
 }
 
 
-function createQuestionPopUp(questionnaireId) {
-    const question = {};
-    const form = `
-            <form action="/api/v2/question" method="POST">
-                <input type="hidden" name="questionnaireId" value="${questionnaireId}">
-                <input type="hidden" name="questionType" id="question-type" value="">
-                <input type="text" maxlength="250" name="question" id="question-name" placeholder="Write your question here"></p>
-                <select onchange="changeQuestionType()" id="input-types" name="input-types">
-                <option value="options">Options</option>
-                <option value="text">Text</option>
-                <option value="radio">Radio</option>
-                <option value="range">range</option>
-                </select>
 
-                <div id="selected-option-div"></div>
-
-                <button id="add-question-button">ADD</button> 
-            </form>
-        `;
-    let hasAnswerOptions = document.getElementById("input-types").value !== "text";
-    question.id = -1;
-    question.question = document.getElementById("question-name");
-    question.questionnaire = id;
-    question.hasAnswerOptions = hasAnswerOptions;
-    question.answerOptionList = [];
-
-    if (hasAnswerOptions) {
-        // add to option list
-    }
-    return form;
-}
 
 function popUpForm(container, type, id){
 
     container.innerHTML = `<div class="background-panel main"></div>`
     container.innerHTML += `<div id="inner-pop-up-container" class="main"></div>`
 
-    let innerContainer = document.querySelector("#inner-pop-up-container");
+    let innerContainer = document.getElementById("inner-pop-up-container");
 
     innerContainer.innerHTML += `
     <div id="pop-up-div" class="popup">
@@ -146,91 +116,10 @@ function popUpForm(container, type, id){
     }
 }
 
-function changeQuestionType(){
 
-    const type = document.getElementById("input-types").value
-    const selectedOptionDiv = document.getElementById("selected-option-div");
-    const questionType = document.getElementById("question-type")
-    const popUpContainer = document.getElementById("inner-pop-up-container");
-    
-
-
-    switch(type){
-        case "radio": selectedOptionDiv.innerHTML = radioSelected(popUpContainer);
-        break;
-        case "text": selectedOptionDiv.innerHTML = `<input type="text">`
-        break;
-        case "range": selectedOptionDiv.innerHTML = `<input type="range" min="0" max=5">`
-        break;
-    }
-
-    questionType.value = type;
-    
-}
 
 function closePopUp(){
     popUpContainer.innerHTML = "";
 
 }
 
-function radioSelected(container){
-
-    container.innerHTML += `<div class="under-popup popup" id="radio-popup"></div>`
-
-    let radioPopup = document.querySelector("#radio-popup");
-
-    radioPopup.innerHTML = `<input type="number" id="radio-numbers" placeholder="How many radio buttons do you want?">
-    <button id="radio-add-button">Add radio buttons</button><br><br>
-    `;
-
-    let radioAddButton = document.querySelector("#radio-add-button");
-    let radioNumbers = document.querySelector("#radio-numbers")
-    radioAddButton.onclick =()=> showRadioButtons(radioPopup, radioNumbers.value);
-
-}
-
-function showRadioButtons(container, number){
-
-    const selectedOptionDiv = document.getElementById("selected-option-div");
-
-    let radioArray = []
-    container.innerHTML = "";
-    for(i=0; i<number; i++){
-        container.innerHTML += `<input type="text" placeholder="Enter text for button here" class="radio-button-value">`
-    }
-
-    container.innerHTML += `<button id="submit-radio-names"> Sumbit </button>`
-
-    let submitRadioButton = document.querySelector("#submit-radio-names");
-
-    submitRadioButton.onclick =()=> printRadioButtons(container, number);
-
-        
-
-}
-    
-
-function printRadioButtons(container, number){
-    console.log(container);
-    console.log(number);
-    let radioPopup = document.querySelector("#radio-popup");
-
-
-    let radioButtonValues = document.querySelectorAll(".radio-button-value")
-
-    radioPopup.innerHTML = ""; 
-
-        for(i=0; i<number; i++){
-            
-            radioPopup.innerHTML += `<div class="radio-answes">
-
-            <input type="radio" id="${radioButtonValues[i].value}" name="answer" value="${radioButtonValues[i].value}">
-            <label  for="${radioButtonValues[i].value}">${radioButtonValues[i].value}</label><br>`
-
-        }
-
-        radioPopup.innerHTML += `</div>`
-
-        console.log(container.innerHTML);
-    console.log(number);
-}

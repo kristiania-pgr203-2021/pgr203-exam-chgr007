@@ -5,6 +5,8 @@
     <title>Questionnaire</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="javascript/javascript.js"></script>
+    <script src="javascript/newQuestion.js"></script>
+
 
 
 </head>
@@ -28,7 +30,8 @@
 </main>
 <script>
 
-    const popUpContainer = document.getElementById("pop-up-container")
+    const popUpContainer = document.getElementById("pop-up-container");
+
     const questionContainer = document.getElementById("question-container");
     const question = "question";
     const questionnaire = "questionnaire"
@@ -40,7 +43,7 @@
     console.log(document.getElementById("questionnaire-name").innerHTML)
     console.log(questionnaireId)
 
-    addButton(questionContainer, "question", questionnaireId)
+    addButton(questionContainer, question, questionnaireId);
 
     fetch(`/api/questionnaireName?questionnaireId=${questionnaireId}`).then(function (res) {
         return res.text()

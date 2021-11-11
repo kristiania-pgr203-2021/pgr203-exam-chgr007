@@ -126,11 +126,6 @@ a{
     color: black
 }
 
-.radio-answers {
-    border: lightgreen;
-    border-style: dashed;
-}
-
 .popup-header{
     background-color: rgb(255, 212, 71);
     margin: -1em;
@@ -149,7 +144,7 @@ a{
 
 
 input{
-    width: 100%;
+    width: 50%;
     height: auto;
     background-color: lightgray;
     border-style: none;
