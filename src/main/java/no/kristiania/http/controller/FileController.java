@@ -14,16 +14,6 @@ import java.sql.SQLException;
 public class FileController implements HttpController {
     @Override
     public HttpResponse handle(HttpRequest request) throws SQLException, IOException {
-        // TODO: Fjerne dev-mode
-        if (Files.exists(Path.of("/src/java/resources" + request.getFileTarget()))) {
-            String messageBody = Files.readString(Path.of("/src/java/resources" + request.getFileTarget()));
-            HttpResponse httpResponse = new HttpResponse(200, "OK");
-            httpResponse.setHeaderField("Connection", "close");
-            httpResponse.setHeaderField("Content-Length", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
-            httpResponse.setHeaderField("Content-type", getContentType(request.getFileTarget()));
-            httpResponse.setMessageBody(messageBody);
-            return httpResponse;
-        }
         InputStream fileStream = getClass().getResourceAsStream(request.getFileTarget());
         if (fileStream != null) {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
