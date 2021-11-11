@@ -103,7 +103,7 @@ function popUpForm(container, type, id){
         `
         break;
 
-        case "question": createQuestionPopUp(id);
+        case "question": popUpDiv.innerHTML += createQuestionPopUp(id);
         break;
 
         case "answer": popUpDiv.innerHTML += `
