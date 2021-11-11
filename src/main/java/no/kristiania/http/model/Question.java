@@ -1,5 +1,6 @@
 package no.kristiania.http.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +13,9 @@ public class Question {
     private boolean hasAnswerOptions = false;
     private List<AnswerOption> answerOptionList;
 
+    public Question() {
+        answerOptionList = new ArrayList<>();
+    }
     public void setQuestion(String question) {
         this.question = question;
     }
@@ -20,7 +24,7 @@ public class Question {
         return question;
     }
 
-    public boolean isHasAnswerOptions() {
+    public boolean getHasAnswerOptions() {
         return hasAnswerOptions;
     }
 
@@ -28,8 +32,11 @@ public class Question {
         return answerOptionList;
     }
 
-    public void setAnswerOptionList(AnswerOption answerOptionList) {
+    public void addAnswerOption(AnswerOption answerOptionList) {
         this.answerOptionList.add(answerOptionList);
+    }
+    public void setAnswerOptionList(List<AnswerOption> answerOptionList) {
+        this.answerOptionList = answerOptionList;
     }
 
     public long getId() {
@@ -61,10 +68,6 @@ public class Question {
         int result = Objects.hash(id, question);
         result = 31 * result;
         return result;
-    }
-
-    public boolean getHasAnswerOptions() {
-        return hasAnswerOptions;
     }
 
     public void setHasAnswerOptions(boolean hasAnswerOptions) {

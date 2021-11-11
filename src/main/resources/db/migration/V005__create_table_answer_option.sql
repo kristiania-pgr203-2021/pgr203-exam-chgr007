@@ -1,4 +1,4 @@
-create type answer_type as enum ('radio', 'range', 'text');
+
 
 create table answer_option (
     id serial primary key,

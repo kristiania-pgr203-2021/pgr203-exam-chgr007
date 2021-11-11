@@ -2,6 +2,7 @@ package no.kristiania.http;
 
 import no.kristiania.dao.*;
 import no.kristiania.http.controller.*;
+import no.kristiania.http.controller.v2.AdvancedQuestionController;
 import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.Properties;
 import no.kristiania.http.util.Router;
@@ -66,6 +67,7 @@ public class HttpServer {
     }
 
     private void configureRouter(Router router) {
+        router.addController("/api/v2/question", new AdvancedQuestionController(new QuestionDao(createDataSource()), new AnswerOptionDao(createDataSource())));
         router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource())));
         router.addController("/api/questionnaires", new QuestionnairesController(new QuestionnaireDao(createDataSource())));
         router.addController("/api/newQuestionnaire", new NewQuestionnaireController(new QuestionnaireDao(createDataSource())));

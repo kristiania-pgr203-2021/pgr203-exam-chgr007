@@ -68,6 +68,38 @@ function addButton(container, type, id){
 }
 
 
+function createQuestionPopUp(questionnaireId) {
+    const question = {};
+    const form = `
+            <form action="/api/v2/question" method="POST">
+                <input type="hidden" name="questionnaireId" value="${questionnaireId}">
+                <input type="hidden" name="questionType" id="question-type" value="">
+                <input type="text" maxlength="250" name="question" id="question-name" placeholder="Write your question here"></p>
+                <select onchange="changeQuestionType()" id="input-types" name="input-types">
+                <option value="options">Options</option>
+                <option value="text">Text</option>
+                <option value="radio">Radio</option>
+                <option value="range">range</option>
+                </select>
+
+                <div id="selected-option-div"></div>
+
+                <button id="add-question-button">ADD</button> 
+            </form>
+        `;
+    let hasAnswerOptions = document.getElementById("input-types").value !== "text";
+    question.id = -1;
+    question.question = document.getElementById("question-name");
+    question.questionnaire = id;
+    question.hasAnswerOptions = hasAnswerOptions;
+    question.answerOptionList = [];
+
+    if (hasAnswerOptions) {
+        // add to option list
+    }
+    return form;
+}
+
 function popUpForm(container, type, id){
 
     container.innerHTML = `<div class="background-panel main"></div>`
@@ -101,23 +133,7 @@ function popUpForm(container, type, id){
         `
         break;
 
-        case "question": popUpDiv.innerHTML += `
-            <form action="/api/newQuestion" method="POST">
-                <input type="hidden" name="questionnaireId" value="${id}">
-                <input type="hidden" name="questionType" id="question-type" value="">
-                <input type="text" maxlength="250" name="question" placeholder="Write your question here"></p>
-                <select onchange="changeQuestionType()" id="input-types" name="input-types">
-                <option value="options">Options</option>
-                <option value="text">Text</option>
-                <option value="radio">Radio</option>
-                <option value="range">range</option>
-                </select>
-
-                <div id="selected-option-div"></div>
-
-                <button type="submit">ADD</button> 
-            </form>
-        `
+        case "question": popUpDiv.innerHTML += createQuestionPopUp(id);
         break;
 
         case "answer": popUpDiv.innerHTML += `

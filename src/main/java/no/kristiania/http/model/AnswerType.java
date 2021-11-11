@@ -4,6 +4,4 @@ public enum AnswerType {
     text,
     range,
     radio
-
-
 }

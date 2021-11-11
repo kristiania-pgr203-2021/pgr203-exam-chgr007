@@ -52,18 +52,6 @@ public class QuestionnairesController implements HttpController {
         if (request.getRequestType().equalsIgnoreCase("get") && request.hasQueryParam("id")) {
             Long id = Long.valueOf(request.getQueryParam("id"));
             Questionnaire questionnaire = questionnaireDao.retrieveById(id);
-
-// ********************             Alternativ måte å gjøre ting på:
-//            questionDao.listByQuestionnaireId(id).forEach(q -> questionnaire.addQuestion(q));
-//
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            String questionnaireJSON = objectMapper.writeValueAsString(questionnaire);
-//            httpResponse.setHeaderField("Connection: ", "close");
-//            httpResponse.setHeaderField("Content-Type", "application/json");
-//            httpResponse.setHeaderField("Content-Length", String.valueOf(questionnaireJSON.getBytes(StandardCharsets.UTF_8).length));
-//            httpResponse.setMessageBody(questionnaireJSON);
-// *******************************************************************************************************************************************
-
             httpResponse.setHeaderField("Connection: ", "close");
             String messageBody = "questionnaire=" + questionnaire.getName();
             httpResponse.setMessageBody(messageBody);
