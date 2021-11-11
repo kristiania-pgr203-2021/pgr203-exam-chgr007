@@ -267,6 +267,43 @@ public class QuestionnaireDaoTest {
     }
 
     @Test
+    void shouldInsertRadioAnswerOptionThrougAPI() throws IOException, SQLException {
+        HttpServer server = new HttpServer(0);
+        HttpClient client = new HttpClient("localhost", server.getPort());
+        User user = randomFromDatabase(userDao);
+        Question question = randomFromDatabase(questionDao);
+        question.setQuestionType(QuestionType.radio);
+        question.setQuestion("Is this working?");
+        question.setHasAnswerOptions(true);
+
+        QuestionOptions questionOptions = new QuestionOptions();
+        questionOptions.setQuestion("Jas");
+        QuestionOptions questionOptions1 = new QuestionOptions();
+        questionOptions1.setQuestion("Nei ass");
+
+        question.addAnswerOption(questionOptions);
+        question.addAnswerOption(questionOptions1);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String JSONQuestion = objectMapper.writeValueAsString(question);
+        PostValue<String, String> jsonPostString = new PostValue("json", JSONQuestion);
+
+        client.post(List.of(jsonPostString), "/api/v2/question");
+        List<Question> questions = questionDao.retrieveAll();
+
+        assertThat(questions)
+                .extracting(Question::getQuestion)
+                .contains("Is this working?");
+
+        RadioQuestionDao radioQuestionDao = new RadioQuestionDao(createDataSource());
+        List<QuestionOptions> radioQuestionOptions = radioQuestionDao.retrieveAll();
+
+        assertThat(radioQuestionOptions)
+                .extracting(QuestionOptions::getQuestion)
+                .contains("Jas", "Nei ass");
+    }
+
+    @Test
     void shouldRegisterAnswerOption() throws SQLException {
         Question question = randomFromDatabase(questionDao);
 

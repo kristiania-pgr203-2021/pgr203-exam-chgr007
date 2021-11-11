@@ -35,7 +35,7 @@ public class RadioQuestionDao extends DataAccessObject<QuestionOptions> {
         QuestionOptions questionOptions = new QuestionOptions();
         questionOptions.setId(rs.getLong("id"));
         questionOptions.setQuestionId(rs.getLong("question_id"));
-        questionOptions.setQuestion("question");
+        questionOptions.setQuestion(rs.getString("question"));
         return questionOptions;
     }
 }
