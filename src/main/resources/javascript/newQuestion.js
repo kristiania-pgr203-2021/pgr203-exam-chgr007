@@ -12,7 +12,6 @@ let answerOptionList = [];
 
 function createQuestionPopUp(questionnaireId) {
 
-
     const form = `
             <div id="question-form" class="popup">
                 <input type="hidden" name="questionnaireId" value="${questionnaireId}">
@@ -20,6 +19,7 @@ function createQuestionPopUp(questionnaireId) {
                 <input type="text" maxlength="250" name="question" id="question-name" placeholder="Write your question here" value="">
                 <br>
                 <select onchange="changeQuestionType()" id="input-types" name="input-types">
+                <option value="option">Please select Answer Type</option>
                 <option value="text">Text</option>
                 <option value="radio">Radio</option>
                 <option value="range">Range</option>
@@ -32,11 +32,9 @@ function createQuestionPopUp(questionnaireId) {
 
                 <hr>
 
-                <button id="add-question-button" onclick="submitJson(form)">ADD</button> 
+                <button id="add-question-button" onclick="submitJson()">ADD</button> 
             </div>
         `;
-
-    console.log(form);
 
     updateFormVariables()
 
@@ -48,35 +46,50 @@ function updateFormVariables(){
     selectedOptionDiv = document.querySelector("#selected-option-div");
     questionType = document.querySelector("#question-type");
     questionForm = document.querySelector("#question-form")
-
 }
 
-function submitJson(form){
+function submitJson(){
 
-    updateFormVariables();
+    const jsonString = makeJson();
+
+    fetch('/api/v2/question', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': jsonString.length,
+        },
+        body: "json=" + jsonString
+    });
+}
+
+function makeJson(){
 
     const question = {};
 
-    question.id = 1;
+    updateFormVariables();
+
+    question.id = 0;
     question.question = document.getElementById("question-name").value;
-    question.questionnaire = questionnaireId;
-    question.answerType = type;
+    question.questionnaireId = questionnaireId;
+    question.questionType = type;
     question.hasAnswerOptions = (type !== "text");
     question.answerOptionList = answerOptionList;
 
-    console.log(question);
+    let jsonStrinify = JSON.stringify(question);
+
+    console.log(jsonStrinify)
 
     closePopUp();
 
-    return form;
+    return  jsonStrinify;
 }
-
 
 function changeQuestionType(){
 
-    type = document.querySelector("#input-types").value
+    updateFormVariables();
 
-    console.log(document.getElementById("under-popup"))
+    type = document.querySelector("#input-types").value
+    questionType.value = type;
 
     if(document.getElementById("under-popup") == null){
         innerPopUpContainer.innerHTML += `<div class="under-popup popup main" id="under-popup"></div>`
@@ -88,8 +101,6 @@ function changeQuestionType(){
 
     document.querySelector("#selected-option-div").innerHTML = "";
 
-    
-
     switch(type){
         case "radio": radioSelected();
             break;
@@ -98,9 +109,6 @@ function changeQuestionType(){
         case "range": rangeSelected();
             break;
     }
-
-    questionType.value = type;
-
 }
 
 function rangeSelected(){
