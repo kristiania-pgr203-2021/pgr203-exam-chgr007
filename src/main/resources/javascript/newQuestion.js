@@ -13,13 +13,12 @@ let answerOptionList = [];
 function createQuestionPopUp(questionnaireId) {
 
 
-    let form = "";
-
-    form = `
+    const form = `
             <div id="question-form" class="popup">
                 <input type="hidden" name="questionnaireId" value="${questionnaireId}">
                 <input type="hidden" name="questionType" id="question-type" value="">
-                <input type="text" maxlength="250" name="question" id="question-name" placeholder="Write your question here">
+                <input type="text" maxlength="250" name="question" id="question-name" placeholder="Write your question here" value="">
+                <br>
                 <select onchange="changeQuestionType()" id="input-types" name="input-types">
                 <option value="text">Text</option>
                 <option value="radio">Radio</option>
@@ -38,63 +37,44 @@ function createQuestionPopUp(questionnaireId) {
         `;
 
     console.log(form);
-    document.querySelector("#pop-up-div").innerHTML += form;
-    console.log(document.querySelector("#pop-up-div"))
 
     updateFormVariables()
 
-
-
+    return form
 }
 
 function updateFormVariables(){
     innerPopUpContainer = document.getElementById("inner-pop-up-container")
-
-    type = document.querySelector("#input-types").value
     selectedOptionDiv = document.querySelector("#selected-option-div");
     questionType = document.querySelector("#question-type");
     questionForm = document.querySelector("#question-form")
+
 }
 
 function submitJson(form){
 
-    updateVariables();
+    updateFormVariables();
 
     const question = {};
 
-    question.id = -1;
+    question.id = 1;
     question.question = document.getElementById("question-name").value;
     question.questionnaire = questionnaireId;
+    question.answerType = type;
     question.hasAnswerOptions = (type !== "text");
     question.answerOptionList = answerOptionList;
 
+    console.log(question);
+
+    closePopUp();
+
     return form;
-
 }
 
-function hasAnswerOptions(questionType){
-
-
-
-    if(questionType === "range"){
-
-    } else if (questionType === "radio"){
-        let radioAnswers = document.querySelectorAll(".radio-answers");
-
-        for(i=0; i<radioAnswers.length; i++){
-            ;
-
-        }
-
-
-    }
-
-    return answerOptionList;
-}
 
 function changeQuestionType(){
 
-
+    type = document.querySelector("#input-types").value
 
     console.log(document.getElementById("under-popup"))
 
@@ -152,6 +132,16 @@ function printRange(){
         maxLabel = tempLabel;
     }
 
+    const rangeAnswer = {}
+
+    rangeAnswer.id = 0;
+    rangeAnswer.min = minRange;
+    rangeAnswer.max = maxRange;
+    rangeAnswer.minLabel = minLabel;
+    rangeAnswer.maxLabel = maxLabel
+
+    answerOptionList.push(rangeAnswer);
+
 
     document.querySelector("#selected-option-div").innerHTML = `
     <label>${minLabel}</label>
@@ -176,6 +166,14 @@ function printTextInput(){
 
     let maxChars = document.querySelector("#text-numbers").value;
     let placeholderText = document.querySelector("#placeholder-text").value;
+
+    const textAnswer = {}
+
+    textAnswer.id = 0;
+    textAnswer.maxChars = maxChars;
+    textAnswer.placeHolderText = placeholderText;
+
+    answerOptionList.push(textAnswer);
 
     document.querySelector("#selected-option-div").innerHTML = `
             <input type="text" id="text-input" name="answer" value="" maxlength="${maxChars}" placeholder="${placeholderText}">
@@ -210,8 +208,6 @@ function printRadioButtons(){
     let radioButtonValues = document.querySelectorAll(".radio-button-value")
     underPopUp.innerHTML = "";
 
-    console.log(selectedOptionDiv)
-
     for(i=0; i<radioButtonValues.length; i++){
 
         const radioAnswer = {};
@@ -228,10 +224,9 @@ function printRadioButtons(){
         </div>
         <br>`
 
-        answerOptionList += radioAnswer;
+        answerOptionList.push(radioAnswer);
     }
 
-    console.log(answerOptionList);
     innerPopUpContainer.removeChild(underPopUp);
 
 }
