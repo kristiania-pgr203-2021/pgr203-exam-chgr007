@@ -47,30 +47,20 @@ public abstract class DataAccessObject<T> {
 
     public void save(T model) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = createPreparedStatementForSave(connection)) {
-                setFieldsToUpdateInDB(model, statement);
-                statement.executeUpdate();
-                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                    generatedKeys.next();
-                    setGeneratedKeys(model, generatedKeys);
-                }
-            }
+            executeSave(connection, model);
         }
     }
+
+
     public void update(T model) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = createPreparedStatementForUpdate(connection)) {
-                setFieldsToUpdateInDB(model, statement);
-                statement.executeUpdate();
-            }
+            executeUpdate(connection, model);
         }
     }
+    protected abstract void executeSave(Connection connection, T model) throws SQLException;
 
-    protected abstract PreparedStatement createPreparedStatementForUpdate(Connection connection) throws SQLException;
+    protected abstract void executeUpdate(Connection connection, T model) throws SQLException;
 
-    protected abstract PreparedStatement createPreparedStatementForSave(Connection connection) throws SQLException;
-    protected abstract void setGeneratedKeys(T model, ResultSet generatedKeys) throws SQLException;
-    protected abstract void setFieldsToUpdateInDB(T model, PreparedStatement statement) throws SQLException;
     protected abstract T mapValuesToObject(ResultSet rs) throws SQLException;
 
 }

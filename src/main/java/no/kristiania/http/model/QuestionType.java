@@ -1,6 +1,6 @@
 package no.kristiania.http.model;
 
-public enum AnswerType {
+public enum QuestionType {
     text,
     range,
     radio

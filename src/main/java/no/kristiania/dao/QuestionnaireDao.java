@@ -11,28 +11,26 @@ public class QuestionnaireDao extends DataAccessObject<Questionnaire> {
     }
 
     @Override
-    protected PreparedStatement createPreparedStatementForUpdate(Connection connection) throws SQLException {
-        return connection.prepareStatement("update questionnaire set name = ? where id = ?");
-
+    protected void executeSave(Connection connection, Questionnaire model) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement("insert into questionnaire(name, person_id) values(?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1,model.getName());
+            statement.setLong(2, model.getPersonId());
+            statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                generatedKeys.next();
+                model.setId(generatedKeys.getLong("id"));
+            }
+        }
     }
 
     @Override
-    protected PreparedStatement createPreparedStatementForSave(Connection connection) throws SQLException {
-        return connection.prepareStatement("insert into questionnaire(name, person_id) values(?, ?)", Statement.RETURN_GENERATED_KEYS);
-
+    protected void executeUpdate(Connection connection, Questionnaire model) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement("update questionnaire set name = ? where id = ?")) {
+            statement.setString(1, model.getName());
+            statement.setLong(2, model.getId());
+        }
     }
 
-    @Override
-    protected void setGeneratedKeys(Questionnaire model, ResultSet generatedKeys) throws SQLException {
-        model.setId(generatedKeys.getLong("id"));
-
-    }
-
-    @Override
-    protected void setFieldsToUpdateInDB(Questionnaire questionnaire, PreparedStatement statement) throws SQLException {
-        statement.setString(1, questionnaire.getName());
-        statement.setLong(2, questionnaire.getId());
-    }
 
     @Override
     protected Questionnaire mapValuesToObject(ResultSet rs) throws SQLException {

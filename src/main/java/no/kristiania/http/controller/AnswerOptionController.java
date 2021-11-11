@@ -1,7 +1,6 @@
 package no.kristiania.http.controller;
 
-import no.kristiania.dao.AnswerOptionDao;
-import no.kristiania.http.model.AnswerOption;
+import no.kristiania.dao.RangeQuestionDao;
 import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.HttpResponse;
 
@@ -10,10 +9,10 @@ import java.sql.SQLException;
 import java.util.Map;
 
 public class AnswerOptionController implements HttpController {
-    private AnswerOptionDao answerOptionDao;
+    private RangeQuestionDao rangeQuestionDao;
 
-    public AnswerOptionController(AnswerOptionDao answerOptionDao) {
-        this.answerOptionDao = answerOptionDao;
+    public AnswerOptionController(RangeQuestionDao rangeQuestionDao) {
+        this.rangeQuestionDao = rangeQuestionDao;
     }
 
     @Override
@@ -25,14 +24,14 @@ public class AnswerOptionController implements HttpController {
 
             Map<String,String> params = request.getPostParams();
             if (params.containsKey("answer_type")) {
-                AnswerOption answerOption = new AnswerOption();
-                int questionId = Integer.parseInt(params.get("question_id"));
-                answerOption.setAnswerType(params.get("answer_type"));
-                answerOption.setQuestionId(questionId);
-                answerOption.setValue(params.get("value"));
-                answerOption.setName(params.get("name"));
-                answerOptionDao.save(answerOption);
-                return new HttpResponse(200, "OK");
+//                AnswerOption answerOption = new AnswerOption();
+//                int questionId = Integer.parseInt(params.get("question_id"));
+//                answerOption.setAnswerType(params.get("answer_type"));
+//                answerOption.setQuestionId(questionId);
+//                answerOption.setValue(params.get("value"));
+//                answerOption.setName(params.get("name"));
+//                rangeQuestionDao.save(answerOption);
+//                return new HttpResponse(200, "OK");
             }
             return new HttpResponse(500, "Internal Server Error");
         }

@@ -12,25 +12,28 @@ public class AnswerDao extends DataAccessObject<Answer> {
         super(dataSource, "answer");
     }
 
+
     @Override
-    protected PreparedStatement createPreparedStatementForUpdate(Connection connection) throws SQLException {
-        return connection.prepareStatement("update answer set answer = ?, question_id = ?");
+    protected void executeSave(Connection connection, Answer model) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement("insert into answer(question_id, answer, person_id) values (?,?,?)",Statement.RETURN_GENERATED_KEYS)) {
+            statement.setLong(1, model.getQuestionId());
+            statement.setString(2, model.getAnswer());
+            statement.setLong(3, model.getUserId());
+            statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                generatedKeys.next();
+                model.setId(generatedKeys.getLong("id"));
+            }
+        }
     }
 
     @Override
-    protected PreparedStatement createPreparedStatementForSave(Connection connection) throws SQLException {
-        return connection.prepareStatement("insert into answer(answer, question_id) values(?,?)", Statement.RETURN_GENERATED_KEYS);
-    }
-
-    @Override
-    protected void setGeneratedKeys(Answer answer, ResultSet generatedKeys) throws SQLException {
-        answer.setId(generatedKeys.getLong("id"));
-    }
-
-    @Override
-    public void setFieldsToUpdateInDB(Answer answer, PreparedStatement statement) throws SQLException {
-        statement.setLong(2, answer.getQuestionId());
-        statement.setString(1, answer.getAnswer());
+    protected void executeUpdate(Connection connection, Answer model) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement("update answer set answer = ? where id = ?")) {
+            statement.setString(1, model.getAnswer());
+            statement.setLong(2, model.getId());
+            statement.executeUpdate();
+        }
     }
 
     @Override
@@ -39,6 +42,7 @@ public class AnswerDao extends DataAccessObject<Answer> {
         answer.setId(rs.getLong("id"));
         answer.setQuestionId(rs.getLong("question_id"));
         answer.setAnswer(rs.getString("answer"));
+        answer.setUserId(rs.getLong("person_id"));
         return answer;
     }
 

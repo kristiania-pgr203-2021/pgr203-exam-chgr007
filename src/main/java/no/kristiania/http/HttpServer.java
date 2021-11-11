@@ -15,7 +15,6 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -67,7 +66,7 @@ public class HttpServer {
     }
 
     private void configureRouter(Router router) {
-        router.addController("/api/v2/question", new AdvancedQuestionController(new QuestionDao(createDataSource()), new AnswerOptionDao(createDataSource())));
+        router.addController("/api/v2/question", new AdvancedQuestionController(new QuestionDao(createDataSource()), new RangeQuestionDao(createDataSource())));
         router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource())));
         router.addController("/api/questionnaires", new QuestionnairesController(new QuestionnaireDao(createDataSource())));
         router.addController("/api/newQuestionnaire", new NewQuestionnaireController(new QuestionnaireDao(createDataSource())));
@@ -79,7 +78,7 @@ public class HttpServer {
         router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource()), new AnswerDao(createDataSource())));
         router.addController("/api/questionName", new QuestionNameController(new QuestionDao(createDataSource())));
         router.addController("/api/newAnswer", new AnswerController(new AnswerDao(createDataSource())));
-        router.addController("/api/answerOption", new AnswerOptionController(new AnswerOptionDao(createDataSource())));
+        router.addController("/api/answerOption", new AnswerOptionController(new RangeQuestionDao(createDataSource())));
     }
 
     // TODO: Kanskje flytte datasource og properties ut til en egen klasse

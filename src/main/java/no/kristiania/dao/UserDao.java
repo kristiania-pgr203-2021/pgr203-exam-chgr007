@@ -12,26 +12,24 @@ public class UserDao extends DataAccessObject<User> {
     }
 
     @Override
-    protected PreparedStatement createPreparedStatementForUpdate(Connection connection) throws SQLException {
-        return connection.prepareStatement("update person set first_name = ?, last_name = ?, email = ?, password = ?");
+    protected void executeSave(Connection connection, User model) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement("insert into person(first_name,last_name,email,password) values (?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, model.getFirstName());
+            statement.setString(2, model.getLastName());
+            statement.setString(3, model.getEmail());
+            statement.setString(4, model.getPassword());
+            statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                generatedKeys.next();
+                model.setId(generatedKeys.getLong("id"));
+            }
+        }
+
     }
 
     @Override
-    protected PreparedStatement createPreparedStatementForSave(Connection connection) throws SQLException {
-        return connection.prepareStatement("insert into person(first_name,last_name,email,password) values (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-    }
+    protected void executeUpdate(Connection connection, User model) throws SQLException {
 
-    @Override
-    protected void setGeneratedKeys(User model, ResultSet generatedKeys) throws SQLException {
-        model.setId(generatedKeys.getLong("id"));
-    }
-
-    @Override
-    protected void setFieldsToUpdateInDB(User model, PreparedStatement statement) throws SQLException {
-        statement.setString(1, model.getFirstName());
-        statement.setString(2, model.getLastName());
-        statement.setString(3, model.getEmail());
-        statement.setString(4, model.getPassword());
     }
 
     @Override

@@ -1,13 +1,11 @@
 package no.kristiania.http;
 
 import no.kristiania.dao.*;
-import no.kristiania.http.model.Answer;
-import no.kristiania.http.model.AnswerOption;
-import no.kristiania.http.model.Question;
-import no.kristiania.http.model.Questionnaire;
+import no.kristiania.http.model.*;
 import no.kristiania.http.util.Authenticator;
 import no.kristiania.http.util.PostValue;
 import no.kristiania.http.util.Properties;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -33,7 +31,7 @@ public class QuestionnaireDaoTest {
     QuestionnaireDao questionnaireDao = new QuestionnaireDao(createDataSource());
     QuestionDao questionDao = new QuestionDao(createDataSource());
     AnswerDao answerDao = new AnswerDao(createDataSource());
-    AnswerOptionDao answerOptionDao = new AnswerOptionDao(createDataSource());
+    RangeQuestionDao rangeQuestionDao = new RangeQuestionDao(createDataSource());
 
 
     @BeforeAll
@@ -62,10 +60,11 @@ public class QuestionnaireDaoTest {
         Question question = new Question();
         question.setQuestionnaireId(questionnaire.getId());
         question.setQuestion("Hva tenker du om eksamen i Avansert Java?");
-
+        question.setQuestionType(QuestionType.text);
         Question question1 = new Question();
         question1.setQuestionnaireId(questionnaire.getId());
         question1.setQuestion("På en skala fra 1-5, hvor stresset er du?");
+        question1.setQuestionType(QuestionType.text);
 
         questionDao.save(question);
         questionDao.save(question1);
@@ -74,14 +73,16 @@ public class QuestionnaireDaoTest {
         Answer answer = new Answer();
         answer.setQuestionId(question.getId());
         answer.setAnswer("Det går egentlig veldig greit!");
-
+        answer.setUserId(user.getId());
         Answer answer1 = new Answer();
         answer1.setQuestionId(question.getId());
         answer1.setAnswer("Jeg skal overleve");
+        answer1.setUserId(user.getId());
 
         Answer answer2 = new Answer();
         answer2.setQuestionId(question.getId());
         answer2.setAnswer("(-: nei");
+        answer2.setUserId(user.getId());
 
         answerDao.save(answer);
         answerDao.save(answer1);
@@ -90,14 +91,17 @@ public class QuestionnaireDaoTest {
         Answer answer3 = new Answer();
         answer3.setQuestionId(question1.getId());
         answer3.setAnswer("5");
+        answer3.setUserId(user.getId());
 
         Answer answer4 = new Answer();
         answer4.setQuestionId(question1.getId());
         answer4.setAnswer("3");
+        answer4.setUserId(user.getId());
 
         Answer answer5 = new Answer();
         answer5.setQuestionId(question1.getId());
         answer5.setAnswer("1");
+        answer5.setUserId(user.getId());
 
         answerDao.save(answer3);
         answerDao.save(answer4);
@@ -113,7 +117,7 @@ public class QuestionnaireDaoTest {
         Question question = new Question();
         question.setQuestion("Hvordan har du det i dag?");
         question.setQuestionnaireId(questionnaire.getId());
-
+        question.setQuestionType(QuestionType.text);
         questionDao.save(question);
 
         Question questionFromDB = questionDao.retrieveById(question.getId());
@@ -129,21 +133,26 @@ public class QuestionnaireDaoTest {
         Question question = new Question();
         question.setQuestion("Hvordan har du det i dag?");
         question.setQuestionnaireId(questionnaire.getId());
+        question.setQuestionType(QuestionType.text);
         questionDao.save(question);
 
         Answer answer1 = new Answer();
         answer1.setQuestionId(question.getId());
         answer1.setAnswer("Jeg har det fint, men er litt sliten");
+        answer1.setUserId(1);
         answerDao.save(answer1);
 
         Answer answer2 = new Answer();
         answer2.setQuestionId(question.getId());
         answer2.setAnswer("Livet suger as");
+        answer2.setUserId(1);
         answerDao.save(answer2);
 
         Answer answer3 = new Answer();
         answer3.setQuestionId(question.getId());
         answer3.setAnswer(":-) nei");
+        answer3.setUserId(1);
+
         answerDao.save(answer3);
 
         assertThat(answerDao.listByQuestionId(question.getId()))
@@ -162,11 +171,13 @@ public class QuestionnaireDaoTest {
         Question question = new Question();
         question.setQuestion("Hvordan har du det i dag?");
         question.setQuestionnaireId(questionnaire.getId());
+        question.setQuestionType(QuestionType.text);
         questionDao.save(question);
 
         Answer answer1 = new Answer();
         answer1.setQuestionId(question.getId());
         answer1.setAnswer("Jeg har det fint");
+        answer1.setUserId(1);
         answerDao.save(answer1);
 
         question.setQuestion("Liker du fiskeboller?");
@@ -180,13 +191,16 @@ public class QuestionnaireDaoTest {
 
     @Test
     void shouldAddUser() throws SQLException {
-        User user = new User();
-        user.setEmail("test@persson.no");
-        user.setFirstName("test");
-        user.setLastName("Persson");
-        user.setPassword("123");
-        userDao.save(user);
-
+        String email = "test@persson.no";
+        User user = userDao.retrieveByEmail(email);
+        if (user == null) {
+            user = new User();
+            user.setEmail(email);
+            user.setFirstName("test");
+            user.setLastName("Persson");
+            user.setPassword("123");
+            userDao.save(user);
+        }
         assertThat(user)
                 .usingRecursiveComparison()
                 .isEqualTo(userDao.retrieveById(user.getId()));
@@ -233,39 +247,42 @@ public class QuestionnaireDaoTest {
     }
 
     @Test
-    void shouldInsertAnswerOptionThrougAPI() throws IOException, SQLException {
+    void shouldInsertPlainTextAnswerOptionThrougAPI() throws IOException, SQLException {
         HttpServer server = new HttpServer(0);
         HttpClient client = new HttpClient("localhost", server.getPort());
         Question question = randomFromDatabase(questionDao);
-        PostValue<String, String> answerType = new PostValue("answer_type", "range");
-        PostValue<String, String> questionId = new PostValue("question_id", String.valueOf(question.getId()));
-        PostValue<String, String> value = new PostValue("value", "5");
-        PostValue<String, String> name = new PostValue("name", "min");
+        question.setQuestionType(QuestionType.text);
+        question.setQuestion("Vil dette fungere?");
+        question.setHasAnswerOptions(false);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String JSONQuestion = objectMapper.writeValueAsString(question);
+        PostValue<String, String> jsonPostString = new PostValue("json", JSONQuestion);
 
-        client.post(List.of(answerType, questionId, value, name), "/api/answerOption");
-        List<AnswerOption> answerOptions = answerOptionDao.retrieveAll();
+        client.post(List.of(jsonPostString), "/api/v2/question");
+        List<Question> questionOptions = questionDao.retrieveAll();
 
-        assertThat(answerOptions)
-                .extracting(AnswerOption::getValue)
-                .contains("5");
+        assertThat(questionOptions)
+                .extracting(Question::getQuestion)
+                .contains("Vil dette fungere?");
     }
 
     @Test
     void shouldRegisterAnswerOption() throws SQLException {
         Question question = randomFromDatabase(questionDao);
 
-        AnswerOption answerOption = new AnswerOption();
-        answerOption.setAnswerType("range");
-        answerOption.setQuestionId(question.getId());
-        answerOption.setValue("0");
-        answerOption.setName("min");
+        QuestionOptions questionOptions = new QuestionOptions();
+        question.setQuestionType(QuestionType.range);
+        questionOptions.setQuestionId(question.getId());
+        questionOptions.setRange(0);
+        questionOptions.setNameMinVal("min");
+        questionOptions.setNameMaxVal("max");
 
-        answerOptionDao.save(answerOption);
+        rangeQuestionDao.save(questionOptions);
 
-        AnswerOption answerOptionFromServer = answerOptionDao.retrieveById(answerOption.getId());
-        assertThat(answerOptionFromServer)
+        QuestionOptions questionOptionsFromServer = rangeQuestionDao.retrieveById(questionOptions.getId());
+        assertThat(questionOptionsFromServer)
                 .usingRecursiveComparison()
-                .isEqualTo(answerOption);
+                .isEqualTo(questionOptions);
 
     }
 
