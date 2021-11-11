@@ -1,4 +1,3 @@
-
 let selectedOptionDiv;
 let type;
 let underPopUp;
@@ -6,8 +5,6 @@ let questionType;
 let innerPopUpContainer;
 let questionForm;
 let answerOptionList = [];
-
-
 
 
 function createQuestionPopUp(questionnaireId) {
@@ -40,14 +37,10 @@ function createQuestionPopUp(questionnaireId) {
     console.log(form);
     document.querySelector("#pop-up-div").innerHTML += form;
     console.log(document.querySelector("#pop-up-div"))
-
     updateFormVariables()
-
-
-
 }
 
-function updateFormVariables(){
+function updateFormVariables() {
     innerPopUpContainer = document.getElementById("inner-pop-up-container")
 
     type = document.querySelector("#input-types").value
@@ -56,7 +49,7 @@ function updateFormVariables(){
     questionForm = document.querySelector("#question-form")
 }
 
-function submitJson(form){
+function submitJson(form) {
 
     updateVariables();
 
@@ -72,16 +65,15 @@ function submitJson(form){
 
 }
 
-function hasAnswerOptions(questionType){
+function hasAnswerOptions(questionType) {
 
 
+    if (questionType === "range") {
 
-    if(questionType === "range"){
-
-    } else if (questionType === "radio"){
+    } else if (questionType === "radio") {
         let radioAnswers = document.querySelectorAll(".radio-answers");
 
-        for(i=0; i<radioAnswers.length; i++){
+        for (i = 0; i < radioAnswers.length; i++) {
             ;
 
         }
@@ -92,13 +84,12 @@ function hasAnswerOptions(questionType){
     return answerOptionList;
 }
 
-function changeQuestionType(){
-
+function changeQuestionType() {
 
 
     console.log(document.getElementById("under-popup"))
 
-    if(document.getElementById("under-popup") == null){
+    if (document.getElementById("under-popup") == null) {
         innerPopUpContainer.innerHTML += `<div class="under-popup popup main" id="under-popup"></div>`
         underPopUp = document.querySelector("#under-popup");
 
@@ -108,14 +99,16 @@ function changeQuestionType(){
 
     document.querySelector("#selected-option-div").innerHTML = "";
 
-    
 
-    switch(type){
-        case "radio": radioSelected();
+    switch (type) {
+        case "radio":
+            radioSelected();
             break;
-        case "text": textSelected();
+        case "text":
+            textSelected();
             break;
-        case "range": rangeSelected();
+        case "range":
+            rangeSelected();
             break;
     }
 
@@ -123,7 +116,7 @@ function changeQuestionType(){
 
 }
 
-function rangeSelected(){
+function rangeSelected() {
 
     underPopUp.innerHTML = `
     <input type="number" id="min-range" placeholder="what is the minimum?">
@@ -135,14 +128,14 @@ function rangeSelected(){
     `
 }
 
-function printRange(){
+function printRange() {
 
     let minRange = document.querySelector("#min-range").value;
     let maxRange = document.querySelector("#max-range").value;
     let minLabel = document.querySelector("#min-label").value;
     let maxLabel = document.querySelector("#max-label").value;
 
-    if(maxRange < minRange){
+    if (maxRange < minRange) {
         var tempRange = minRange;
         minRange = maxRange;
         maxRange = tempRange;
@@ -162,7 +155,7 @@ function printRange(){
 }
 
 
-function textSelected(){
+function textSelected() {
 
     underPopUp.innerHTML = `
     <input type="number" id="text-numbers" placeholder="What is the maximum amount of characters?">
@@ -172,7 +165,7 @@ function textSelected(){
     `;
 }
 
-function printTextInput(){
+function printTextInput() {
 
     let maxChars = document.querySelector("#text-numbers").value;
     let placeholderText = document.querySelector("#placeholder-text").value;
@@ -185,19 +178,19 @@ function printTextInput(){
 }
 
 
-function radioSelected(){
+function radioSelected() {
 
     underPopUp.innerHTML = `<input type="number" id="radio-numbers" placeholder="How many radio buttons do you want?">
     <button id="radio-add-button" onclick="addRadioButtonNames()">Add radio buttons</button><br><br>
     `;
 }
 
-function addRadioButtonNames(){
+function addRadioButtonNames() {
 
     let radioNumbers = document.querySelector("#radio-numbers").value
     underPopUp.innerHTML = "";
 
-    for(i=0; i<radioNumbers; i++){
+    for (i = 0; i < radioNumbers; i++) {
         underPopUp.innerHTML += `<input type="text" placeholder="Enter text for button here" class="radio-button-value">`
     }
 
@@ -205,14 +198,14 @@ function addRadioButtonNames(){
 
 }
 
-function printRadioButtons(){
+function printRadioButtons() {
 
     let radioButtonValues = document.querySelectorAll(".radio-button-value")
     underPopUp.innerHTML = "";
 
     console.log(selectedOptionDiv)
 
-    for(i=0; i<radioButtonValues.length; i++){
+    for (i = 0; i < radioButtonValues.length; i++) {
 
         const radioAnswer = {};
 

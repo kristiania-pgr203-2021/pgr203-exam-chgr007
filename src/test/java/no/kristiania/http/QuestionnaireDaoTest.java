@@ -308,7 +308,7 @@ public class QuestionnaireDaoTest {
         HttpClient client = new HttpClient("localhost", server.getPort());
         Question question = randomFromDatabase(questionDao);
         question.setQuestionType(QuestionType.range);
-        question.setQuestion("Is this working?");
+        question.setQuestion("What about this, then?");
         question.setHasAnswerOptions(true);
 
         QuestionOptions questionOptions = new QuestionOptions();

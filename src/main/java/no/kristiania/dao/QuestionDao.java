@@ -2,6 +2,7 @@ package no.kristiania.dao;
 
 import no.kristiania.http.model.Answer;
 import no.kristiania.http.model.Question;
+import no.kristiania.http.model.QuestionOptions;
 import no.kristiania.http.model.QuestionType;
 
 import javax.sql.DataSource;
@@ -45,6 +46,15 @@ public class QuestionDao extends DataAccessObject<Question> {
         question.setId(rs.getLong("id"));
         question.setQuestionnaireId(rs.getLong("questionnaire_id"));
         question.setQuestionType(QuestionType.valueOf(rs.getString("answer_type")));
+        if (question.getQuestionType() == QuestionType.range) {
+            RangeQuestionDao rangeQuestionDao = new RangeQuestionDao(dataSource);
+            question.addAnswerOption(rangeQuestionDao.fetchByQuestionId(question.getId()));
+            question.setHasAnswerOptions(true);
+        } else if (question.getQuestionType() == QuestionType.radio) {
+            question.setHasAnswerOptions(true);
+            RadioQuestionDao radioQuestionDao = new RadioQuestionDao(dataSource);
+            radioQuestionDao.fetchAllByQuestionId(question.getId()).forEach(qOpt -> question.addAnswerOption(qOpt));
+        }
         return question;
     }
 

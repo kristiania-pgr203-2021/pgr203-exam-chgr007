@@ -14,6 +14,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 public class AdvancedQuestionController implements HttpController {
@@ -54,27 +55,23 @@ public class AdvancedQuestionController implements HttpController {
                     }
                 }
                 String responseBody = objectMapper.writeValueAsString(question);
-                httpResponse.setHeaderField("Content-Type", "application/json");
+                httpResponse.setHeaderField("Content-Type", "application/json; charset=UTF-8");
+                httpResponse.setHeaderField("Connection", "close");
                 httpResponse.setHeaderField("Content-Length", String.valueOf(responseBody.getBytes(StandardCharsets.UTF_8).length));
                 httpResponse.setMessageBody(responseBody);
                 return httpResponse;
             }
         } else if (request.getRequestType().equalsIgnoreCase("get")) {
-//            Question question = new Question();
-//            question.setQuestion("question");
-//            question.setId(1);
-//            question.setQuestionnaireId(1);
-//            AnswerOption answerOption = new AnswerOption();
-//            answerOption.setId(1);
-//            answerOption.setAnswerType("radio");
-//            answerOption.setName("name");
-//            answerOption.setValue("value");
-//            question.addAnswerOption(answerOption);
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            String jsonObject = objectMapper.writeValueAsString(question);
-//            HttpResponse response = new HttpResponse(200, "OK");
-//            response.setMessageBody(jsonObject);
-//            return response;
+            List<Question> questionList = questionDao.retrieveAll();
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            String jsonObject = objectMapper.writeValueAsString(questionList);
+            HttpResponse response = new HttpResponse(200, "OK");
+            response.setHeaderField("Connection", "Close");
+            response.setHeaderField("Content-Type", "application/json; charset=UTF-8");
+            response.setHeaderField("Content-Length", String.valueOf(jsonObject.getBytes(StandardCharsets.UTF_8).length));
+            response.setMessageBody(jsonObject);
+            return response;
         }
         return new HttpResponse(500, "Internal Server Error");
     }

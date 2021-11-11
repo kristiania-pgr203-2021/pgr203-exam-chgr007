@@ -4,6 +4,8 @@ import no.kristiania.http.model.QuestionOptions;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RangeQuestionDao extends DataAccessObject<QuestionOptions> {
     public RangeQuestionDao(DataSource dataSource) {
@@ -37,7 +39,17 @@ public class RangeQuestionDao extends DataAccessObject<QuestionOptions> {
         }
     }
 
-
+    public QuestionOptions fetchByQuestionId(long id) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("select * from range_question where question_id = ?")) {
+                statement.setLong(1,id);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    resultSet.next();
+                    return mapValuesToObject(resultSet);
+                }
+            }
+        }
+    }
     @Override
     protected QuestionOptions mapValuesToObject(ResultSet rs) throws SQLException {
         QuestionOptions questionOptions = new QuestionOptions();

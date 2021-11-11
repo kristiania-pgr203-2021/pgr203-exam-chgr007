@@ -4,6 +4,8 @@ import no.kristiania.http.model.QuestionOptions;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RadioQuestionDao extends DataAccessObject<QuestionOptions> {
     public RadioQuestionDao(DataSource dataSource) {
@@ -38,4 +40,19 @@ public class RadioQuestionDao extends DataAccessObject<QuestionOptions> {
         questionOptions.setQuestion(rs.getString("question"));
         return questionOptions;
     }
+    public List<QuestionOptions> fetchAllByQuestionId(long id) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("select * from radio_question where question_id = ?")) {
+                statement.setLong(1,id);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    List<QuestionOptions> questionOptions = new ArrayList<>();
+                    while(resultSet.next()) {
+                        questionOptions.add(mapValuesToObject(resultSet));
+                    }
+                    return questionOptions;
+                }
+            }
+        }
+    }
+
 }

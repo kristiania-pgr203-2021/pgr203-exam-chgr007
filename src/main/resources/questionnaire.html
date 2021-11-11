@@ -6,9 +6,6 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="javascript/javascript.js"></script>
     <script src="javascript/newQuestion.js"></script>
-
-
-
 </head>
 <body>
 <div class="top-bar">
@@ -28,8 +25,8 @@
     <div class="flex-container" id="question-container"></div>
 
 </main>
-<script>
 
+<script>
     const popUpContainer = document.getElementById("pop-up-container");
 
     const questionContainer = document.getElementById("question-container");
@@ -40,25 +37,28 @@
     const urlSearchParams = new URLSearchParams(window.location.search);
     const questionnaireId = urlSearchParams.get("questionnaireId");
 
-    addButton(questionContainer, question, questionnaireId);
 
-    fetch(`/api/questionnaireName?questionnaireId=${questionnaireId}`).then(function (res) {
-        return res.text()
-    }).then(function (text) {
-        document.querySelector("#questionnaire-name").innerHTML = text;
-    }).catch(function(error) {
-        console.log(error)
-    });
+        addButton(questionContainer, question, questionnaireId);
 
-    fetch(`/api/questionnaire?questionnaireId=${questionnaireId}`).then(function (res) {
-        return res.text()
-    }).then(function (text) {
+        fetch(`/api/questionnaireName?questionnaireId=${questionnaireId}`).then(function (res) {
+            return res.text()
+        }).then(function (text) {
+            document.querySelector("#questionnaire-name").innerHTML = text;
+        }).catch(function(error) {
+            console.log(error)
+        });
 
-        document.querySelector("#question-container").innerHTML += text;
-        randomColor();
-    }).catch(function(error) {
-        console.log(error)
-    });
+        fetch(`/api/questionnaire?questionnaireId=${questionnaireId}`).then(function (res) {
+            return res.text()
+        }).then(function (text) {
+
+            document.querySelector("#question-container").innerHTML += text;
+            randomColor();
+        }).catch(function(error) {
+            console.log(error)
+        });
+
+
 
 </script>
 
