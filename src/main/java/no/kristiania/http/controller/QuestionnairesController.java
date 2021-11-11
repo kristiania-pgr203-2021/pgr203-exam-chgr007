@@ -77,10 +77,9 @@ public class QuestionnairesController implements HttpController {
 
 
         for (Questionnaire questionnaire : questionnaireDao.retrieveAll()) {
-            stringBuilder.append("<a href=\"questionnaire.html?questionnaireId=" + questionnaire.getId() + "\">");
-            stringBuilder.append("<div class=\"random-color flexbox-box flex-content questionnaire\" id=\"questionnaire_" + questionnaire.getId() + "\">");
+            stringBuilder.append("<a href=\"questionnaire.html?questionnaireId=" + questionnaire.getId() + "\" class=\"random-color flexbox-box flex-content questionnaire\" id=\"questionnaire_\"" + questionnaire.getId() + "\">");
             stringBuilder.append("<h2>").append(questionnaire.getName()).append("</h2>");
-            stringBuilder.append("</div>");
+            stringBuilder.append("</a>");
 
         }
         return stringBuilder.toString();

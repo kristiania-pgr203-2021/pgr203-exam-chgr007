@@ -15,7 +15,6 @@ public class QuestionDao extends DataAccessObject<Question> {
     }
 
 
-
     @Override
     protected void executeSave(Connection connection, Question model) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement("insert into question(question, questionnaire_id,answer_type) values(?,?,?)", Statement.RETURN_GENERATED_KEYS)) {

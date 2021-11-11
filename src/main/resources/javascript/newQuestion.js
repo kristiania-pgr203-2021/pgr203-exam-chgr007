@@ -22,7 +22,12 @@ function createQuestionPopUp(questionnaireId) {
                 <option value="range">range</option>
                 </select>
 
+                <hr>
+
+                <p>Preview</p>
                 <div id="selected-option-div"></div>
+
+                <hr>
 
                 <button id="add-question-button">ADD</button> 
             </form>
