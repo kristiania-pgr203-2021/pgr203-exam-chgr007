@@ -50,16 +50,28 @@ function changeQuestionType(){
     questionType = document.querySelector("#question-type");
     innerPopUpContainer = document.getElementById("inner-pop-up-container")
     questionForm = document.querySelector("#question-form")
+    questionName = document.querySelector("#question-name")
 
-    innerPopUpContainer.innerHTML += `<div class="under-popup popup main" id="under-popup"></div>`
-    underPopUp = document.querySelector("#under-popup");
+    console.log(document.getElementById("under-popup"))
+
+    if(document.getElementById("under-popup") == null){
+        innerPopUpContainer.innerHTML += `<div class="under-popup popup main" id="under-popup"></div>`
+        underPopUp = document.querySelector("#under-popup");
+
+    } else {
+        underPopUp.innerHTML = "";
+    }
+
+    document.querySelector("#selected-option-div").innerHTML = "";
+
+    
 
     switch(type){
         case "radio": radioSelected();
             break;
-        case "text": selectedOptionDiv.innerHTML = `<input type="text">`
+        case "text": textSelected();
             break;
-        case "range": selectedOptionDiv.innerHTML = `<input type="range" min="0" max=5">`
+        case "range": rangeSelected();
             break;
     }
 
@@ -67,16 +79,76 @@ function changeQuestionType(){
 
 }
 
+function rangeSelected(){
+
+    underPopUp.innerHTML = `
+    <input type="number" id="min-range" placeholder="what is the minimum?">
+    <input type="number" id="max-range" placeholder="what is the maximum?">
+    <input type="text" id="min-label" placeholder="what is the min-label?">
+    <input type="text" id="max-label" placeholder="what is the max-label?">
+
+    <button id="range-add-button" onclick="printRange()">Add range input</button><br><br>
+    `
+}
+
+function printRange(){
+
+    let minRange = document.querySelector("#min-range").value;
+    let maxRange = document.querySelector("#max-range").value;
+    let minLabel = document.querySelector("#min-label").value;
+    let maxLabel = document.querySelector("#max-label").value;
+
+    if(maxRange < minRange){
+        var tempRange = minRange;
+        minRange = maxRange;
+        maxRange = tempRange;
+
+        var tempLabel = minLabel;
+        minLabel = maxLabel;
+        maxLabel = tempLabel;
+    }
+
+
+    document.querySelector("#selected-option-div").innerHTML = `
+    <label>${minLabel}</label>
+    <input type="range" min="${minRange}" max="${maxRange}">
+    <label>${maxLabel}</label>`
+    innerPopUpContainer.removeChild(underPopUp);
+
+}
+
+
+function textSelected(){
+
+    underPopUp.innerHTML = `
+    <input type="number" id="text-numbers" placeholder="What is the maximum amount of characters?">
+    <input type="text" id="placeholder-text" placeholder="What would you like the placeholder text to be?">
+
+    <button id="text-add-button" onclick="printTextInput()">Add text input</button><br><br>
+    `;
+}
+
+function printTextInput(){
+
+    let maxChars = document.querySelector("#text-numbers").value;
+    let placeholderText = document.querySelector("#placeholder-text").value;
+
+    document.querySelector("#selected-option-div").innerHTML = `
+            <input type="text" id="text-input" name="answer" value="" maxlength="${maxChars}" placeholder="${placeholderText}">
+        <br>`;
+
+    innerPopUpContainer.removeChild(underPopUp);
+}
 
 
 function radioSelected(){
 
     underPopUp.innerHTML = `<input type="number" id="radio-numbers" placeholder="How many radio buttons do you want?">
-    <button id="radio-add-button" onclick="showRadioButtons()">Add radio buttons</button><br><br>
+    <button id="radio-add-button" onclick="addRadioButtonNames()">Add radio buttons</button><br><br>
     `;
 }
 
-function showRadioButtons(){
+function addRadioButtonNames(){
 
     let radioNumbers = document.querySelector("#radio-numbers").value
     underPopUp.innerHTML = "";
@@ -98,14 +170,16 @@ function printRadioButtons(){
 
     for(i=0; i<radioButtonValues.length; i++){
 
-        underPopUp.innerHTML += `
+        document.querySelector("#selected-option-div").innerHTML += `
         <div class="radio-answes">
             <input type="radio" id="${radioButtonValues[i].value}" name="answer" value="${radioButtonValues[i].value}">
             <label  for="${radioButtonValues[i].value}">${radioButtonValues[i].value}</label>
         </div>
         <br>`
-
     }
+
+    innerPopUpContainer.removeChild(underPopUp);
+
 }
 
 
