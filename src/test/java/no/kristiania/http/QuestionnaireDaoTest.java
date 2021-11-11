@@ -302,7 +302,39 @@ public class QuestionnaireDaoTest {
                 .extracting(QuestionOptions::getQuestion)
                 .contains("Jas", "Nei ass");
     }
+    @Test
+    void shouldInsertRangeAnswerOptionThrougAPI() throws IOException, SQLException {
+        HttpServer server = new HttpServer(0);
+        HttpClient client = new HttpClient("localhost", server.getPort());
+        Question question = randomFromDatabase(questionDao);
+        question.setQuestionType(QuestionType.range);
+        question.setQuestion("Is this working?");
+        question.setHasAnswerOptions(true);
 
+        QuestionOptions questionOptions = new QuestionOptions();
+        questionOptions.setRange(10);
+        questionOptions.setNameMaxVal("Helt fantastisk bra");
+        questionOptions.setNameMinVal("Helt sjukt dårlig :(");
+        question.addAnswerOption(questionOptions);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String JSONQuestion = objectMapper.writeValueAsString(question);
+        PostValue<String, String> jsonPostString = new PostValue("json", JSONQuestion);
+
+        client.post(List.of(jsonPostString), "/api/v2/question");
+        List<Question> questions = questionDao.retrieveAll();
+
+        assertThat(questions)
+                .extracting(Question::getQuestion)
+                .contains("Is this working?");
+
+        RangeQuestionDao rangeQuestionDao = new RangeQuestionDao(createDataSource());
+        List<QuestionOptions> rangeQuestionOptions = rangeQuestionDao.retrieveAll();
+
+        assertThat(rangeQuestionOptions)
+                .extracting(QuestionOptions::getNameMaxVal)
+                .contains("Helt fantastisk bra");
+    }
     @Test
     void shouldRegisterAnswerOption() throws SQLException {
         Question question = randomFromDatabase(questionDao);
