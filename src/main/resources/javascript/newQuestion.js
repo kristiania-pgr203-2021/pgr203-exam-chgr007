@@ -5,21 +5,25 @@ let underPopUp;
 let questionType;
 let innerPopUpContainer;
 let questionForm;
+let answerOptionList = [];
+
 
 
 
 function createQuestionPopUp(questionnaireId) {
-    const question = {};
-    const form = `
-            <form action="/api/v2/question" method="POST" id="question-form">
+
+
+    let form = "";
+
+    form = `
+            <div id="question-form" class="popup">
                 <input type="hidden" name="questionnaireId" value="${questionnaireId}">
                 <input type="hidden" name="questionType" id="question-type" value="">
-                <input type="text" maxlength="250" name="question" id="question-name" placeholder="Write your question here"></p>
+                <input type="text" maxlength="250" name="question" id="question-name" placeholder="Write your question here">
                 <select onchange="changeQuestionType()" id="input-types" name="input-types">
-                <option value="options">Options</option>
                 <option value="text">Text</option>
                 <option value="radio">Radio</option>
-                <option value="range">range</option>
+                <option value="range">Range</option>
                 </select>
 
                 <hr>
@@ -29,33 +33,68 @@ function createQuestionPopUp(questionnaireId) {
 
                 <hr>
 
-                <button id="add-question-button">ADD</button> 
-            </form>
+                <button id="add-question-button" onclick="submitJson(form)">ADD</button> 
+            </div>
         `;
 
+    console.log(form);
+    document.querySelector("#pop-up-div").innerHTML += form;
+    console.log(document.querySelector("#pop-up-div"))
 
-    /*
-    question.id = -1;
-    question.question = document.getElementById("question-name").value;
-    question.questionnaire = id;
-    question.hasAnswerOptions = hasAnswerOptions;
-    question.answerOptionList = [];
+    updateFormVariables()
 
-    if (hasAnswerOptions) {
-        // add to option list
-    }
-    */
-    return form;
+
+
 }
 
-function changeQuestionType(){
+function updateFormVariables(){
+    innerPopUpContainer = document.getElementById("inner-pop-up-container")
 
     type = document.querySelector("#input-types").value
     selectedOptionDiv = document.querySelector("#selected-option-div");
     questionType = document.querySelector("#question-type");
-    innerPopUpContainer = document.getElementById("inner-pop-up-container")
     questionForm = document.querySelector("#question-form")
-    questionName = document.querySelector("#question-name")
+}
+
+function submitJson(form){
+
+    updateVariables();
+
+    const question = {};
+
+    question.id = -1;
+    question.question = document.getElementById("question-name").value;
+    question.questionnaire = questionnaireId;
+    question.hasAnswerOptions = (type !== "text");
+    question.answerOptionList = answerOptionList;
+
+    return form;
+
+}
+
+function hasAnswerOptions(questionType){
+
+
+
+    if(questionType === "range"){
+
+    } else if (questionType === "radio"){
+        let radioAnswers = document.querySelectorAll(".radio-answers");
+
+        for(i=0; i<radioAnswers.length; i++){
+            ;
+
+        }
+
+
+    }
+
+    return answerOptionList;
+}
+
+function changeQuestionType(){
+
+
 
     console.log(document.getElementById("under-popup"))
 
@@ -175,14 +214,24 @@ function printRadioButtons(){
 
     for(i=0; i<radioButtonValues.length; i++){
 
+        const radioAnswer = {};
+
+        radioAnswer.id = i;
+        radioAnswer.questionId = -1;
+        radioAnswer.question = radioButtonValues[i].value;
+
+
         document.querySelector("#selected-option-div").innerHTML += `
         <div class="radio-answes">
             <input type="radio" id="${radioButtonValues[i].value}" name="answer" value="${radioButtonValues[i].value}">
             <label  for="${radioButtonValues[i].value}">${radioButtonValues[i].value}</label>
         </div>
         <br>`
+
+        answerOptionList += radioAnswer;
     }
 
+    console.log(answerOptionList);
     innerPopUpContainer.removeChild(underPopUp);
 
 }

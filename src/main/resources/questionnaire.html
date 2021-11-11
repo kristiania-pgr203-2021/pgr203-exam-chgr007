@@ -40,9 +40,6 @@
     const urlSearchParams = new URLSearchParams(window.location.search);
     const questionnaireId = urlSearchParams.get("questionnaireId");
 
-    console.log(document.getElementById("questionnaire-name").innerHTML)
-    console.log(questionnaireId)
-
     addButton(questionContainer, question, questionnaireId);
 
     fetch(`/api/questionnaireName?questionnaireId=${questionnaireId}`).then(function (res) {
