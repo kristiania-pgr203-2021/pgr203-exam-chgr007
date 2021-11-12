@@ -11,6 +11,7 @@ import org.junit.jupiter.api.TestInstance;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -287,13 +288,15 @@ public class QuestionnaireDaoTest {
     void shouldInsertPlainTextAnswerOptionThrougAPI() throws IOException, SQLException {
         HttpServer server = new HttpServer(0, createDataSource());
         HttpClient client = new HttpClient("localhost", server.getPort());
-        Question question = randomFromDatabase(questionDao);
+        Questionnaire questionnaire = randomFromDatabase(questionnaireDao);
+        Question<TextQuestion> question = new Question<>();
+        question.setQuestionnaireId(questionnaire.getId());
         question.setQuestionType(QuestionType.text);
         question.setQuestion("Vil dette fungere?");
         question.setHasAnswerOptions(false);
         ObjectMapper objectMapper = new ObjectMapper();
         String JSONQuestion = objectMapper.writeValueAsString(question);
-        PostValue<String, String> jsonPostString = new PostValue("json", JSONQuestion);
+        PostValue<String, String> jsonPostString = new PostValue("json",JSONQuestion);
 
         client.post(List.of(jsonPostString), "/api/v2/question");
         List<Question> questionOptions = questionDao.retrieveAll();
