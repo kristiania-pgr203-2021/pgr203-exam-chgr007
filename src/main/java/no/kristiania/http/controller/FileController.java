@@ -36,6 +36,11 @@ public class FileController implements HttpController {
         }
     }
 
+    @Override
+    public String getPath() {
+        return null;
+    }
+
     private String getContentType(String fileTarget) {
         String response = "text/plain";
         if(fileTarget.endsWith(".html")) response = "text/html";

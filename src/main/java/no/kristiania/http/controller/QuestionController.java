@@ -15,7 +15,7 @@ import java.util.List;
 public class QuestionController implements HttpController{
     QuestionDao questionDao;
     AnswerDao answerDao;
-    private String path = "/api/newQuestion";
+    private final String path = "/api/newQuestion";
 
     public QuestionController(QuestionDao questionDao) {
         this.questionDao = questionDao;
