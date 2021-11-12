@@ -63,7 +63,7 @@ function submitJson(){
     }).then(response => response.json())
         .then(data => console.log(data));
 
-    location.reload();
+    refresh();
 }
 
 function makeJson(){

@@ -6,11 +6,11 @@ function createAnswerPopUp(id){
                 <input type="hidden" name="questionType" value="${questionType}">
                 <input type="hidden" name="userId" value="${1}">
                 <div id="answer-form"></div>
-                <button type="submit">SUBMIT</button> 
+                <button type="submit" onclick="refresh()">SUBMIT</button> 
             </form>
         `;
 
-    fetch(`/api/v2/question?questionId=${questionId}&questionType=${questionType}`).then(function (res) {
+    fetch(`/api/newAnswer?questionId=${questionId}&questionType=${questionType}`).then(function (res) {
         return res.text()
     }).then(function (text) {
         console.log(text)

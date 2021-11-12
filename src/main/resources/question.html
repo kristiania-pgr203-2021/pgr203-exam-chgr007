@@ -18,8 +18,8 @@
             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
         </svg>
     </div>
-    <div class="nav-bar">
-        <li><a href="/index.html">Main Menu</a></li>
+    <div class="nav-bar" id="nav-bar">
+        <a class="nav-element" href="/index.html">Main Menu</a>
     </div>
 </div>
 <main>
@@ -27,6 +27,7 @@
     <div class="flex-container" id="answer-container"></div>
 </main>
 <script>
+
 
     const popUpContainer = document.getElementById("pop-up-container");
     const answerContainer = document.getElementById("answer-container");
@@ -36,6 +37,9 @@
     const urlSearchParams = new URLSearchParams(window.location.search);
     const questionId = urlSearchParams.get("questionId");
     const questionType = urlSearchParams.get("questionType");
+    const questionnaireId = urlSearchParams.get("questionnaireId")
+
+    document.getElementById("nav-bar").innerHTML += `<a class="nav-element" href="/questionnaire.html?questionnaireId=${questionnaireId}">Back</a>`
 
     addButton(answerContainer, "answer", questionId);
 
