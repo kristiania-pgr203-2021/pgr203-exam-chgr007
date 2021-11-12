@@ -2,17 +2,73 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Webshop</title>
+    <title>Questionaire</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="javascript/javascript.js"></script>
 </head>
 <body>
-    <main>
-        <h1>Welcome to the web shop</h1>
-    
-        <ul>
-            <li><a href="/listProducts.html">List existing products</a></li>
-            <li><a href="/newProduct.html">Add new product</a></li>
-        </ul>
-    </main>
+<div class="top-bar">
+    <h1 id="welcome-msg">Welcome, [name]</h1>
+    <div class="nav-bar">
+        <li></li>
+    </div>
+</div>
+<main>
+    <div id="pop-up-container"></div>
+    <div class="flex-container" id="questionnaire-container">
+
+    </div>
+</main>
+
+
+<script>
+
+    const popUpContainer = document.getElementById("pop-up-container")
+    const questionnaire = "questionnaire"
+    const questionnaireContainer = document.getElementById("questionnaire-container");
+    let userId = 0;
+    function parseJwt(token) {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    };
+
+    // datoene må ganges med 1000 for å få millisekunder som js bruker i date.
+    const cookie = document.cookie;
+    if (cookie.length > 0) {
+        console.info("Found token");
+
+        const tokenEncoded = cookie.substr(cookie.indexOf("=") + 1, cookie.length)
+        const token = parseJwt(tokenEncoded);
+        console.info(token);
+        if (new Date(token.exp*1000) > new Date()) showLoginForm();
+        userId = token.jti;
+        document.getElementById("welcome-msg").innerHTML = `Welcome, ${token.sub}`;
+    } else {
+        showLoginForm();
+    }
+    addButton(questionnaireContainer, "questionnaire", userId);
+
+    fetch("/api/questionnaires").then(function (res) {
+        return res.text()
+    }).then(function (text) {
+
+        document.querySelector("#questionnaire-container").innerHTML += text;
+
+        questionnaires = document.querySelector("#questionnaire");
+
+        randomColor();
+    });
+    function showLoginForm() {
+        document.getElementById("welcome-msg").innerHTML = "<a href='/login.html'>login</a><br>or <a href='/signup.html'>sign up</a>";
+    }
+    //Kilde: https://stackoverflow.com/questions/38552003/how-to-decode-jwt-token-in-javascript-without-using-a-library
+
+</script>
+
+
 </body>
 </html>

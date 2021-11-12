@@ -1,60 +1,94 @@
 package no.kristiania.http;
 
-import no.kristiania.http.model.Product;
+import no.kristiania.dao.*;
+import no.kristiania.http.controller.*;
+import no.kristiania.http.controller.v2.AdvancedQuestionController;
 import no.kristiania.http.util.HttpRequest;
+import no.kristiania.http.util.Properties;
 import no.kristiania.http.util.Router;
+import org.flywaydb.core.Flyway;
+import org.postgresql.ds.PGSimpleDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class HttpServer {
-
-    private int port;
+    public static boolean DEVELOPMENT = true;
+    private final int port;
     private ServerSocket serverSocket;
-    private Path rootDirectory;
-    private List<Product> products;
-
-    public HttpServer(int port) throws IOException {
+    private DataSource dataSource;
+    private static final Logger logger = LoggerFactory.getLogger(HttpServer.class);
+    private final ExecutorService threadPool;
+    private Thread runningThread = null;
+    public HttpServer(int port, DataSource dataSource) throws IOException {
         this.port = port;
         this.serverSocket = new ServerSocket(port);
-        products = new ArrayList<>();
+        this.dataSource = dataSource;
+        threadPool = Executors.newFixedThreadPool(20);
+        //TODO: add thread pool
         new Thread(this::handleClient).start();
     }
 
     private void handleClient() {
-        while(true){
-            try{
-                System.out.printf("Server running at port: %s%n", getPort());
+        // Thread pool http://tutorials.jenkov.com/java-multithreaded-servers/thread-pooled-server.html
+        logger.info("Server running at http://localhost:{}/", getPort());
+        while (true) {
+            try {
                 Socket clientSocket = serverSocket.accept();
-                HttpRequest message = new HttpRequest(clientSocket);
-                Router router = new Router(clientSocket, products);
-                router.route(message, rootDirectory);
-                if (message.getRequestType().equalsIgnoreCase("POST")) {
-                    products.add(
-                            new Product(router.getProducts().get("productName"),
-                            router.getProducts().get("category"))
-                    );
-                }
+
+                logger.info("*** Accepted a client connection from: {} at port: {}! ***",clientSocket.getInetAddress().getHostName(),clientSocket.getPort());
+                this.threadPool.execute(() -> session(clientSocket));
+                // TODO: håndtere feil i router, skrive ut feilmeldinger til nettleser
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("*** I/O ERROR: Connection to client failed! ***");
+                logger.error(e.getMessage());
             }
+
         }
     }
 
-    public void setRoot(String root){
-        this.rootDirectory = Path.of(root);
+    private void session(Socket clientSocket)  {
+        synchronized(this) {
+            this.runningThread = Thread.currentThread();
+        }
+        try {
+            HttpRequest message = new HttpRequest(clientSocket);
+            Router router = new Router(clientSocket);
+            configureRouter(router);
+            router.route(message);
+        } catch (IOException e) {
+            logger.error("*** ERROR: Failed to read from client socket! ***");
+            logger.error(e.getMessage());
+        }
     }
+
+    private void configureRouter(Router router) {
+        router.addController(new AdvancedQuestionController(new QuestionDao(dataSource), new RangeQuestionDao(dataSource), new RadioQuestionDao(dataSource), new TextQuestionDao(dataSource)));
+        //router.addController(new QuestionController(new QuestionDao(dataSource)));
+        router.addController(new QuestionnairesController(new QuestionnaireDao(dataSource)));
+        router.addController(new NewQuestionnaireController(new QuestionnaireDao(dataSource)));
+        router.addController(new QuestionnaireNameController(new QuestionnaireDao(dataSource)));
+        router.addController(new QuestionnaireController(new QuestionnaireDao(dataSource), new QuestionDao(dataSource), new AnswerDao(dataSource)));
+        router.addController(new LoginController(new UserDao(dataSource)));
+        router.addController(new SignupController(new UserDao(dataSource)));
+        router.addController(new QuestionController(new QuestionDao(dataSource)));
+        router.addController(new QuestionAnswersController(new QuestionDao(dataSource), new AnswerDao(dataSource)));
+        router.addController(new QuestionNameController(new QuestionDao(dataSource)));
+        router.addController(new AnswerController(new AnswerDao(dataSource), new QuestionDao(dataSource), new RangeQuestionDao(dataSource), new RadioQuestionDao(dataSource), new TextQuestionDao(dataSource)));
+        router.addController(new AnswerOptionController(new RangeQuestionDao(dataSource)));
+    }
+
+
+
 
     public int getPort() {
         return serverSocket.getLocalPort();
-    }
-
-    public List<Product> getProducts() {
-        return products;
     }
 
 }
