@@ -4,6 +4,7 @@ import no.kristiania.dao.RadioQuestionDao;
 import no.kristiania.dao.RangeQuestionDao;
 import no.kristiania.dao.QuestionDao;
 import no.kristiania.dao.TextQuestionDao;
+import no.kristiania.http.HttpServer;
 import no.kristiania.http.controller.HttpController;
 import no.kristiania.http.model.*;
 import no.kristiania.http.util.Authenticator;
@@ -69,15 +70,15 @@ public class AdvancedQuestionController implements HttpController {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> postValues = request.getPostParams();
         boolean hasAccess = true;
-//        if (!postValues.containsKey("AuthToken")) {
-//            HttpResponse httpResponse = new HttpResponse(303, "See other");
-//            httpResponse.setHeaderField("Connection", "close");
-//            httpResponse.setHeaderField("Location", "/login.html");
-//            return httpResponse;
-//        } else {
-//            Authenticator authenticator = new Authenticator();
-//            hasAccess = authenticator.validateToken(postValues.get("AuthToken"));
-//        }
+        if (!postValues.containsKey("AuthToken") || !HttpServer.DEVELOPMENT) {
+            HttpResponse httpResponse = new HttpResponse(303, "See other");
+            httpResponse.setHeaderField("Connection", "close");
+            httpResponse.setHeaderField("Location", "/login.html");
+            return httpResponse;
+        } else {
+            Authenticator authenticator = new Authenticator();
+            hasAccess = authenticator.validateToken(postValues.get("AuthToken"));
+        }
         if (hasAccess) {
             HttpResponse httpResponse = parseJSONValues(objectMapper, postValues);
             if (httpResponse != null) return httpResponse;

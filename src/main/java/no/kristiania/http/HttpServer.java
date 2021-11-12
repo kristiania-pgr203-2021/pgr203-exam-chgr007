@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class HttpServer {
-
+    public static boolean DEVELOPMENT = true;
     private final int port;
     private ServerSocket serverSocket;
     private DataSource dataSource;

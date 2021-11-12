@@ -6,7 +6,7 @@ public class RadioQuestion extends QuestionOptions{
     public String getChoice() {
         return choice;
     }
-    public String getChoiceAsId(){
+    public String generateChoiceAsId(){
         String[] choiceArr = choice.split(" ");
 
         if(choiceArr.length > 1){
@@ -31,8 +31,8 @@ public class RadioQuestion extends QuestionOptions{
     public String getHtml(){
 
         return "<div class=\"radio-answers\">" +
-                "<input type=\"radio\" id=\"" + getChoiceAsId() + "\" name=\"answer\" value=\"" + getChoice() + "\">" +
-                "<label for=\"" + getChoiceAsId() + "\">" + getChoice() + "</label>" +
+                "<input type=\"radio\" id=\"" + generateChoiceAsId() + "\" name=\"answer\" value=\"" + getChoice() + "\">" +
+                "<label for=\"" + generateChoiceAsId() + "\">" + getChoice() + "</label>" +
                 "</div>" +
                 "<br>";
 

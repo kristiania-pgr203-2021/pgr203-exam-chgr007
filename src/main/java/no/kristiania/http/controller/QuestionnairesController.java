@@ -21,7 +21,7 @@ public class QuestionnairesController implements HttpController {
     private QuestionnaireDao questionnaireDao;
     private QuestionDao questionDao;
     private boolean validToken = false;
-    private final String path = "/api/questionnaire";
+    private final String path = "/api/questionnaires";
 
     public QuestionnairesController(QuestionnaireDao questionnaireDao) {
         this.questionnaireDao = questionnaireDao;
