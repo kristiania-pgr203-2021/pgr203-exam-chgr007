@@ -13,12 +13,13 @@
 
 ## Beskriv hvordan programmet skal testes:
 * Sensor bes legge inn følgende linje i pgr203.properties, for å sette key til HS256 algoritmen som benyttes til signering av
-  token: <token.key=w9z$C&F)J@McQfTjWnZr4u7x!A%D*G-K>
+  token: `token.key=w9z$C&F)J@McQfTjWnZr4u7x!A%D*G-K`
   * Det presiseres at dette er en HTTP-server, ikke https. Alt vil bli sendt i klartekst mellom klient og tjener.
     Vi har heller ikke bruk veldig mye tid på å forske på Spring Security, og må ta forbehold om feil i oppsett. Dette er ment som demo/POC.
     Derfor fraråder vi på det sterkeste å benytte reelle passord ved registrering av ny bruker.
     Nøkkelen til signering av token ville heller aldri blitt opplastet på github i en reell situasjon.
-
+* Kjør den eksekverbare .jar filen med kommandoen `java -jar <sti til jar> [--port]`
+  * Port argumentet er valgfritt. Dersom det unnlates vil port 8080 bli benyttet.
 
 ## Korreksjoner av eksamensteksten i Wiseflow:
 
