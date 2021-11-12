@@ -1,4 +1,5 @@
 /.idea/
 *.iml
 target/
-/src/main/resources/pgr203.properties
+pgr203.properties
+
