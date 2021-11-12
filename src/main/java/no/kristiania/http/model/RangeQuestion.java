@@ -37,4 +37,14 @@ public class RangeQuestion extends QuestionOptions {
     public void setMaxLabel(String maxLabel) {
         this.maxLabel = maxLabel;
     }
+
+    @Override
+    public String getHtml(){
+
+        String minLabel = "<label>"+ getMinLabel() + "</label>";
+        String input = "<input name=\"answer\" type=\"range\" min=\"" + getMin() + "\" max=\"" + getMax() + "\">";
+        String maxLabel = "<label>"+ getMaxLabel() + "</label>";
+
+        return minLabel + input + maxLabel;
+    }
 }

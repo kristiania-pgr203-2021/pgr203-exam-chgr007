@@ -3,6 +3,7 @@ let selectedOptionDiv;
 let type;
 let underPopUp;
 let questionType;
+let questionName;
 let innerPopUpContainer;
 let questionForm;
 let answerOptionList = [];
@@ -59,7 +60,10 @@ function submitJson(){
             'Content-Length': jsonString.length,
         },
         body: "json=" + jsonString
-    });
+    }).then(response => response.json())
+        .then(data => console.log(data));
+
+    location.reload();
 }
 
 function makeJson(){
@@ -68,7 +72,7 @@ function makeJson(){
 
     updateFormVariables();
 
-    question.id = 0;
+    question.id = null;
     question.question = document.getElementById("question-name").value;
     question.questionnaireId = questionnaireId;
     question.questionType = type;
@@ -88,6 +92,7 @@ function changeQuestionType(){
 
     updateFormVariables();
 
+    questionName = document.getElementById("question-name").value;
     type = document.querySelector("#input-types").value
     questionType.value = type;
 
@@ -142,7 +147,7 @@ function printRange(){
 
     const rangeAnswer = {}
 
-    rangeAnswer.id = 0;
+    rangeAnswer.id = null;
     rangeAnswer.min = minRange;
     rangeAnswer.max = maxRange;
     rangeAnswer.minLabel = minLabel;
@@ -175,12 +180,20 @@ function printTextInput(){
     let maxChars = document.querySelector("#text-numbers").value;
     let placeholderText = document.querySelector("#placeholder-text").value;
 
+    if(maxChars == null){
+        maxChars = 100;
+    }
+
+    if(placeholderText === ""){
+        placeholderText = "Please write your answer here"
+    }
+
     const textAnswer = {}
 
-    textAnswer.id = 0;
+    textAnswer.id = null;
     textAnswer.questionId = 0;
     textAnswer.maxChars = maxChars;
-    textAnswer.placeHolderText = placeholderText;
+    textAnswer.placeholder = placeholderText;
 
     answerOptionList.push(textAnswer);
 
@@ -222,7 +235,7 @@ function printRadioButtons(){
         const radioAnswer = {};
 
         radioAnswer.id = i;
-        radioAnswer.questionId = -1;
+        radioAnswer.questionId = null;
         radioAnswer.choice = radioButtonValues[i].value;
 
 

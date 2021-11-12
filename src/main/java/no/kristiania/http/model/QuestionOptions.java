@@ -28,4 +28,6 @@ public abstract class QuestionOptions {
     public void setQuestionId(long questionId) {
         this.questionId = questionId;
     }
+
+    abstract String getHtml();
 }

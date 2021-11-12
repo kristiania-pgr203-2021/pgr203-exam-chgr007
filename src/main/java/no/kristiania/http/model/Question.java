@@ -38,6 +38,10 @@ public class Question<T extends QuestionOptions> {
         return questionOptionsList;
     }
 
+    public T getElementFromQuestionOptionList(Integer index){
+        return questionOptionsList.get(index);
+    }
+
     public void addAnswerOption(T questionOptionsList) {
         this.questionOptionsList.add(questionOptionsList);
     }

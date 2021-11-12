@@ -25,13 +25,15 @@ public class AnswerController implements HttpController{
             Answer answer = new Answer();
             answer.setAnswer(request.getPostParams().get("answer"));
             long questionId = Long.parseLong(request.getPostParams().get("questionId"));
+            long personId = Long.parseLong(request.getPostParams().get("userId"));
+            String questionType = request.getPostParams().get("questionType");
             answer.setQuestionId(questionId);
-            httpResponse.setHeaderField("Connection", "close");
+            answer.setUserId(personId);
             answerDao.save(answer);
 
             httpResponse = new HttpResponse(303, "See other");
             httpResponse.setHeaderField("Connection", "close");
-            httpResponse.setHeaderField("Location", "/question.html?questionId=" + questionId);
+            httpResponse.setHeaderField("Location", "/question.html?questionId=" + questionId + "&questionType=" + questionType);
             return httpResponse;
             // Kan sende tilbake ID i body her kanskje?
         }

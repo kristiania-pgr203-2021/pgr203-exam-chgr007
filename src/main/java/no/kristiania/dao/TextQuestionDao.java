@@ -50,16 +50,16 @@ public class TextQuestionDao extends DataAccessObject<TextQuestion>{
         return textQuestion;
     }
 
-    public List<TextQuestion> fetchAllByQuestionId(long id) throws SQLException {
+    public TextQuestion fetchByQuestionId(long id) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("select * from text_question where question_id = ?")) {
                 statement.setLong(1,id);
                 try (ResultSet resultSet = statement.executeQuery()) {
-                    List<TextQuestion> textQuestions = new ArrayList<>();
+                    TextQuestion textQuestion = new TextQuestion();
                     while(resultSet.next()) {
-                        textQuestions.add(mapValuesToObject(resultSet));
+                        textQuestion = (mapValuesToObject(resultSet));
                     }
-                    return textQuestions;
+                    return textQuestion;
                 }
             }
         }

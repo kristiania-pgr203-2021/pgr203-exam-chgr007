@@ -39,7 +39,7 @@ public class QuestionnaireController implements HttpController {
 
         StringBuilder stringBuilder = new StringBuilder();
         for (Question question : questions) {
-            stringBuilder.append("<a href=\"question.html?questionId=" + question.getId() + "\" class=\"question random-color flexbox-box flex-content \">");
+            stringBuilder.append("<a href=\"question.html?questionId=" + question.getId() + "&questionType="+ question.getQuestionType() + "\" class=\"question random-color flexbox-box flex-content \">");
             stringBuilder.append("<h2>" + question.getQuestion() + "</h2>");
             stringBuilder.append("<p class=\"bottom\">" + question.getQuestionType() + "</p>");
             stringBuilder.append("</a>");

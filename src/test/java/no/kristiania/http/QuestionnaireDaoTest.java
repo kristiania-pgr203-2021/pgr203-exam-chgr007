@@ -32,6 +32,8 @@ public class QuestionnaireDaoTest {
     QuestionDao questionDao = new QuestionDao(createDataSource());
     AnswerDao answerDao = new AnswerDao(createDataSource());
     RangeQuestionDao rangeQuestionDao = new RangeQuestionDao(createDataSource());
+    TextQuestionDao textQuestionDao = new TextQuestionDao(createDataSource());
+    RadioQuestionDao radioQuestionDao = new RadioQuestionDao(createDataSource());
 
 
     @BeforeAll
@@ -64,10 +66,51 @@ public class QuestionnaireDaoTest {
         Question question1 = new Question();
         question1.setQuestionnaireId(questionnaire.getId());
         question1.setQuestion("På en skala fra 1-5, hvor stresset er du?");
-        question1.setQuestionType(QuestionType.text);
+        question1.setQuestionType(QuestionType.range);
+        Question question2 = new Question();
+        question2.setQuestionnaireId(questionnaire.getId());
+        question2.setQuestion("Hva liker du best med Avansert Java?");
+        question2.setQuestionType(QuestionType.radio);
 
         questionDao.save(question);
         questionDao.save(question1);
+        questionDao.save(question2);
+
+        //adds questionOptions
+        TextQuestion textQuestion = new TextQuestion();
+        textQuestion.setQuestionId(question.getId());
+        textQuestion.setMaxChars(250);
+        textQuestion.setPlaceholder("Skriv et par setninger");
+
+        textQuestionDao.save(textQuestion);
+
+        RangeQuestion rangeQuestion = new RangeQuestion();
+        rangeQuestion.setQuestionId(question1.getId());
+        rangeQuestion.setMin(0);
+        rangeQuestion.setMax(5);
+        rangeQuestion.setMinLabel("min");
+        rangeQuestion.setMaxLabel("max");
+
+        rangeQuestionDao.save(rangeQuestion);
+
+        RadioQuestion radioQuestion = new RadioQuestion();
+        radioQuestion.setQuestionId(question2.getId());
+        radioQuestion.setChoice("Læreren");
+
+        radioQuestionDao.save(radioQuestion);
+
+        RadioQuestion radioQuestion1 = new RadioQuestion();
+        radioQuestion1.setQuestionId(question2.getId());
+        radioQuestion1.setChoice("At det er avansert");
+
+        radioQuestionDao.save(radioQuestion1);
+
+        RadioQuestion radioQuestion2 = new RadioQuestion();
+        radioQuestion2.setQuestionId(question2.getId());
+        radioQuestion2.setChoice("At det er Java");
+
+        radioQuestionDao.save(radioQuestion2);
+
 
         //adds answers
         Answer answer = new Answer();
@@ -78,7 +121,6 @@ public class QuestionnaireDaoTest {
         answer1.setQuestionId(question.getId());
         answer1.setAnswer("Jeg skal overleve");
         answer1.setUserId(user.getId());
-
         Answer answer2 = new Answer();
         answer2.setQuestionId(question.getId());
         answer2.setAnswer("(-: nei");

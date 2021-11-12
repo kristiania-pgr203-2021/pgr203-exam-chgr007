@@ -19,4 +19,10 @@ public class TextQuestion extends QuestionOptions{
     public void setPlaceholder(String placeholder) {
         this.placeholder = placeholder;
     }
+
+    @Override
+    public String getHtml() {
+        return "<input type=\"text\" id=\"text-input\" name=\"answer\" value=\"\" maxlength=\""+getMaxChars()+"\" placeholder=\""+getPlaceholder()+"\">\n" +
+                "<br>";
+    }
 }

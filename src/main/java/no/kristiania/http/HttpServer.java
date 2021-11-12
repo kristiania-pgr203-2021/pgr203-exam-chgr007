@@ -67,7 +67,7 @@ public class HttpServer {
 
     private void configureRouter(Router router) {
         router.addController("/api/v2/question", new AdvancedQuestionController(new QuestionDao(createDataSource()), new RangeQuestionDao(createDataSource()), new RadioQuestionDao(createDataSource()), new TextQuestionDao(createDataSource())));
-        router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource())));
+        //router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource())));
         router.addController("/api/questionnaires", new QuestionnairesController(new QuestionnaireDao(createDataSource())));
         router.addController("/api/newQuestionnaire", new NewQuestionnaireController(new QuestionnaireDao(createDataSource())));
         router.addController("/api/questionnaireName", new QuestionnaireNameController(new QuestionnaireDao(createDataSource())));
@@ -75,7 +75,7 @@ public class HttpServer {
         router.addController("/api/login", new LoginController(new UserDao(createDataSource())));
         router.addController("/api/signup", new SignupController(new UserDao(createDataSource())));
         router.addController("/api/newQuestion", new QuestionController(new QuestionDao(createDataSource())));
-        router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource()), new AnswerDao(createDataSource())));
+        router.addController("/api/questionAnswers", new QuestionAnswersController(new QuestionDao(createDataSource()), new AnswerDao(createDataSource())));
         router.addController("/api/questionName", new QuestionNameController(new QuestionDao(createDataSource())));
         router.addController("/api/newAnswer", new AnswerController(new AnswerDao(createDataSource())));
         router.addController("/api/answerOption", new AnswerOptionController(new RangeQuestionDao(createDataSource())));

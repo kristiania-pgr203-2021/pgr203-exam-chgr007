@@ -106,13 +106,7 @@ function popUpForm(container, type, id){
         case "question": popUpDiv.innerHTML += createQuestionPopUp(id);
         break;
 
-        case "answer": popUpDiv.innerHTML += `
-            <form action="/api/newAnswer" method="POST">
-                <input type="hidden" name="questionId" value="${id}">
-                <input type="text" maxlength="250" name="answer" placeholder="What is your reponse?"></p>
-                <button type="submit">SUBMIT</button> 
-            </form>
-        `
+        case "answer": popUpDiv.innerHTML += createAnswerPopUp(id)
     }
 }
 

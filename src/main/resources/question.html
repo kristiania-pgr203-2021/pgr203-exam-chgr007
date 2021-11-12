@@ -5,6 +5,8 @@
     <title>Question</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="javascript/javascript.js"></script>
+    <script src="javascript/newAnswer.js"></script>
+
 
 </head>
 <body>
@@ -33,6 +35,7 @@
 
     const urlSearchParams = new URLSearchParams(window.location.search);
     const questionId = urlSearchParams.get("questionId");
+    const questionType = urlSearchParams.get("questionType");
 
     addButton(answerContainer, "answer", questionId);
 
@@ -44,7 +47,7 @@
         console.log(error)
     });
 
-    fetch(`/api/question?questionId=${questionId}`).then(function (res) {
+    fetch(`/api/questionAnswers?questionId=${questionId}`).then(function (res) {
         return res.text()
     }).then(function (text) {
 
@@ -53,6 +56,7 @@
     }).catch(function(error) {
         console.log(error)
     });
+
 
 </script>
 
