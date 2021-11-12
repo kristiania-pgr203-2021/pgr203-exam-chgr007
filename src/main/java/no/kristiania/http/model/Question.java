@@ -4,23 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Question {
+public class Question<T extends QuestionOptions> {
 
     private long id;
     private String question;
     private long questionnaireId;
     private QuestionType questionType;
     private boolean hasAnswerOptions = false;
-    private List<QuestionOptions> questionOptionsList;
+    private List<T> questionOptionsList;
 
+    public Question() {
+        questionOptionsList = new ArrayList<>();
+    }
     public QuestionType getQuestionType() {
         return this.questionType;
     }
     public void setQuestionType(QuestionType questionType) {
         this.questionType = questionType;
-    }
-    public Question() {
-        questionOptionsList = new ArrayList<>();
     }
     public void setQuestion(String question) {
         this.question = question;
@@ -34,14 +34,14 @@ public class Question {
         return hasAnswerOptions;
     }
 
-    public List<QuestionOptions> getQuestionOptionList() {
+    public List<T> getQuestionOptionList() {
         return questionOptionsList;
     }
 
-    public void addAnswerOption(QuestionOptions questionOptionsList) {
+    public void addAnswerOption(T questionOptionsList) {
         this.questionOptionsList.add(questionOptionsList);
     }
-    public void setAnswerOptionList(List<QuestionOptions> questionOptionsList) {
+    public void setAnswerOptionList(List<T> questionOptionsList) {
         this.questionOptionsList = questionOptionsList;
     }
 

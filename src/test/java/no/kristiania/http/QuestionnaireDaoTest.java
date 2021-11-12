@@ -34,7 +34,7 @@ public class QuestionnaireDaoTest {
     RangeQuestionDao rangeQuestionDao = new RangeQuestionDao(createDataSource());
 
 
-    @BeforeAll
+    //@BeforeAll
     void addStartData() throws SQLException {
 
         //adds user
@@ -271,15 +271,15 @@ public class QuestionnaireDaoTest {
         HttpServer server = new HttpServer(0);
         HttpClient client = new HttpClient("localhost", server.getPort());
         User user = randomFromDatabase(userDao);
-        Question question = randomFromDatabase(questionDao);
+        Question<RadioQuestion> question = randomFromDatabase(questionDao);
         question.setQuestionType(QuestionType.radio);
         question.setQuestion("Is this working?");
         question.setHasAnswerOptions(true);
 
         RadioQuestion questionOptions = new RadioQuestion();
-        questionOptions.setQuestion("Jas");
+        questionOptions.setChoice("Jas");
         RadioQuestion questionOptions1 = new RadioQuestion();
-        questionOptions1.setQuestion("Nei ass");
+        questionOptions1.setChoice("Nei ass");
 
         question.addAnswerOption(questionOptions);
         question.addAnswerOption(questionOptions1);
@@ -299,11 +299,11 @@ public class QuestionnaireDaoTest {
         List<RadioQuestion> radioQuestionOptions = radioQuestionDao.retrieveAll();
 
         assertThat(radioQuestionOptions)
-                .extracting(QuestionOptions::getQuestion)
+                .extracting(RadioQuestion::getChoice)
                 .contains("Jas", "Nei ass");
     }
     @Test
-    void shouldInsertRangeAnswerOptionThrougAPI() throws IOException, SQLException {
+    void shouldInsertRangeAnswerOptionThroughAPI() throws IOException, SQLException {
         HttpServer server = new HttpServer(0);
         HttpClient client = new HttpClient("localhost", server.getPort());
         Question question = randomFromDatabase(questionDao);
@@ -312,6 +312,7 @@ public class QuestionnaireDaoTest {
         question.setHasAnswerOptions(true);
 
         RangeQuestion questionOptions = new RangeQuestion();
+        questionOptions.setQuestionId(question.getId());
         questionOptions.setMin(0);
         questionOptions.setMax(10);
         questionOptions.setMaxLabel("Helt fantastisk bra");
@@ -337,13 +338,14 @@ public class QuestionnaireDaoTest {
                 .contains("Helt fantastisk bra");
     }
     @Test
-    void shouldRegisterAnswerOption() throws SQLException {
+    void shouldRegisterRangeQuestion() throws SQLException {
         Question question = randomFromDatabase(questionDao);
 
         RangeQuestion questionOptions = new RangeQuestion();
         question.setQuestionType(QuestionType.range);
         questionOptions.setQuestionId(question.getId());
         questionOptions.setMin(0);
+        questionOptions.setMax(5);
         questionOptions.setMinLabel("min");
         questionOptions.setMaxLabel("max");
 

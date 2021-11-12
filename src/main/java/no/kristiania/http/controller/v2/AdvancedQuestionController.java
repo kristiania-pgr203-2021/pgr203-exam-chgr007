@@ -8,6 +8,7 @@ import no.kristiania.http.controller.HttpController;
 import no.kristiania.http.model.*;
 import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.HttpResponse;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.w3c.dom.Text;
 
@@ -42,26 +43,46 @@ public class AdvancedQuestionController implements HttpController {
             if (postValues != null && postValues.containsKey("json")) {
                 String questionJson = postValues.get("json");
 
-                Question question = objectMapper.readValue(questionJson, Question.class);
-                questionDao.save(question);
+                JsonNode jsonNodeRoot = objectMapper.readTree(questionJson);
 
-                if (question.getHasAnswerOptions() && question.getQuestionType() == QuestionType.range) {
-                    for (QuestionOptions option : question.getQuestionOptionList()) {
+                String questionType = jsonNodeRoot.get("questionType").toString();
+
+                String responseBody = "";
+
+
+                if (questionType.equals("range")) {
+
+                    Question<RangeQuestion> question = objectMapper.readValue(questionJson, Question.class);
+                    questionDao.save(question);
+
+                    for (RangeQuestion option : question.getQuestionOptionList()) {
                         option.setQuestionId(question.getId());
-                        rangeQuestionDao.save((RangeQuestion) option);
+                        rangeQuestionDao.save(option);
                     }
-                } else if (question.getHasAnswerOptions() && question.getQuestionType() == QuestionType.radio) {
-                    for (QuestionOptions option : question.getQuestionOptionList()) {
+
+                    responseBody = objectMapper.writeValueAsString(question);
+                } else if (questionType.equals("radio")) {
+
+                    Question<RadioQuestion> question = objectMapper.readValue(questionJson, Question.class);
+                    questionDao.save(question);
+
+                    for (RadioQuestion option : question.getQuestionOptionList()) {
                         option.setQuestionId(question.getId());
-                        radioQuestionDao.save((RadioQuestion) option);
+                        radioQuestionDao.save(option);
                     }
-                } else if (question.getHasAnswerOptions() && question.getQuestionType() == QuestionType.text) {
-                    for (QuestionOptions option : question.getQuestionOptionList()) {
+
+                    responseBody = objectMapper.writeValueAsString(question);
+                } else if (questionType.equals("text")) {
+
+                    Question<TextQuestion> question = objectMapper.readValue(questionJson, Question.class);
+                    questionDao.save(question);
+
+                    for (TextQuestion option : question.getQuestionOptionList()) {
                         option.setQuestionId(question.getId());
-                        textQuestionDao.save((TextQuestion) option);
+                        textQuestionDao.save(option);
                     }
+                    responseBody = objectMapper.writeValueAsString(question);
                 }
-                String responseBody = objectMapper.writeValueAsString(question);
                 httpResponse.setHeaderField("Content-Type", "application/json; charset=UTF-8");
                 httpResponse.setHeaderField("Connection", "close");
                 httpResponse.setHeaderField("Content-Length", String.valueOf(responseBody.getBytes(StandardCharsets.UTF_8).length));
