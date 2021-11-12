@@ -13,12 +13,13 @@
 
 
 ## Beskriv hvordan programmet skal testes:
-* Sensor bes legge inn følgende linje i pgr203.properties, for å sette key til HS256 algoritmen som benyttes til signering av
+* Sensor bes legge inn følgende linje i pgr203.properties, for å sette 32-bytes nøkkel til HS256 algoritmen som benyttes til signering av
   token: `token.key=w9z$C&F)J@McQfTjWnZr4u7x!A%D*G-K`
   * Det presiseres at dette er en HTTP-server, ikke https. Alt vil bli sendt i klartekst mellom klient og tjener.
     Vi har heller ikke bruk veldig mye tid på å forske på Spring Security, og må ta forbehold om feil i oppsett. Dette er ment som demo/POC.
     Derfor fraråder vi på det sterkeste å benytte reelle passord ved registrering av ny bruker.
-    Nøkkelen til signering av token ville heller aldri blitt opplastet på github i en reell situasjon.
+    Nøkkelen vi har benyttet til signering av token ville heller aldri blitt opplastet på github i en reell situasjon.
+* Bygg programmet med `mvn package`
 * Kjør den eksekverbare .jar filen med kommandoen `java -jar <sti til jar> [--port]`
   * Port argumentet er valgfritt. Dersom det unnlates vil port 8080 bli benyttet.
 
@@ -50,10 +51,10 @@
 
 ### Koden
 
-* [ ] `mvn package` bygger en executable jar-fil
+* [x] `mvn package` bygger en executable jar-fil
 * [ ] Koden inneholder et godt sett med tester
-* [ ] `java -jar target/...jar` (etter `mvn package`) lar bruker legge til og liste ut data fra databasen via webgrensesnitt
-* [ ] Serveren leser HTML-filer fra JAR-filen slik at den ikke er avhengig av å kjøre i samme directory som kildekoden
+* [x] `java -jar target/...jar` (etter `mvn package`) lar bruker legge til og liste ut data fra databasen via webgrensesnitt
+* [x] Serveren leser HTML-filer fra JAR-filen slik at den ikke er avhengig av å kjøre i samme directory som kildekoden
 * [x] Programmet leser `dataSource.url`, `dataSource.username` og `dataSource.password` fra `pgr203.properties` for å connecte til databasen
 * [x] Programmet bruker Flywaydb for å sette opp databaseskjema
 * [x] Server skriver nyttige loggmeldinger, inkludert informasjon om hvilken URL den kjører på ved oppstart
