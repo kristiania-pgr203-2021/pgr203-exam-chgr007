@@ -66,7 +66,7 @@ public class HttpServer {
     }
 
     private void configureRouter(Router router) {
-        router.addController("/api/v2/question", new AdvancedQuestionController(new QuestionDao(createDataSource()), new RangeQuestionDao(createDataSource()), new RadioQuestionDao(createDataSource())));
+        router.addController("/api/v2/question", new AdvancedQuestionController(new QuestionDao(createDataSource()), new RangeQuestionDao(createDataSource()), new RadioQuestionDao(createDataSource()), new TextQuestionDao(createDataSource())));
         router.addController("/api/question", new QuestionController(new QuestionDao(createDataSource())));
         router.addController("/api/questionnaires", new QuestionnairesController(new QuestionnaireDao(createDataSource())));
         router.addController("/api/newQuestionnaire", new NewQuestionnaireController(new QuestionnaireDao(createDataSource())));
