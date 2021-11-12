@@ -7,8 +7,8 @@
 * Fancy random css farger :D
 
 ## Kilder:
-* Decoding av Token i JavaScript:
-* Thread pool:
+* Decoding av Token i JavaScript: https://stackoverflow.com/a/38552302 av bruker Peheje
+* Thread pool: http://tutorials.jenkov.com/java-multithreaded-servers/thread-pooled-server.html av Jakob Jenkov
 
 
 ## Beskriv hvordan programmet skal testes:
