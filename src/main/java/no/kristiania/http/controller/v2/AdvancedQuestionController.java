@@ -43,7 +43,7 @@ public class AdvancedQuestionController implements HttpController {
 
         if (request.getRequestType().equalsIgnoreCase("post")) {
             HttpResponse httpResponse = postHandler(request);
-            if (httpResponse != null) return httpResponse;
+            return httpResponse;
         } else if (request.getRequestType().equalsIgnoreCase("get") && !request.hasQueryParam("questionId")) {
 
             List<Question> questionList = questionDao.retrieveAll();
@@ -70,16 +70,16 @@ public class AdvancedQuestionController implements HttpController {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> postValues = request.getPostParams();
         boolean hasAccess = true;
-        if (!postValues.containsKey("AuthToken") || !HttpServer.DEVELOPMENT) {
+        if (!postValues.containsKey("AuthToken") && !HttpServer.DEVELOPMENT) {
             HttpResponse httpResponse = new HttpResponse(303, "See other");
             httpResponse.setHeaderField("Connection", "close");
             httpResponse.setHeaderField("Location", "/login.html");
             return httpResponse;
-        } else {
+        } else if (!HttpServer.DEVELOPMENT){
             Authenticator authenticator = new Authenticator();
             hasAccess = authenticator.validateToken(postValues.get("AuthToken"));
         }
-        if (hasAccess) {
+        if (hasAccess || HttpServer.DEVELOPMENT) {
             HttpResponse httpResponse = parseJSONValues(objectMapper, postValues);
             if (httpResponse != null) return httpResponse;
         }
