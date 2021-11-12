@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -20,7 +19,7 @@ public class Properties {
         //TODO: Legge til working directory (FileReader reader = new FileReader("pgr203.properties"))
         Path workingDir = Paths.get("").toAbsolutePath();
         logger.info("Loading properties file from: {}",workingDir);
-        try (FileReader reader = new FileReader(workingDir+"/pgr203.properties")) {
+        try (FileReader reader = new FileReader(workingDir+ "/pgr203.properties")) {
             java.util.Properties properties = new java.util.Properties();
             properties.load(reader);
             return properties;

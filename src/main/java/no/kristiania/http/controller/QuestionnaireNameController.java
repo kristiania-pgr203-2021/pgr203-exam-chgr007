@@ -30,10 +30,11 @@ public class QuestionnaireNameController implements HttpController {
             Long questionnaireId = Long.parseLong(request.getPostParams().get("questionnaireId"));
 
             Questionnaire questionnaire = questionnaireDao.retrieveById(questionnaireId);
-            questionnaire.setName(request.getPostParams().get("name"));
+            String name = request.getPostParams().get("name");
+            questionnaire.setName(name);
             questionnaireDao.update(questionnaire);
 
-            System.out.println(questionnaireDao.retrieveById(questionnaireId).toString());
+            System.out.println(questionnaireDao.retrieveById(questionnaireId).getName());
 
             httpResponse = new HttpResponse(303, "See other");
             httpResponse.setHeaderField("Connection", "close");

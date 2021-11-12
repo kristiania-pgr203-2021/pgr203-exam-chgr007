@@ -22,6 +22,9 @@ public class NewQuestionnaireController implements HttpController {
             Questionnaire questionnaire = new Questionnaire();
             questionnaire.setName(request.getPostParams().get("questionnaireName"));
             questionnaire.setPersonId(Long.parseLong(request.getPostParams().get("userId")));
+
+            questionnaireDao.save(questionnaire);
+
             HttpResponse response = new HttpResponse(303, "See other");
             response.setHeaderField("Connection", "close");
             response.setHeaderField("Location", "/index.html");
