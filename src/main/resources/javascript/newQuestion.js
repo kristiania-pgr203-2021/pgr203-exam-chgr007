@@ -147,6 +147,7 @@ function printRange(){
 
     const rangeAnswer = {}
 
+
     rangeAnswer.id = 0;
     rangeAnswer.min = minRange;
     rangeAnswer.max = maxRange;
@@ -233,6 +234,7 @@ function printRadioButtons(){
     for(i=0; i<radioButtonValues.length; i++){
 
         const radioAnswer = {};
+
 
         radioAnswer.id = 0;
         radioAnswer.questionId = 0;
