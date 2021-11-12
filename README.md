@@ -1,13 +1,23 @@
+[![Byggejobb](https://github.com/kristiania-pgr203-2021/pgr203-exam-chgr007/actions/workflows/maven.yml/badge.svg)](https://github.com/kristiania-pgr203-2021/pgr203-exam-chgr007/actions/workflows/maven.yml)
+
 # PGR203 Avansert Java eksamen
+
+## Linker
+* https://github.com/kristiania-pgr203-2021/pgr203-exam-chgr007 Github Repo
+* https://github.com/kristiania-pgr203-2021/pgr203-exam-chgr007/actions Github Actions 
 
 ## Funksjonalitet utenfor beskrivelse
 * Serveren benytter JWT (JSON Web Tokens) for å autorisere bruker
 * Serveren benytter Spring Security og Bcryp for å autentisere bruker
 * Serializing til/fra server med JSON, Jackson-biblioteket er benyttet backend
 * Fancy random css farger :D
+* Man kan endre tittel på spørreundersøkelse og spørsmål ved bruk av edit-ikonet ved siden av tittelen
+* Answer vil bruke info fra opprettelsen av spørreundersøkelsen for å gi riktig svarmulighet
+
 
 ## Kilder:
 * HttpServer https://github.com/kristiania-pgr203-2021/pgr203-innlevering-2-mariestigen Innlevering 2 av Marie og Christian 
+* JDBC https://github.com/kristiania-pgr203-2021/pgr203-innlevering-3-mariestigen Innlevering 3 av Marie og Christian
 * Decoding av Token i JavaScript: https://stackoverflow.com/a/38552302 av bruker Peheje
 * Thread pool: http://tutorials.jenkov.com/java-multithreaded-servers/thread-pooled-server.html av Jakob Jenkov
 
