@@ -59,7 +59,7 @@ public class AnswerController implements HttpController{
             if(questionType.equals("text")){
                 TextQuestion textQuestions = textQuestionDao.fetchByQuestionId(questionId);
 
-                String messageBody = textQuestions.getHtml();
+                String messageBody = textQuestions.generateHtml();
                 response.setMessageBody(messageBody);
                 response.setHeaderField("Connection", "close");
                 response.setHeaderField("Content-Length", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
@@ -67,7 +67,7 @@ public class AnswerController implements HttpController{
             } else if(questionType.equals("range")){
                 RangeQuestion range = rangeQuestionDao.fetchByQuestionId(questionId);
 
-                String messageBody = range.getHtml();
+                String messageBody = range.generateHtml();
                 response.setMessageBody(messageBody);
                 response.setHeaderField("Connection", "close");
                 response.setHeaderField("Content-Length", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
@@ -78,7 +78,7 @@ public class AnswerController implements HttpController{
                 StringBuilder stringBuilder = new StringBuilder();
 
                 for(RadioQuestion r : radioQuestions){
-                    stringBuilder.append(r.getHtml());
+                    stringBuilder.append(r.generateHtml());
                 }
 
                 String messageBody = stringBuilder.toString();

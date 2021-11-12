@@ -28,7 +28,7 @@ public class RadioQuestion extends QuestionOptions{
     }
 
     @Override
-    public String getHtml(){
+    public String generateHtml(){
 
         return "<div class=\"radio-answers\">" +
                 "<input type=\"radio\" id=\"" + generateChoiceAsId() + "\" name=\"answer\" value=\"" + getChoice() + "\">" +

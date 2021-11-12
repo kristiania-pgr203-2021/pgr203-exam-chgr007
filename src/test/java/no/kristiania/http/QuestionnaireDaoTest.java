@@ -311,7 +311,9 @@ public class QuestionnaireDaoTest {
         HttpServer server = new HttpServer(0, createDataSource());
         HttpClient client = new HttpClient("localhost", server.getPort());
         User user = randomFromDatabase(userDao);
-        Question<RadioQuestion> question = randomFromDatabase(questionDao);
+        Questionnaire questionnaire = randomFromDatabase(questionnaireDao);
+        Question<RadioQuestion> question = new Question<>();
+        question.setQuestionnaireId(questionnaire.getId());
         question.setQuestionType(QuestionType.radio);
         question.setQuestion("Is this working?");
         question.setHasAnswerOptions(true);
@@ -342,42 +344,42 @@ public class QuestionnaireDaoTest {
                 .extracting(RadioQuestion::getChoice)
                 .contains("Jas", "Nei ass");
     }
-//    @Test
-//    void shouldInsertRangeAnswerOptionThroughAPI() throws IOException, SQLException {
-//        HttpServer server = new HttpServer(0, createDataSource());
-//        HttpClient client = new HttpClient("localhost", server.getPort());
-//        Questionnaire questionnaire = randomFromDatabase(questionnaireDao);
-//        Question<RangeQuestion> question = new Question<>();
-//        question.setQuestionnaireId(questionnaire.getId());
-//        question.setQuestionType(QuestionType.range);
-//        question.setQuestion("What about this, then?");
-//        question.setHasAnswerOptions(true);
-//
-//        RangeQuestion questionOptions = new RangeQuestion();
-//        questionOptions.setMin(0);
-//        questionOptions.setMax(10);
-//        questionOptions.setMaxLabel("Helt fantastisk bra");
-//        questionOptions.setMinLabel("Helt sjukt dårlig :(");
-//        question.addAnswerOption(questionOptions);
-//
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String JSONQuestion = objectMapper.writeValueAsString(question);
-//        PostValue<String, String> jsonPostString = new PostValue("json", JSONQuestion);
-//
-//        client.post(List.of(jsonPostString), "/api/v2/question");
-//        List<Question> questions = questionDao.retrieveAll();
-//        System.out.println(client.getStatusCode());
-//        assertThat(questions)
-//                .extracting(Question::getQuestion)
-//                .contains("What about this, then?");
-//
-//        RangeQuestionDao rangeQuestionDao = new RangeQuestionDao(createDataSource());
-//        List<RangeQuestion> rangeQuestionOptions = rangeQuestionDao.retrieveAll();
-//
-//        assertThat(rangeQuestionOptions)
-//                .extracting(RangeQuestion::getMaxLabel)
-//                .contains("Helt fantastisk bra");
-//    }
+    @Test
+    void shouldInsertRangeAnswerOptionThroughAPI() throws IOException, SQLException {
+        HttpServer server = new HttpServer(0, createDataSource());
+        HttpClient client = new HttpClient("localhost", server.getPort());
+        Questionnaire questionnaire = randomFromDatabase(questionnaireDao);
+        Question<RangeQuestion> question = new Question<>();
+        question.setQuestionnaireId(questionnaire.getId());
+        question.setQuestionType(QuestionType.range);
+        question.setQuestion("What about this, then?");
+        question.setHasAnswerOptions(true);
+
+        RangeQuestion questionOptions = new RangeQuestion();
+        questionOptions.setMin(0);
+        questionOptions.setMax(10);
+        questionOptions.setMaxLabel("Helt fantastisk bra");
+        questionOptions.setMinLabel("Helt sjukt dårlig :(");
+        question.addAnswerOption(questionOptions);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String JSONQuestion = objectMapper.writeValueAsString(question);
+        PostValue<String, String> jsonPostString = new PostValue("json", JSONQuestion);
+
+        client.post(List.of(jsonPostString), "/api/v2/question");
+        List<Question> questions = questionDao.retrieveAll();
+        System.out.println(client.getStatusCode());
+        assertThat(questions)
+                .extracting(Question::getQuestion)
+                .contains("What about this, then?");
+
+        RangeQuestionDao rangeQuestionDao = new RangeQuestionDao(createDataSource());
+        List<RangeQuestion> rangeQuestionOptions = rangeQuestionDao.retrieveAll();
+
+        assertThat(rangeQuestionOptions)
+                .extracting(RangeQuestion::getMaxLabel)
+                .contains("Helt fantastisk bra");
+    }
     @Test
     void shouldRegisterRangeQuestion() throws SQLException {
         Question question = randomFromDatabase(questionDao);

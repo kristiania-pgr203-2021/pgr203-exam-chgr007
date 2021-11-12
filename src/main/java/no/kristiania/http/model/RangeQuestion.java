@@ -39,7 +39,7 @@ public class RangeQuestion extends QuestionOptions {
     }
 
     @Override
-    public String getHtml(){
+    public String generateHtml(){
 
         String minLabel = "<label>"+ getMinLabel() + "</label>";
         String input = "<input name=\"answer\" type=\"range\" min=\"" + getMin() + "\" max=\"" + getMax() + "\">";

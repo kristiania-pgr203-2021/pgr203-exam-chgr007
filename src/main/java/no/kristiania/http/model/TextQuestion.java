@@ -21,7 +21,7 @@ public class TextQuestion extends QuestionOptions{
     }
 
     @Override
-    public String getHtml() {
+    public String generateHtml() {
         return "<input type=\"text\" id=\"text-input\" name=\"answer\" value=\"\" maxlength=\""+getMaxChars()+"\" placeholder=\""+getPlaceholder()+"\">\n" +
                 "<br>";
     }

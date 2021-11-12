@@ -29,5 +29,5 @@ public abstract class QuestionOptions {
         this.questionId = questionId;
     }
 
-    abstract String getHtml();
+    abstract String generateHtml();
 }
