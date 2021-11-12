@@ -67,6 +67,10 @@ function addButton(container, type, id){
     
 }
 
+function refresh(){
+    location.reload();
+}
+
 
 
 
@@ -98,7 +102,7 @@ function popUpForm(container, type, id){
             <form action="/api/newQuestionnaire" method="POST">
                 <input type="hidden" name="userId" value="${id}">
                 <input type="text" maxlength="250" name="questionnaireName" placeholder="What would you like to name the new questionnaire?"></p>
-                <button type="submit">CREATE</button> 
+                <button type="submit" onclick="refresh()">CREATE</button> 
             </form>
         `
         break;

@@ -103,43 +103,6 @@ public class AdvancedQuestionController implements HttpController {
             response.setHeaderField("Content-Length", String.valueOf(jsonObject.getBytes(StandardCharsets.UTF_8).length));
             response.setMessageBody(jsonObject);
             return response;
-        } else if (request.getRequestType().equalsIgnoreCase("get") && request.hasQueryParam("questionId")){
-            HttpResponse response = new HttpResponse(200, "OK");
-
-            Long questionId = Long.parseLong(request.getQueryParam("questionId"));
-            String questionType = request.getQueryParam("questionType");
-
-            if(questionType.equals("text")){
-                TextQuestion textQuestions = textQuestionDao.fetchByQuestionId(questionId);
-
-                String messageBody = textQuestions.getHtml();
-                response.setMessageBody(messageBody);
-                response.setHeaderField("Connection", "close");
-                response.setHeaderField("Content-Length", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
-                return response;
-            } else if(questionType.equals("range")){
-                RangeQuestion range = rangeQuestionDao.fetchByQuestionId(questionId);
-
-                String messageBody = range.getHtml();
-                response.setMessageBody(messageBody);
-                response.setHeaderField("Connection", "close");
-                response.setHeaderField("Content-Length", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
-                return response;
-            } else if(questionType.equals("radio")){
-                List<RadioQuestion> radioQuestions = radioQuestionDao.fetchAllByQuestionId(questionId);
-
-                StringBuilder stringBuilder = new StringBuilder();
-
-                for(RadioQuestion r : radioQuestions){
-                    stringBuilder.append(r.getHtml());
-                }
-
-                String messageBody = stringBuilder.toString();
-                response.setMessageBody(messageBody);
-                response.setHeaderField("Connection", "close");
-                response.setHeaderField("Content-Length", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
-                return response;
-            }
         }
         return new HttpResponse(500, "Internal Server Error");
     }
