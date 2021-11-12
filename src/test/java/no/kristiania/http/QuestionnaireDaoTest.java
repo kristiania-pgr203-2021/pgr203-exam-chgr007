@@ -34,7 +34,7 @@ public class QuestionnaireDaoTest {
     RangeQuestionDao rangeQuestionDao = new RangeQuestionDao(createDataSource());
 
 
-    //@BeforeAll
+    @BeforeAll
     void addStartData() throws SQLException {
 
         //adds user

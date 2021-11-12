@@ -10,6 +10,8 @@ import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.HttpResponse;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
@@ -32,7 +34,7 @@ public class AdvancedQuestionController implements HttpController {
     }
 
     @Override
-    public HttpResponse handle(HttpRequest request) throws SQLException, IOException {
+    public HttpResponse handle(@NotNull HttpRequest request) throws SQLException, IOException {
 
 
         if (request.getRequestType().equalsIgnoreCase("post")) {
@@ -45,14 +47,14 @@ public class AdvancedQuestionController implements HttpController {
 
                 JsonNode jsonNodeRoot = objectMapper.readTree(questionJson);
 
-                String questionType = jsonNodeRoot.get("questionType").toString();
+                String questionType = jsonNodeRoot.get("questionType").getTextValue().trim();
 
                 String responseBody = "";
 
 
                 if (questionType.equals("range")) {
 
-                    Question<RangeQuestion> question = objectMapper.readValue(questionJson, Question.class);
+                    Question<RangeQuestion> question = objectMapper.readValue(questionJson, new TypeReference<Question<RangeQuestion>>(){});
                     questionDao.save(question);
 
                     for (RangeQuestion option : question.getQuestionOptionList()) {
@@ -63,7 +65,7 @@ public class AdvancedQuestionController implements HttpController {
                     responseBody = objectMapper.writeValueAsString(question);
                 } else if (questionType.equals("radio")) {
 
-                    Question<RadioQuestion> question = objectMapper.readValue(questionJson, Question.class);
+                    Question<RadioQuestion> question = objectMapper.readValue(questionJson, new TypeReference<Question<RadioQuestion>>(){});
                     questionDao.save(question);
 
                     for (RadioQuestion option : question.getQuestionOptionList()) {
@@ -74,7 +76,7 @@ public class AdvancedQuestionController implements HttpController {
                     responseBody = objectMapper.writeValueAsString(question);
                 } else if (questionType.equals("text")) {
 
-                    Question<TextQuestion> question = objectMapper.readValue(questionJson, Question.class);
+                    Question<TextQuestion> question = objectMapper.readValue(questionJson, new TypeReference<Question<TextQuestion>>(){});
                     questionDao.save(question);
 
                     for (TextQuestion option : question.getQuestionOptionList()) {
