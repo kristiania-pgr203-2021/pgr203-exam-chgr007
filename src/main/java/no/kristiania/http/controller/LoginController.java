@@ -14,6 +14,7 @@ import java.util.Map;
 
 public class LoginController implements HttpController {
     private UserDao userDao;
+    private final String path = "/api/login";
 
     public LoginController(UserDao userDao) {
         this.userDao = userDao;
@@ -49,5 +50,10 @@ public class LoginController implements HttpController {
             // show login form
         }
         return new HttpResponse(500, "Internal server error");
+    }
+
+    @Override
+    public String getPath() {
+        return this.path;
     }
 }

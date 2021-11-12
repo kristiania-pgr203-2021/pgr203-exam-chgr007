@@ -16,6 +16,7 @@ public class QuestionnaireController implements HttpController {
     private QuestionnaireDao questionnaireDao;
     private QuestionDao questionDao;
     private AnswerDao answerDao;
+    private final String path = "/api/questionnaire";
 
     public QuestionnaireController(QuestionnaireDao questionnaireDao, QuestionDao questionDao, AnswerDao answerDao) {
         this.questionnaireDao = questionnaireDao;
@@ -37,6 +38,12 @@ public class QuestionnaireController implements HttpController {
         }
         return new HttpResponse(500, "Internal server error");
     }
+
+    @Override
+    public String getPath() {
+        return this.path;
+    }
+
     private String printAllQuestionnaireQuestions(long questionnaireId) throws SQLException {
         List<Question> questions = questionDao.listByQuestionnaireId(questionnaireId);
 

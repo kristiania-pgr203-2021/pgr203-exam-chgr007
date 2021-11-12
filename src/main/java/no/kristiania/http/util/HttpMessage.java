@@ -1,5 +1,7 @@
 package no.kristiania.http.util;
 
+import org.codehaus.jackson.io.UTF8Writer;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -31,6 +33,8 @@ public class HttpMessage {
         for (int i = 0; i < contentLength; i++) {
             body.append((char)socket.getInputStream().read());
         }
+        byte array[] = body.toString().getBytes("UTF-8");
+        String encoded = new String(array, StandardCharsets.UTF_8);
         this.messageBody = body.toString();
     }
 

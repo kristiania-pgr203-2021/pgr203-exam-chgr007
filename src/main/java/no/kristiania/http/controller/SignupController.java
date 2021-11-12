@@ -15,6 +15,7 @@ import java.util.Map;
 
 public class SignupController implements HttpController {
     private UserDao userDao;
+    private final String path = "/api/signup";
 
     public SignupController(UserDao userDao) {
         this.userDao = userDao;
@@ -55,6 +56,11 @@ public class SignupController implements HttpController {
 
         }
         return null;
+    }
+
+    @Override
+    public String getPath() {
+        return this.path;
     }
 
     private boolean userExists(String email) throws SQLException {

@@ -27,6 +27,7 @@ public class AdvancedQuestionController implements HttpController {
     private RangeQuestionDao rangeQuestionDao;
     private RadioQuestionDao radioQuestionDao;
     private TextQuestionDao textQuestionDao;
+    private final String path = "/api/v2/question";
 
     public AdvancedQuestionController(QuestionDao questionDao, RangeQuestionDao rangeQuestionDao, RadioQuestionDao radioQuestionDao, TextQuestionDao textQuestionDao) {
         this.questionDao = questionDao;
@@ -56,6 +57,11 @@ public class AdvancedQuestionController implements HttpController {
             return response;
         }
         return new HttpResponse(500, "Internal Server Error");
+    }
+
+    @Override
+    public String getPath() {
+        return this.path;
     }
 
     @Nullable

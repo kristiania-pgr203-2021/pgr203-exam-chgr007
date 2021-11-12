@@ -17,6 +17,7 @@ public class AnswerController implements HttpController{
     private RangeQuestionDao rangeQuestionDao;
     private RadioQuestionDao radioQuestionDao;
     private TextQuestionDao textQuestionDao;
+    private final String path = "/api/newAnswer";
 
     public AnswerController(AnswerDao answerDao) {
         this.answerDao = answerDao;
@@ -89,5 +90,10 @@ public class AnswerController implements HttpController{
         }
         return null;
 
+    }
+
+    @Override
+    public String getPath() {
+        return path;
     }
 }

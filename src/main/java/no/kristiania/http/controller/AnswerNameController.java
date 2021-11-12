@@ -13,6 +13,7 @@ import java.sql.SQLException;
 
 public class AnswerNameController implements HttpController{
     AnswerDao answerDao;
+    private final String path = "/api/answerName";
 
     public AnswerNameController(AnswerDao answerDao) {
         this.answerDao = answerDao;
@@ -43,6 +44,11 @@ public class AnswerNameController implements HttpController{
             return httpResponse;
         }
         return null;    }
+
+    @Override
+    public String getPath() {
+        return this.path;
+    }
 
     private String printAnswerName(Long answerId) throws SQLException {
         return answerDao.retrieveById(answerId).getAnswer();

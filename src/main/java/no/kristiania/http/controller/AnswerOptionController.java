@@ -10,6 +10,7 @@ import java.util.Map;
 
 public class AnswerOptionController implements HttpController {
     private RangeQuestionDao rangeQuestionDao;
+    private String path = "/api/answerOption";
 
     public AnswerOptionController(RangeQuestionDao rangeQuestionDao) {
         this.rangeQuestionDao = rangeQuestionDao;
@@ -36,5 +37,10 @@ public class AnswerOptionController implements HttpController {
             return new HttpResponse(500, "Internal Server Error");
         }
         return new HttpResponse(500, "Internal Server Error");
+    }
+
+    @Override
+    public String getPath() {
+        return this.path;
     }
 }

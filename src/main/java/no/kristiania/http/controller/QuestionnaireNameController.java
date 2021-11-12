@@ -11,6 +11,7 @@ import java.sql.SQLException;
 
 public class QuestionnaireNameController implements HttpController {
     private QuestionnaireDao questionnaireDao;
+    private String path = "/api/questionnaireName";
 
     public QuestionnaireNameController(QuestionnaireDao questionnaireDao    ) {
         this.questionnaireDao = questionnaireDao;
@@ -42,6 +43,11 @@ public class QuestionnaireNameController implements HttpController {
             return httpResponse;
         }
         return new HttpResponse(500, "Internal server error");
+    }
+
+    @Override
+    public String getPath() {
+        return this.path;
     }
 
     private String printQuestionnaireName(long questionnaireId) throws SQLException {

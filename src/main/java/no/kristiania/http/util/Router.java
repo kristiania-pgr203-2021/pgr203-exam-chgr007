@@ -65,8 +65,8 @@ public class Router {
         }
     }
 
-    public void addController(String path, HttpController controller) {
-        controllers.put(path,controller);
+    public void addController(HttpController controller) {
+        controllers.put(controller.getPath(),controller);
     }
 
 

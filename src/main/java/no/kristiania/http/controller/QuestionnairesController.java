@@ -21,6 +21,7 @@ public class QuestionnairesController implements HttpController {
     private QuestionnaireDao questionnaireDao;
     private QuestionDao questionDao;
     private boolean validToken = false;
+    private final String path = "/api/questionnaire";
 
     public QuestionnairesController(QuestionnaireDao questionnaireDao) {
         this.questionnaireDao = questionnaireDao;
@@ -70,6 +71,11 @@ public class QuestionnairesController implements HttpController {
         }
 
         return httpResponse;
+    }
+
+    @Override
+    public String getPath() {
+        return this.path;
     }
 
     private String printAllQuestionnaires() throws SQLException {

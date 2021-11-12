@@ -15,6 +15,7 @@ import java.util.List;
 public class QuestionController implements HttpController{
     QuestionDao questionDao;
     AnswerDao answerDao;
+    private String path = "/api/newQuestion";
 
     public QuestionController(QuestionDao questionDao) {
         this.questionDao = questionDao;
@@ -63,5 +64,10 @@ public class QuestionController implements HttpController{
         }
 
         return null;
+    }
+
+    @Override
+    public String getPath() {
+        return this.path;
     }
 }

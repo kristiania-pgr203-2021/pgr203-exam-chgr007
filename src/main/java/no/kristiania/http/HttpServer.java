@@ -69,19 +69,19 @@ public class HttpServer {
     }
 
     private void configureRouter(Router router) {
-        router.addController("/api/v2/question", new AdvancedQuestionController(new QuestionDao(dataSource), new RangeQuestionDao(dataSource), new RadioQuestionDao(dataSource), new TextQuestionDao(dataSource)));
+        router.addController(new AdvancedQuestionController(new QuestionDao(dataSource), new RangeQuestionDao(dataSource), new RadioQuestionDao(dataSource), new TextQuestionDao(dataSource)));
         //router.addController("/api/question", new QuestionController(new QuestionDao(dataSource)));
-        router.addController("/api/questionnaires", new QuestionnairesController(new QuestionnaireDao(dataSource)));
-        router.addController("/api/newQuestionnaire", new NewQuestionnaireController(new QuestionnaireDao(dataSource)));
-        router.addController("/api/questionnaireName", new QuestionnaireNameController(new QuestionnaireDao(dataSource)));
-        router.addController("/api/questionnaire", new QuestionnaireController(new QuestionnaireDao(dataSource), new QuestionDao(dataSource), new AnswerDao(dataSource)));
-        router.addController("/api/login", new LoginController(new UserDao(dataSource)));
-        router.addController("/api/signup", new SignupController(new UserDao(dataSource)));
-        router.addController("/api/newQuestion", new QuestionController(new QuestionDao(dataSource)));
-        router.addController("/api/questionAnswers", new QuestionAnswersController(new QuestionDao(dataSource), new AnswerDao(dataSource)));
-        router.addController("/api/questionName", new QuestionNameController(new QuestionDao(dataSource)));
-        router.addController("/api/newAnswer", new AnswerController(new AnswerDao(dataSource), new QuestionDao(dataSource), new RangeQuestionDao(dataSource), new RadioQuestionDao(dataSource), new TextQuestionDao(dataSource)));
-        router.addController("/api/answerOption", new AnswerOptionController(new RangeQuestionDao(dataSource)));
+        router.addController(new QuestionnairesController(new QuestionnaireDao(dataSource)));
+        router.addController(new NewQuestionnaireController(new QuestionnaireDao(dataSource)));
+        router.addController(new QuestionnaireNameController(new QuestionnaireDao(dataSource)));
+        router.addController(new QuestionnaireController(new QuestionnaireDao(dataSource), new QuestionDao(dataSource), new AnswerDao(dataSource)));
+        router.addController(new LoginController(new UserDao(dataSource)));
+        router.addController(new SignupController(new UserDao(dataSource)));
+        router.addController(new QuestionController(new QuestionDao(dataSource)));
+        router.addController(new QuestionAnswersController(new QuestionDao(dataSource), new AnswerDao(dataSource)));
+        router.addController(new QuestionNameController(new QuestionDao(dataSource)));
+        router.addController(new AnswerController(new AnswerDao(dataSource), new QuestionDao(dataSource), new RangeQuestionDao(dataSource), new RadioQuestionDao(dataSource), new TextQuestionDao(dataSource)));
+        router.addController(new AnswerOptionController(new RangeQuestionDao(dataSource)));
     }
 
 

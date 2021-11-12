@@ -12,6 +12,7 @@ import java.sql.SQLException;
 
 public class QuestionNameController implements HttpController{
     QuestionDao questionDao;
+    private String path = "/api/questionName";
 
     public QuestionNameController(QuestionDao questionDao) {
         this.questionDao = questionDao;
@@ -44,7 +45,12 @@ public class QuestionNameController implements HttpController{
         return new HttpResponse(500, "Internal server error");
     }
 
-        private String printQuestionName(long questionId) throws SQLException {
+    @Override
+    public String getPath() {
+        return this.path;
+    }
+
+    private String printQuestionName(long questionId) throws SQLException {
             return questionDao.retrieveById(questionId).getQuestion();
         }
 }

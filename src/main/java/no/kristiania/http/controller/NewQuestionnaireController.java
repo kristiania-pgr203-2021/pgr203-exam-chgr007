@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 public class NewQuestionnaireController implements HttpController {
     private QuestionnaireDao questionnaireDao;
+    private String path = "/api/newQuestionnaire";
 
     public NewQuestionnaireController(QuestionnaireDao questionnaireDao) {
         this.questionnaireDao = questionnaireDao;
@@ -32,5 +33,10 @@ public class NewQuestionnaireController implements HttpController {
 
         }
         return new HttpResponse(500, "Internal server error");
+    }
+
+    @Override
+    public String getPath() {
+        return this.path;
     }
 }
