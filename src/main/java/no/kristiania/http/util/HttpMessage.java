@@ -31,8 +31,7 @@ public class HttpMessage {
         for (int i = 0; i < contentLength; i++) {
             body.append((char)socket.getInputStream().read());
         }
-        byte[] bytes = body.toString().getBytes(StandardCharsets.UTF_8);
-        this.messageBody = new String(bytes, StandardCharsets.UTF_8);
+        this.messageBody = body.toString();
     }
 
 
