@@ -22,7 +22,7 @@ public class HttpServer {
 
     private final int port;
     private ServerSocket serverSocket;
-    private final Logger logger = LoggerFactory.getLogger(HttpServer.class);
+
     private final ExecutorService threadPool;
     private Thread runningThread = null;
     public HttpServer(int port) throws IOException {
@@ -35,16 +35,16 @@ public class HttpServer {
 
     private void handleClient() {
         // Thread pool http://tutorials.jenkov.com/java-multithreaded-servers/thread-pooled-server.html
-        logger.info("Server running at http://localhost:{}/", getPort());
+        Router.logger.info("Server running at http://localhost:{}/", getPort());
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                logger.info("*** Accepted a client connection! ***");
+                Router.logger.info("*** Accepted a client connection! ***");
                 this.threadPool.execute(() -> session(clientSocket));
                 // TODO: håndtere feil i router, skrive ut feilmeldinger til nettleser
             } catch (IOException e) {
-                logger.error("*** I/O ERROR: Connection to client failed! ***");
-                logger.error(e.getMessage());
+                Router.logger.error("*** I/O ERROR: Connection to client failed! ***");
+                Router.logger.error(e.getMessage());
             }
 
         }
@@ -60,8 +60,8 @@ public class HttpServer {
             configureRouter(router);
             router.route(message);
         } catch (IOException e) {
-            logger.error("*** ERROR: Failed to read from client socket! ***");
-            logger.error(e.getMessage());
+            Router.logger.error("*** ERROR: Failed to read from client socket! ***");
+            Router.logger.error(e.getMessage());
         }
     }
 

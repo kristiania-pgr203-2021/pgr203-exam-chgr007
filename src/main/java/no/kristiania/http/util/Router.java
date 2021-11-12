@@ -1,6 +1,5 @@
 package no.kristiania.http.util;
 
-import no.kristiania.http.HttpServer;
 import no.kristiania.http.controller.FileController;
 import no.kristiania.http.controller.HttpController;
 import org.slf4j.Logger;
@@ -16,7 +15,7 @@ import java.util.Map;
 public class Router {
     private final Socket clientSocket;
     private final Map<String, HttpController> controllers;
-    private static final Logger logger = LoggerFactory.getLogger(Router.class);
+    public static final Logger logger = LoggerFactory.getLogger(Router.class);
     public Router(Socket clientSocket) {
         this.clientSocket = clientSocket;
         controllers = new HashMap<>();

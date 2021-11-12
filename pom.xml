@@ -33,11 +33,11 @@
             <version>7.14.1</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.logevents/logevents -->
         <dependency>
             <groupId>org.logevents</groupId>
             <artifactId>logevents</artifactId>
-            <version>0.2.2</version>
-            <scope>runtime</scope>
+            <version>0.2.3</version>
         </dependency>
 
         <dependency>
