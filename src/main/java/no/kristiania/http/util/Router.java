@@ -24,7 +24,7 @@ public class Router {
     public void route(HttpRequest message) {
 
         try {
-            if (message.getFileTarget().equals("/")) redirect("index.html");
+            if (message.getFileTarget().equals("/")) redirect("/index.html");
 
             FileController fileController = new FileController();
             if (controllers.containsKey(message.getFileTarget())) {
@@ -50,21 +50,14 @@ public class Router {
 
 
     private void redirect(String location) throws IOException {
-        String responseMessage = "HTTP/1.1 303 See Other\r\n" +
-                "Location: " + location + "\r\n" +
-                "Connection: close\r\n" +
-                "\r\n";
-        clientSocket.getOutputStream().write(responseMessage.getBytes(StandardCharsets.UTF_8));
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.useRedirectParams(location);
+        httpResponse.write(clientSocket);
     }
     private void writeServerError() {
         try {
-            String message = "<p>OooooooOOoooOOooOOps. Something went really wrong!</p>";
-
             HttpResponse response = new HttpResponse(500, "Internal server error");
-            response.setHeaderField("Connection", "Close");
-            response.setHeaderField("Content-Type", "text/html");
-            response.setHeaderField("Content-Length", String.valueOf(message.getBytes(StandardCharsets.UTF_8).length));
-            response.setMessageBody(message);
+            response.useServerErrorParams();
             response.write(clientSocket);
         } catch (IOException e) {
             logger.error("*** Failed to write error message to user! ***");

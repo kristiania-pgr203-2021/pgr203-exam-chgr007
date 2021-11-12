@@ -2,6 +2,7 @@ package no.kristiania.http.util;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class HttpResponse extends HttpMessage {
     private int statusCode;
@@ -14,6 +15,11 @@ public class HttpResponse extends HttpMessage {
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
     }
+
+    public HttpResponse() {
+
+    }
+
     public int getStatusCode() {
         return statusCode;
     }
@@ -21,7 +27,22 @@ public class HttpResponse extends HttpMessage {
     public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
     }
-
+    public void useServerErrorParams(){
+        headerFields.clear();
+        statusCode = 500;
+        statusMessage = "Internal server error";
+        messageBody = "<p>OooooooOOoooOOooOOps. Something went really wrong!</p>";
+        setHeaderField("Connection", "Close");
+        setHeaderField("Content-Type", "text/html");
+        setHeaderField("Content-Length", String.valueOf(statusMessage.getBytes(StandardCharsets.UTF_8).length));
+    }
+    public void useRedirectParams(String location) {
+        statusCode = 303;
+        statusMessage = "See other";
+        headerFields.clear();
+        setHeaderField("Location", location);
+        setHeaderField("Connection", "Close");
+    }
     @Override
     public void write(Socket socket) throws IOException {
         startLine = String.format("HTTP/1.1 %s %s",statusCode, statusMessage);

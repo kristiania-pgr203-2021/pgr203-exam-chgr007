@@ -41,7 +41,8 @@ public class HttpServer {
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                logger.info("*** Accepted a client connection! ***");
+
+                logger.info("*** Accepted a client connection from: {} at port: {}! ***",clientSocket.getInetAddress().getHostName(),clientSocket.getPort());
                 this.threadPool.execute(() -> session(clientSocket));
                 // TODO: håndtere feil i router, skrive ut feilmeldinger til nettleser
             } catch (IOException e) {
