@@ -28,6 +28,7 @@ public class QuestionnaireDao extends DataAccessObject<Questionnaire> {
         try (PreparedStatement statement = connection.prepareStatement("update questionnaire set name = ? where id = ?")) {
             statement.setString(1, model.getName());
             statement.setLong(2, model.getId());
+            statement.executeUpdate();
         }
     }
 
