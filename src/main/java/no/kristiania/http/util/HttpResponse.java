@@ -43,6 +43,15 @@ public class HttpResponse extends HttpMessage {
         setHeaderField("Location", location);
         setHeaderField("Connection", "Close");
     }
+    public void useNotFoundParams() {
+        headerFields.clear();
+        statusCode = 404;
+        statusMessage = "Not found";
+        messageBody = "<p>The resource could not be found</p>";
+        setHeaderField("Connection", "Close");
+        setHeaderField("Content-Type", "text/html");
+        setHeaderField("Content-Length", String.valueOf(statusMessage.getBytes(StandardCharsets.UTF_8).length));
+    }
     @Override
     public void write(Socket socket) throws IOException {
         startLine = String.format("HTTP/1.1 %s %s",statusCode, statusMessage);

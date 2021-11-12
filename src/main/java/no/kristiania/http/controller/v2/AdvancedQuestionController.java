@@ -136,6 +136,8 @@ public class AdvancedQuestionController implements HttpController {
             httpResponse.setMessageBody(responseBody);
             return httpResponse;
         }
-        return null;
+        HttpResponse response = new HttpResponse();
+        response.useNotFoundParams();
+        return response;
     }
 }
