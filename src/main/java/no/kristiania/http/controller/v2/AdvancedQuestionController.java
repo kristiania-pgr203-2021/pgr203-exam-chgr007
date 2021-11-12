@@ -99,20 +99,23 @@ public class AdvancedQuestionController implements HttpController {
     private HttpResponse postHandler(@NotNull HttpRequest request) throws IOException, SQLException {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> postValues = request.getPostParams();
-        boolean hasAccess = false;
-        if (!postValues.containsKey("AuthToken")) {
-            HttpResponse httpResponse = new HttpResponse(303, "See other");
-            httpResponse.setHeaderField("Connection", "close");
-            httpResponse.setHeaderField("Location", "/login.html");
-        } else {
-            Authenticator authenticator = new Authenticator();
-            hasAccess = authenticator.validateToken(postValues.get("AuthToken"));
-        }
+        boolean hasAccess = true;
+//        if (!postValues.containsKey("AuthToken")) {
+//            HttpResponse httpResponse = new HttpResponse(303, "See other");
+//            httpResponse.setHeaderField("Connection", "close");
+//            httpResponse.setHeaderField("Location", "/login.html");
+//            return httpResponse;
+//        } else {
+//            Authenticator authenticator = new Authenticator();
+//            hasAccess = authenticator.validateToken(postValues.get("AuthToken"));
+//        }
         if (hasAccess) {
             HttpResponse httpResponse = parseJSONValues(objectMapper, postValues);
             if (httpResponse != null) return httpResponse;
         }
-        return null;
+        HttpResponse response = new HttpResponse();
+        response.useServerErrorParams();
+        return response;
     }
 
     @Nullable
