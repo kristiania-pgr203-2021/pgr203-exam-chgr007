@@ -7,6 +7,7 @@
 * Fancy random css farger :D
 
 ## Kilder:
+* HttpServer https://github.com/kristiania-pgr203-2021/pgr203-innlevering-2-mariestigen Innlevering 2 av Marie og Christian 
 * Decoding av Token i JavaScript: https://stackoverflow.com/a/38552302 av bruker Peheje
 * Thread pool: http://tutorials.jenkov.com/java-multithreaded-servers/thread-pooled-server.html av Jakob Jenkov
 
