@@ -72,7 +72,7 @@ function makeJson(){
 
     updateFormVariables();
 
-    question.id = null;
+    question.id = 0;
     question.question = document.getElementById("question-name").value;
     question.questionnaireId = questionnaireId;
     question.questionType = type;
@@ -147,7 +147,7 @@ function printRange(){
 
     const rangeAnswer = {}
 
-    rangeAnswer.id = null;
+    rangeAnswer.id = 0;
     rangeAnswer.min = minRange;
     rangeAnswer.max = maxRange;
     rangeAnswer.minLabel = minLabel;
@@ -190,7 +190,7 @@ function printTextInput(){
 
     const textAnswer = {}
 
-    textAnswer.id = null;
+    textAnswer.id = 0;
     textAnswer.questionId = 0;
     textAnswer.maxChars = maxChars;
     textAnswer.placeholder = placeholderText;
@@ -234,8 +234,8 @@ function printRadioButtons(){
 
         const radioAnswer = {};
 
-        radioAnswer.id = i;
-        radioAnswer.questionId = null;
+        radioAnswer.id = 0;
+        radioAnswer.questionId = 0;
         radioAnswer.choice = radioButtonValues[i].value;
 
 
