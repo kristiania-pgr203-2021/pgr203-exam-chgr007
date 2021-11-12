@@ -14,10 +14,26 @@ import java.nio.file.Paths;
 
 public class Program {
     private static final Logger logger = LoggerFactory.getLogger(Program.class);
-    public static void main(String[] args) throws IOException {
-        HttpServer server = new HttpServer(8080, createDataSource());
 
+    public static void main(String[] args) throws IOException {
+        int port = getPort(args);
+        HttpServer server = new HttpServer(port, createDataSource());
     }
+
+    private static int getPort(String[] args) {
+        int port = 8080;
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("--port")) {
+                try {
+                    port = Integer.parseInt(args[i + 1]);
+                } catch (NumberFormatException e) {
+                    logger.error("Port must be a number!");
+                }
+            }
+        }
+        return port;
+    }
+
     // TODO: Kanskje flytte datasource og properties ut til en egen klasse
     private static DataSource createDataSource() {
         Properties prop = new Properties();

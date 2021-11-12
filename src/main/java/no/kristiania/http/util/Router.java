@@ -25,9 +25,7 @@ public class Router {
 
         try {
             if (message.getFileTarget().equals("/")) redirect("index.html");
-            else if (message.getFileTarget().equals("favicon.ico")) {
-                // TODO: well this was harder than expected
-            }
+
             FileController fileController = new FileController();
             if (controllers.containsKey(message.getFileTarget())) {
                 controllers
