@@ -1,18 +1,14 @@
 package no.kristiania.http;
 
-import no.kristiania.http.model.Product;
-import no.kristiania.http.util.PostValue;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HttpServerTest {
-    HttpServer server = new HttpServer(0);
+    HttpServer server = new HttpServer(0, TestData.testDataSource());
 
     public HttpServerTest() throws IOException {
     }

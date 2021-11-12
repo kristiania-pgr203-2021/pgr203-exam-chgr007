@@ -15,7 +15,7 @@ import java.util.Map;
 public class Router {
     private final Socket clientSocket;
     private final Map<String, HttpController> controllers;
-    public static final Logger logger = LoggerFactory.getLogger(Router.class);
+    private static final Logger logger = LoggerFactory.getLogger(Router.class);
     public Router(Socket clientSocket) {
         this.clientSocket = clientSocket;
         controllers = new HashMap<>();
@@ -25,6 +25,7 @@ public class Router {
 
         try {
             if (message.getFileTarget().equals("/")) redirect("index.html");
+
             FileController fileController = new FileController();
             if (controllers.containsKey(message.getFileTarget())) {
                 controllers
@@ -46,6 +47,7 @@ public class Router {
             logger.error(e.getMessage());
         }
     }
+
 
     private void redirect(String location) throws IOException {
         String responseMessage = "HTTP/1.1 303 See Other\r\n" +

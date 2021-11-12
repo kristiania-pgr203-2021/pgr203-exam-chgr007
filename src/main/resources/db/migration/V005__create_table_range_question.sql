@@ -1,6 +1,6 @@
 create table range_question (
     id serial primary key,
-    question_id integer references question(id) not null,
+    question_id integer references question(id),
     min int not null,
     max int not null,
     min_label varchar(100),
