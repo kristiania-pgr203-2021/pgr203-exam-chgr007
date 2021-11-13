@@ -37,16 +37,10 @@ public class Router {
             if (message.getFileTarget().endsWith(".png") || message.getFileTarget().endsWith(".jpg") || message.getFileTarget().endsWith(".ico") ) {
                 logger.info(message.getFileTarget());
                 InputStream fileStream = getClass().getResourceAsStream(message.getFileTarget());
-
-                String headers = "HTTP/1.1 200 OK\r\n" +
-                        "Content-Type: image/x-icon\r\n" +
-                        "Connection: Close\r\n" +
-                        "\r\n";
-
-                clientSocket.getOutputStream().write(headers.getBytes());
-                fileStream.transferTo(clientSocket.getOutputStream());
-                clientSocket.close();
-                return;
+                HttpResponse response = new HttpResponse(200, "OK");
+                response.setHeaderField("Connection", "Close");
+                response.setHeaderField("Content-Type", "image/x-icon");
+                response.writeBytes(clientSocket,fileStream);
             }
             FileController fileController = new FileController();
             if (controllers.containsKey(message.getFileTarget())) {
