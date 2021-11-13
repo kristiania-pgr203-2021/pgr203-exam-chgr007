@@ -29,4 +29,4 @@ jobs:
         if: ${{ always() }}
         uses: scacap/action-surefire-report@v1
       - name: Create coveralls report
-        run: mvn cobertura:cobertura coveralls:report
+        run: mvn clean test jacoco:report coveralls:report
