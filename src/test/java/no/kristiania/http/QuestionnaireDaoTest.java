@@ -351,14 +351,14 @@ public class QuestionnaireDaoTest {
         Question<RangeQuestion> question = new Question<>();
         question.setQuestionnaireId(questionnaire.getId());
         question.setQuestionType(QuestionType.range);
-        question.setQuestion("What about this, then?");
+        question.setQuestion("Er alt i orden?");
         question.setHasAnswerOptions(true);
 
         RangeQuestion questionOptions = new RangeQuestion();
         questionOptions.setMin(0);
         questionOptions.setMax(10);
-        questionOptions.setMaxLabel("Helt fantastisk bra");
-        questionOptions.setMinLabel("Helt sjukt dårlig :(");
+        questionOptions.setMaxLabel("JA!");
+        questionOptions.setMinLabel("Over hodet ikke");
         question.addAnswerOption(questionOptions);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -370,14 +370,14 @@ public class QuestionnaireDaoTest {
         System.out.println(client.getStatusCode());
         assertThat(questions)
                 .extracting(Question::getQuestion)
-                .contains("What about this, then?");
+                .contains("Er alt i orden?");
 
         RangeQuestionDao rangeQuestionDao = new RangeQuestionDao(createDataSource());
         List<RangeQuestion> rangeQuestionOptions = rangeQuestionDao.retrieveAll();
 
         assertThat(rangeQuestionOptions)
                 .extracting(RangeQuestion::getMaxLabel)
-                .contains("Helt fantastisk bra");
+                .contains("JA!");
     }
     @Test
     void shouldRegisterRangeQuestion() throws SQLException {
