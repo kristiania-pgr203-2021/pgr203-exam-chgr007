@@ -47,6 +47,7 @@ public class FileController implements HttpController {
         else if (fileTarget.endsWith(".txt")) response = "text/plain";
         else if (fileTarget.endsWith(".css")) response = "text/css";
         else if (fileTarget.endsWith(".js")) response = "text/javascript";
+        else if (fileTarget.endsWith(".png")) response = "image/png";
         response+="; charset=UTF8";
         return response;
     }
