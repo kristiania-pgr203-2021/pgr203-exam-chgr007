@@ -30,5 +30,3 @@ jobs:
         uses: scacap/action-surefire-report@v1
       - name: Create coveralls report
         run: mvn cobertura:cobertura coveralls:report
-      - after_success:
-        run: mvn clean cobertura:cobertura coveralls:report
