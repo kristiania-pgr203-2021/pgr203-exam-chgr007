@@ -28,3 +28,6 @@ jobs:
       - name: Publish Test Report
         if: ${{ always() }}
         uses: scacap/action-surefire-report@v1
+      - name: Create coveralls report
+        run: mvn cobertura:cobertura coveralls:report
+      after_success: mvn clean cobertura:cobertura coveralls:report
