@@ -1,13 +1,12 @@
 package no.kristiania.http.controller;
 
-import no.kristiania.dao.UserDao;
+import no.kristiania.http.dao.UserDao;
 import no.kristiania.http.User;
 import no.kristiania.http.util.Authenticator;
 import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.HttpResponse;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;

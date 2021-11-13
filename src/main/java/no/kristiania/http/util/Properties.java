@@ -10,6 +10,12 @@ import java.nio.file.Paths;
 
 public class Properties {
     private static final Logger logger = LoggerFactory.getLogger(Properties.class);
+    private String fileName;
+
+    public Properties(String fileName) {
+        this.fileName = fileName;
+    }
+
     public String getProperty(String key) {
         java.util.Properties prop = getPropertiesObj();
         return prop.getProperty(key);
@@ -19,7 +25,7 @@ public class Properties {
         //TODO: Legge til working directory (FileReader reader = new FileReader("pgr203.properties"))
         Path workingDir = Paths.get("").toAbsolutePath();
         logger.info("Loading properties file from: {}",workingDir);
-        try (FileReader reader = new FileReader(workingDir+ "/pgr203.properties")) {
+        try (FileReader reader = new FileReader(workingDir+ "/"+fileName)) {
             java.util.Properties properties = new java.util.Properties();
             properties.load(reader);
             return properties;

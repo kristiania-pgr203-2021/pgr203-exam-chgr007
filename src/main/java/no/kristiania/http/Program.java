@@ -1,6 +1,6 @@
 package no.kristiania.http;
 
-import no.kristiania.dao.*;
+import no.kristiania.http.dao.*;
 import no.kristiania.http.model.*;
 import no.kristiania.http.util.Authenticator;
 import no.kristiania.http.util.Properties;
@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 
 
@@ -170,7 +168,7 @@ public class Program {
 
     // TODO: Kanskje flytte datasource og properties ut til en egen klasse
     private static DataSource createDataSource() {
-        Properties prop = new Properties();
+        Properties prop = new Properties("pgr203.properties");
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         dataSource.setUser(prop.getProperty("dataSource.username"));
         dataSource.setPassword(prop.getProperty("dataSource.password"));

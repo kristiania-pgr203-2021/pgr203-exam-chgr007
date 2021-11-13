@@ -1,6 +1,6 @@
 package no.kristiania.http.controller;
 
-import no.kristiania.dao.QuestionnaireDao;
+import no.kristiania.http.dao.QuestionnaireDao;
 import no.kristiania.http.model.Questionnaire;
 import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.HttpResponse;

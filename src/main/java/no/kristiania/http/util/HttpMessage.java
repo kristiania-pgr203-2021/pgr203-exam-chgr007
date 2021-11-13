@@ -1,8 +1,11 @@
 package no.kristiania.http.util;
 
 import org.codehaus.jackson.io.UTF8Writer;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -95,6 +98,13 @@ public class HttpMessage {
     }
 
     public void write(Socket socket) throws IOException {
+        String response = generateStartAndHeaders();
+
+        socket.getOutputStream().write(response.getBytes(StandardCharsets.UTF_8));
+    }
+
+    @NotNull
+    private String generateStartAndHeaders() {
         StringBuilder headers = new StringBuilder();
 
         // Formats headers to key: value\r\n
@@ -104,8 +114,20 @@ public class HttpMessage {
                 + headers
                 + "\r\n"
                 + messageBody;
+        return response;
+    }
 
-        socket.getOutputStream().write(response.getBytes(StandardCharsets.UTF_8));
+    public void writeBytes(Socket socket, InputStream fileStream) throws IOException {
+        StringBuilder headers = new StringBuilder();
+
+        // Formats headers to key: value\r\n
+        headerFields.forEach((k,v) -> headers.append(k+": "+v+"\r\n"));
+
+        String response = startLine+"\r\n"
+                + headers
+                + "\r\n";
+        socket.getOutputStream().write(response.getBytes());
+        fileStream.transferTo(socket.getOutputStream());
     }
 
 }

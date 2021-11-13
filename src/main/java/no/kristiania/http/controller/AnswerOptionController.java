@@ -1,6 +1,6 @@
 package no.kristiania.http.controller;
 
-import no.kristiania.dao.RangeQuestionDao;
+import no.kristiania.http.dao.RangeQuestionDao;
 import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.HttpResponse;
 

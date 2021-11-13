@@ -5,10 +5,17 @@ import no.kristiania.http.controller.HttpController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +33,15 @@ public class Router {
         try {
             if (message.getFileTarget().equals("/")) redirect("/index.html");
 
+            // TODO: Refactor to byte-controller or whatever
+            if (message.getFileTarget().endsWith(".png") || message.getFileTarget().endsWith(".jpg") || message.getFileTarget().endsWith(".ico") ) {
+                logger.info(message.getFileTarget());
+                InputStream fileStream = getClass().getResourceAsStream(message.getFileTarget());
+                HttpResponse response = new HttpResponse(200, "OK");
+                response.setHeaderField("Connection", "Close");
+                response.setHeaderField("Content-Type", "image/x-icon");
+                response.writeBytes(clientSocket,fileStream);
+            }
             FileController fileController = new FileController();
             if (controllers.containsKey(message.getFileTarget())) {
                 controllers

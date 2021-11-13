@@ -1,12 +1,9 @@
-package no.kristiania.dao;
+package no.kristiania.http.dao;
 
-import no.kristiania.http.model.RadioQuestion;
 import no.kristiania.http.model.TextQuestion;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TextQuestionDao extends DataAccessObject<TextQuestion>{
 

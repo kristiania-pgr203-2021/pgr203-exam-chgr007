@@ -1,20 +1,15 @@
 package no.kristiania.http.controller;
 
-import no.kristiania.dao.QuestionDao;
-import no.kristiania.dao.QuestionnaireDao;
-import no.kristiania.http.model.Question;
+import no.kristiania.http.dao.QuestionDao;
+import no.kristiania.http.dao.QuestionnaireDao;
 import no.kristiania.http.model.Questionnaire;
 import no.kristiania.http.util.Authenticator;
-import no.kristiania.http.util.HttpMessage;
 import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.HttpResponse;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class QuestionnairesController implements HttpController {
 

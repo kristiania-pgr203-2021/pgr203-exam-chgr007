@@ -1,6 +1,6 @@
 package no.kristiania.http;
 
-import no.kristiania.dao.*;
+import no.kristiania.http.dao.*;
 import no.kristiania.http.model.*;
 import no.kristiania.http.util.Authenticator;
 import no.kristiania.http.util.PostValue;
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.TestInstance;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,8 @@
 package no.kristiania.http.util;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
@@ -56,5 +58,10 @@ public class HttpResponse extends HttpMessage {
     public void write(Socket socket) throws IOException {
         startLine = String.format("HTTP/1.1 %s %s",statusCode, statusMessage);
         super.write(socket);
+    }
+    @Override
+    public void writeBytes(Socket socket, InputStream stream) throws IOException {
+        startLine = String.format("HTTP/1.1 %s %s",statusCode, statusMessage);
+        super.writeBytes(socket, stream);
     }
 }
