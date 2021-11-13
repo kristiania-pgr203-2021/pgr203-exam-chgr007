@@ -1,12 +1,9 @@
-package no.kristiania.dao;
+package no.kristiania.http.dao;
 
-import no.kristiania.http.model.QuestionOptions;
 import no.kristiania.http.model.RangeQuestion;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RangeQuestionDao extends DataAccessObject<RangeQuestion> {
     public RangeQuestionDao(DataSource dataSource) {

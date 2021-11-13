@@ -1,8 +1,6 @@
-package no.kristiania.dao;
+package no.kristiania.http.dao;
 
-import no.kristiania.http.model.Answer;
 import no.kristiania.http.model.Question;
-import no.kristiania.http.model.QuestionOptions;
 import no.kristiania.http.model.QuestionType;
 
 import javax.sql.DataSource;

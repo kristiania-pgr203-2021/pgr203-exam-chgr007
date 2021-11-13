@@ -1,6 +1,5 @@
-package no.kristiania.dao;
+package no.kristiania.http.dao;
 
-import no.kristiania.http.model.QuestionOptions;
 import no.kristiania.http.model.RadioQuestion;
 
 import javax.sql.DataSource;

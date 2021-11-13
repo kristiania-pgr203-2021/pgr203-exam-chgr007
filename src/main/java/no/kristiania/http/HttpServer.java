@@ -1,13 +1,10 @@
 package no.kristiania.http;
 
-import no.kristiania.dao.*;
+import no.kristiania.http.dao.*;
 import no.kristiania.http.controller.*;
 import no.kristiania.http.controller.v2.AdvancedQuestionController;
 import no.kristiania.http.util.HttpRequest;
-import no.kristiania.http.util.Properties;
 import no.kristiania.http.util.Router;
-import org.flywaydb.core.Flyway;
-import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

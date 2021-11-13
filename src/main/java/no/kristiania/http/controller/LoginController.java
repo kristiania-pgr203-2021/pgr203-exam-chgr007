@@ -1,6 +1,6 @@
 package no.kristiania.http.controller;
 
-import no.kristiania.dao.UserDao;
+import no.kristiania.http.dao.UserDao;
 import no.kristiania.http.User;
 import no.kristiania.http.util.Authenticator;
 import no.kristiania.http.util.HttpRequest;

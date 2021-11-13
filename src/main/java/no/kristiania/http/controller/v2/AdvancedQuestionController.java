@@ -1,9 +1,9 @@
 package no.kristiania.http.controller.v2;
 
-import no.kristiania.dao.RadioQuestionDao;
-import no.kristiania.dao.RangeQuestionDao;
-import no.kristiania.dao.QuestionDao;
-import no.kristiania.dao.TextQuestionDao;
+import no.kristiania.http.dao.RadioQuestionDao;
+import no.kristiania.http.dao.RangeQuestionDao;
+import no.kristiania.http.dao.QuestionDao;
+import no.kristiania.http.dao.TextQuestionDao;
 import no.kristiania.http.HttpServer;
 import no.kristiania.http.controller.HttpController;
 import no.kristiania.http.model.*;
@@ -15,7 +15,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
