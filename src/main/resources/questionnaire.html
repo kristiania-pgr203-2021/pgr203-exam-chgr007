@@ -7,9 +7,14 @@
     <script src="app.js" type="javascript"></script>
     <script src="javascript/javascript.js"></script>
     <script src="javascript/newQuestion.js"></script>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
 </head>
 <body>
 <div class="top-bar">
+    <p class="welcome-msg" id="welcome-msg">Welcome, [name]<p>
+    <div class="nav-bar">
+        <li></li>
+    </div>
     <div class="centred">
         <h1 id="questionnaire-name" style="display: inline-block; text-align: center">Questionnaire</h1>
         <svg id="edit-questionnaire-name" onclick="changeName(questionnaire, questionnaireId)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="" class="bi bi-pencil-square"  viewBox="0 0 16 16">
@@ -37,7 +42,34 @@
 
     const urlSearchParams = new URLSearchParams(window.location.search);
     const questionnaireId = urlSearchParams.get("questionnaireId");
+    let userId = 0;
+    function showLoginForm() {
+        document.getElementById("welcome-msg").innerHTML = "<a href='/login.html'>login</a><br>or <a href='/signup.html'>sign up</a>";
+    }
+    //Kilde: https://stackoverflow.com/questions/38552003/how-to-decode-jwt-token-in-javascript-without-using-a-library
+    function parseJwt(token) {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    }
 
+    // datoene må ganges med 1000 for å få millisekunder som js bruker i date.
+    const cookie = document.cookie;
+    if (cookie.length > 0) {
+        console.info("Found token");
+
+        const tokenEncoded = cookie.substr(cookie.indexOf("=") + 1, cookie.length)
+        const token = parseJwt(tokenEncoded);
+        console.info(token);
+        if (new Date(token.exp*1000) > new Date()) showLoginForm();
+        userId = token.jti;
+        document.getElementById("welcome-msg").innerHTML = `Welcome, ${token.sub}`;
+    } else {
+        showLoginForm();
+    }
 
         addButton(questionContainer, question, questionnaireId);
 
