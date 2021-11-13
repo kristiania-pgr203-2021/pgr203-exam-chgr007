@@ -1,27 +1,36 @@
+[![Byggejobb](https://github.com/kristiania-pgr203-2021/pgr203-exam-chgr007/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/kristiania-pgr203-2021/pgr203-exam-chgr007/actions/workflows/maven.yml)
+
 # PGR203 Avansert Java eksamen
+
+## Linker
+* https://github.com/kristiania-pgr203-2021/pgr203-exam-chgr007 Github Repo
+* https://github.com/kristiania-pgr203-2021/pgr203-exam-chgr007/actions Github Actions 
 
 ## Funksjonalitet utenfor beskrivelse
 * Serveren benytter JWT (JSON Web Tokens) for å autorisere bruker
 * Serveren benytter Spring Security og Bcryp for å autentisere bruker
 * Serializing til/fra server med JSON, Jackson-biblioteket er benyttet backend
 * Fancy random css farger :D
+* Man kan endre tittel på spørreundersøkelse og spørsmål ved bruk av edit-ikonet ved siden av tittelen
+* Answer vil bruke info fra opprettelsen av spørreundersøkelsen for å gi riktig svarmulighet
+
 
 ## Kilder:
 * HttpServer https://github.com/kristiania-pgr203-2021/pgr203-innlevering-2-mariestigen Innlevering 2 av Marie og Christian 
+* JDBC https://github.com/kristiania-pgr203-2021/pgr203-innlevering-3-mariestigen Innlevering 3 av Marie og Christian
 * Decoding av Token i JavaScript: https://stackoverflow.com/a/38552302 av bruker Peheje
 * Thread pool: http://tutorials.jenkov.com/java-multithreaded-servers/thread-pooled-server.html av Jakob Jenkov
 
 
 ## Beskriv hvordan programmet skal testes:
-* Sensor bes legge inn følgende linje i pgr203.properties, for å sette 32-bytes nøkkel til HS256 algoritmen som benyttes til signering av
-  token: `token.key=w9z$C&F)J@McQfTjWnZr4u7x!A%D*G-K`
-  * Det presiseres at dette er en HTTP-server, ikke https. Alt vil bli sendt i klartekst mellom klient og tjener.
-    Vi har heller ikke bruk veldig mye tid på å forske på Spring Security, og må ta forbehold om feil i oppsett. Dette er ment som demo/POC.
-    Derfor fraråder vi på det sterkeste å benytte reelle passord ved registrering av ny bruker.
-    Nøkkelen vi har benyttet til signering av token ville heller aldri blitt opplastet på github i en reell situasjon.
 * Bygg programmet med `mvn package`
 * Kjør den eksekverbare .jar filen med kommandoen `java -jar <sti til jar> [--port]`
   * Port argumentet er valgfritt. Dersom det unnlates vil port 8080 bli benyttet.
+* Registrer en bruker
+  * Det presiseres at dette er en HTTP-server, ikke https. Alt vil bli sendt i klartekst mellom klient og tjener.
+    Vi har heller ikke bruk veldig mye tid på å forske på Spring Security, og må ta forbehold om feil i oppsett. Dette er ment som demo/POC.
+    Derfor fraråder vi på det sterkeste å benytte reelle passord ved registrering av ny bruker.
+    Nøkkelen vi har benyttet til signering av token ville heller aldri blitt opplastet på github om programmet skulle i produksjon.
 
 ## Korreksjoner av eksamensteksten i Wiseflow:
 
@@ -76,10 +85,20 @@
 * [x] Vi har sett på hvordan å bruke AbstractDao for å få felles kode for retrieve og list. Kan dere bruke felles kode i AbstractDao for å unngå duplisering av inserts og updates?
 * [x] Dersom noe alvorlig galt skjer vil serveren krasje. Serveren burde i stedet logge dette og returnere en status code 500 til brukeren
 * [x] Dersom brukeren går til http://localhost:8080 får man 404. Serveren burde i stedet returnere innholdet av index.html
-* [ ] Et favorittikon er et lite ikon som nettleseren viser i tab-vinduer for en webapplikasjon. Kan dere lage et favorittikon for deres server? Tips: ikonet er en binærfil og ikke en tekst og det går derfor ikke an å laste den inn i en StringBuilder
+* [x] Et favorittikon er et lite ikon som nettleseren viser i tab-vinduer for en webapplikasjon. Kan dere lage et favorittikon for deres server? Tips: ikonet er en binærfil og ikke en tekst og det går derfor ikke an å laste den inn i en StringBuilder
 * [x] I forelesningen har vi sett på å innføre begrepet Controllers for å organisere logikken i serveren. Unntaket fra det som håndteres med controllers er håndtering av filer på disk. Kan dere skrive om HttpServer til å bruke en FileController for å lese filer fra disk?
 * [ ] Kan dere lage noen diagrammer som illustrerer hvordan programmet deres virker?
 * [ ] JDBC koden fra forelesningen har en feil ved retrieve dersom id ikke finnes. Kan dere rette denne?
 * [x] I forelesningen fikk vi en rar feil med CSS når vi hadde `<!DOCTYPE html>`. Grunnen til det er feil content-type. Klarer dere å fikse det slik at det fungerer å ha `<!DOCTYPE html>` på starten av alle HTML-filer?
 * [ ] Klarer dere å lage en Coverage-rapport med GitHub Actions med Coveralls? (Advarsel: Foreleser har nylig opplevd feil med Coveralls så det er ikke sikkert dere får det til å virke)
 * [x] FARLIG: I løpet av kurset har HttpServer og tester fått funksjonalitet som ikke lenger er nødvendig. Klarer dere å fjerne alt som er overflødig nå uten å også fjerne kode som fortsatt har verdi? (Advarsel: Denne kan trekke ned dersom dere gjør det feil!)
+
+ ## Bilder
+ ![UML-diagram](https://user-images.githubusercontent.com/23049454/141648351-6c689f0a-e65e-4c9f-ae68-69ccc6f89446.png)
+
+ UML-diagram over ferdig kode. Plugin'en (UML Generator) var helt håpløs å jobbe med, men jeg tror vi fikk satt det opp så og si riktig.
+ 
+ 
+ ![answer](https://user-images.githubusercontent.com/23049454/141648464-5cdbd69c-b9f7-49f6-9e8e-736b46badcaa.png)
+ 
+ ER-diagram over databasen.
