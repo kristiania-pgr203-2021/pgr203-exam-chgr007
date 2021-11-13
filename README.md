@@ -13,15 +13,14 @@
 
 
 ## Beskriv hvordan programmet skal testes:
-* Sensor bes legge inn følgende linje i pgr203.properties, for å sette 32-bytes nøkkel til HS256 algoritmen som benyttes til signering av
-  token: `token.key=w9z$C&F)J@McQfTjWnZr4u7x!A%D*G-K`
-  * Det presiseres at dette er en HTTP-server, ikke https. Alt vil bli sendt i klartekst mellom klient og tjener.
-    Vi har heller ikke bruk veldig mye tid på å forske på Spring Security, og må ta forbehold om feil i oppsett. Dette er ment som demo/POC.
-    Derfor fraråder vi på det sterkeste å benytte reelle passord ved registrering av ny bruker.
-    Nøkkelen vi har benyttet til signering av token ville heller aldri blitt opplastet på github i en reell situasjon.
 * Bygg programmet med `mvn package`
 * Kjør den eksekverbare .jar filen med kommandoen `java -jar <sti til jar> [--port]`
   * Port argumentet er valgfritt. Dersom det unnlates vil port 8080 bli benyttet.
+* Registrer en bruker
+  * Det presiseres at dette er en HTTP-server, ikke https. Alt vil bli sendt i klartekst mellom klient og tjener.
+    Vi har heller ikke bruk veldig mye tid på å forske på Spring Security, og må ta forbehold om feil i oppsett. Dette er ment som demo/POC.
+    Derfor fraråder vi på det sterkeste å benytte reelle passord ved registrering av ny bruker.
+    Nøkkelen vi har benyttet til signering av token ville heller aldri blitt opplastet på github om programmet skulle i produksjon.
 
 ## Korreksjoner av eksamensteksten i Wiseflow:
 
@@ -76,7 +75,7 @@
 * [x] Vi har sett på hvordan å bruke AbstractDao for å få felles kode for retrieve og list. Kan dere bruke felles kode i AbstractDao for å unngå duplisering av inserts og updates?
 * [x] Dersom noe alvorlig galt skjer vil serveren krasje. Serveren burde i stedet logge dette og returnere en status code 500 til brukeren
 * [x] Dersom brukeren går til http://localhost:8080 får man 404. Serveren burde i stedet returnere innholdet av index.html
-* [ ] Et favorittikon er et lite ikon som nettleseren viser i tab-vinduer for en webapplikasjon. Kan dere lage et favorittikon for deres server? Tips: ikonet er en binærfil og ikke en tekst og det går derfor ikke an å laste den inn i en StringBuilder
+* [x] Et favorittikon er et lite ikon som nettleseren viser i tab-vinduer for en webapplikasjon. Kan dere lage et favorittikon for deres server? Tips: ikonet er en binærfil og ikke en tekst og det går derfor ikke an å laste den inn i en StringBuilder
 * [x] I forelesningen har vi sett på å innføre begrepet Controllers for å organisere logikken i serveren. Unntaket fra det som håndteres med controllers er håndtering av filer på disk. Kan dere skrive om HttpServer til å bruke en FileController for å lese filer fra disk?
 * [ ] Kan dere lage noen diagrammer som illustrerer hvordan programmet deres virker?
 * [ ] JDBC koden fra forelesningen har en feil ved retrieve dersom id ikke finnes. Kan dere rette denne?
