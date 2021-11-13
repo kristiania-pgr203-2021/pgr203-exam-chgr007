@@ -61,7 +61,7 @@ public class QuestionController implements HttpController{
             // Add question to DB
         }
 
-        return null;
+        return new HttpResponse(500, "Internal Server Error");
     }
 
     @Override

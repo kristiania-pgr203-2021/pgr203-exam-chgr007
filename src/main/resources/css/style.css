@@ -62,6 +62,15 @@ li{
 
 }
 
+.welcome-msg{
+    position: fixed;
+}
+
+.nav-bar{
+    position: relative;
+    bottom:2em;
+}
+
 .flex-container{
     display: flex;
     flex-wrap: wrap;

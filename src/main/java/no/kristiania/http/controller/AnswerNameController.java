@@ -41,7 +41,8 @@ public class AnswerNameController implements HttpController{
             httpResponse.setHeaderField("Location", "/question.html?question=" + answerId);
             return httpResponse;
         }
-        return null;    }
+        return new HttpResponse(500, "Internal Server Error");
+    }
 
     @Override
     public String getPath() {

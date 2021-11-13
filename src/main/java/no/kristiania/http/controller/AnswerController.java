@@ -88,7 +88,7 @@ public class AnswerController implements HttpController{
                 return response;
             }
         }
-        return null;
+        return new HttpResponse(500, "Internal Server Error");
 
     }
 

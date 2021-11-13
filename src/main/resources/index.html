@@ -57,7 +57,7 @@
     }
     addButton(questionnaireContainer, "questionnaire", userId);
 
-    fetch("/api/questionnaires").then(function (res) {
+    fetch(`/api/questionnaires?userId=${userId}`).then(function (res) {
         return res.text()
     }).then(function (text) {
 

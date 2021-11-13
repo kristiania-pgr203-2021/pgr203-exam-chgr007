@@ -55,9 +55,8 @@ public class QuestionnairesController implements HttpController {
             return httpResponse;
         } if (request.getRequestType().equalsIgnoreCase("get") && request.hasQueryParam("userId")) {
             Long id = Long.valueOf(request.getQueryParam("userId"));
-            Questionnaire questionnaire = questionnaireDao.retrieveById(id);
             httpResponse.setHeaderField("Connection: ", "close");
-            String messageBody = "questionnaire=" + questionnaire.getName();
+            String messageBody = printAllQuestionnairesById(id);
             httpResponse.setMessageBody(messageBody);
             httpResponse.setHeaderField("Content-Length: ", String.valueOf(messageBody.getBytes(StandardCharsets.UTF_8).length));
             return httpResponse;
