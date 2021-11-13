@@ -31,6 +31,12 @@
     Vi har heller ikke bruk veldig mye tid på å forske på Spring Security, og må ta forbehold om feil i oppsett. Dette er ment som demo/POC.
     Derfor fraråder vi på det sterkeste å benytte reelle passord ved registrering av ny bruker.
     Nøkkelen vi har benyttet til signering av token ville heller aldri blitt opplastet på github om programmet skulle i produksjon.
+* Opprett questionnaire
+* Opprett spørsmål og type
+* Legg inn svar
+* For å logge ut, må token slettes (F12 -> Application -> Token)
+* Deretter kan man opprette ny bruker for å teste at questionnaire og svar blir lagret i databasen på
+  den innloggede brukeren. For å verifisere må man sjekke databasen og userId.
 
 ## Korreksjoner av eksamensteksten i Wiseflow:
 
