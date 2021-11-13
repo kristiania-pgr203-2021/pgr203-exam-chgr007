@@ -12,15 +12,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Authenticator {
-    private final String ENCRYPTION = "bcrypt";
-    //private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    // add to properties if it works
+    private final static String ENCRYPTION = "bcrypt";
+
     private byte[] apiKeySecretBytes;
     private Key key;
     public PasswordEncoder passwordEncoder;
 
     public Authenticator() {
-        Properties properties = new Properties();
+        Properties properties = new Properties("token.properties");
         apiKeySecretBytes = properties.getProperty("token.key").getBytes();
         key = new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());
         passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -33,13 +32,13 @@ public class Authenticator {
     }
 
     public String generateToken(long id, String userName) {
-        // https://github.com/jwtk/jjwt#install-jdk-maven
         Calendar c = Calendar.getInstance();
         Date expiration = new Date();
         c.setTime(expiration);
         c.add(Calendar.DATE, 1);
         expiration = c.getTime();
 
+        // https://github.com/jwtk/jjwt#install-jdk-maven
         String jws = Jwts.builder()
                 .setIssuedAt(new Date())
                 .setExpiration(expiration)
@@ -51,16 +50,17 @@ public class Authenticator {
 
         return jws;
     }
-    public long getIdFromToken(String token) {
+    public Long getIdFromToken(String token) {
         if (validateToken(token)) {
-            return Long.valueOf(Jwts.parserBuilder()
+            Long id = Long.valueOf(Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token)
                     .getBody()
                     .getId());
+            return id;
         }
-        return -1;
+        return -1l;
     }
     public boolean validateToken(String token) {
         Jws<Claims> jws;
