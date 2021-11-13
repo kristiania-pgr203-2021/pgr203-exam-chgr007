@@ -94,11 +94,15 @@
 * [x] FARLIG: I løpet av kurset har HttpServer og tester fått funksjonalitet som ikke lenger er nødvendig. Klarer dere å fjerne alt som er overflødig nå uten å også fjerne kode som fortsatt har verdi? (Advarsel: Denne kan trekke ned dersom dere gjør det feil!)
 
  ## Bilder
+ ![image](https://user-images.githubusercontent.com/23049454/141648969-f032951a-9794-4dfa-bd9c-d3d5034e531b.png)
+ Kort overview av programmet
+ 
+ 
+ 
  ![UML-diagram](https://user-images.githubusercontent.com/23049454/141648351-6c689f0a-e65e-4c9f-ae68-69ccc6f89446.png)
-
  UML-diagram over ferdig kode. Plugin'en (UML Generator) var helt håpløs å jobbe med, men jeg tror vi fikk satt det opp så og si riktig.
  
  
- ![answer](https://user-images.githubusercontent.com/23049454/141648464-5cdbd69c-b9f7-49f6-9e8e-736b46badcaa.png)
  
+ ![answer](https://user-images.githubusercontent.com/23049454/141648464-5cdbd69c-b9f7-49f6-9e8e-736b46badcaa.png)
  ER-diagram over databasen.
