@@ -95,4 +95,44 @@ public class QuestionDaoTest {
                 .isEqualTo(rangeQuestionFromDB);
 
     }
+
+    @Test
+    void shouldSaveTextQuestion() throws SQLException {
+        Question<RadioQuestion> question = new Question();
+        question.setQuestion("Hvordan har du det i dag?");
+        question.setQuestionnaireId(questionnaire.getId());
+        question.setQuestionType(QuestionType.text);
+        questionDao.save(question);
+
+        TextQuestion textQuestion = new TextQuestion();
+        textQuestion.setPlaceholder("si hvordan du har det");
+        textQuestion.setMaxChars(150);
+        textQuestion.setQuestionId(question.getId());
+
+        textQuestionDao.save(textQuestion);
+
+        TextQuestion textQuestionFromDb = textQuestionDao.retrieveById(textQuestion.getId());
+        assertThat(textQuestion)
+                .usingRecursiveComparison()
+                .isEqualTo(textQuestionFromDb);
+
+    }
+
+    @Test
+    void shouldUpdateSavedQuestion() throws SQLException {
+
+        Question question = new Question();
+        question.setQuestion("Hvordan har du det i dag?");
+        question.setQuestionnaireId(questionnaire.getId());
+        question.setQuestionType(QuestionType.text);
+        questionDao.save(question);
+
+        question.setQuestion("Liker du fiskeboller?");
+        questionDao.update(question);
+
+        Question questionFromServer = questionDao.retrieveById(question.getId());
+        assertThat(questionFromServer)
+                .usingRecursiveComparison()
+                .isEqualTo(question);
+    }
 }
