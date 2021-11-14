@@ -35,10 +35,11 @@ public class QuestionDaoTest {
     @Test
     void shouldSaveQuestionToDatabase() throws IOException, SQLException {
 
-        Question question = new Question();
+        Question<TextQuestion> question = new Question();
         question.setQuestion("Hvordan har du det i dag?");
         question.setQuestionnaireId(questionnaire.getId());
         question.setQuestionType(QuestionType.text);
+
         questionDao.save(question);
 
         Question questionFromDB = questionDao.retrieveById(question.getId());
@@ -49,28 +50,31 @@ public class QuestionDaoTest {
 
     @Test
     void shouldSaveRadioQuestion() throws SQLException {
-        Question question = new Question();
+        Question<RadioQuestion> question = new Question();
         question.setQuestion("Hvordan har du det i dag?");
         question.setQuestionnaireId(questionnaire.getId());
         question.setQuestionType(QuestionType.radio);
-        questionDao.save(question);
+        question.setHasAnswerOptions(true);
+        question.setQuestionnaireId(questionnaire.getId());
+
 
         RadioQuestion radioQuestion = new RadioQuestion();
         radioQuestion.setChoice("Jeg har det fint");
+
+        questionDao.save(question);
         radioQuestion.setQuestionId(question.getId());
 
         radioQuestionDao.save(radioQuestion);
 
         RadioQuestion radioQuestionFromDB = radioQuestionDao.retrieveById(radioQuestion.getId());
-        assertThat(question)
-                .usingRecursiveComparison()
-                .isEqualTo(radioQuestionFromDB);
+        assertThat(radioQuestion.getQuestion())
+                .isEqualTo(radioQuestionFromDB.getQuestion());
 
     }
 
     @Test
     void shouldSaveRangeQuestion() throws SQLException {
-        Question question = new Question();
+        Question<RadioQuestion> question = new Question();
         question.setQuestion("Hvordan har du det i dag?");
         question.setQuestionnaireId(questionnaire.getId());
         question.setQuestionType(QuestionType.radio);

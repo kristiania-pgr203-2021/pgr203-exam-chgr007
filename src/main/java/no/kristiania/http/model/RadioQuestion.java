@@ -1,5 +1,7 @@
 package no.kristiania.http.model;
 
+import java.util.Objects;
+
 public class RadioQuestion extends QuestionOptions{
     private String choice;
 
@@ -36,5 +38,19 @@ public class RadioQuestion extends QuestionOptions{
                 "</div>" +
                 "<br>";
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RadioQuestion compareToObj = (RadioQuestion)o;
+        if (this.getQuestion().equals(compareToObj.getQuestion())) return true;
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(choice);
     }
 }

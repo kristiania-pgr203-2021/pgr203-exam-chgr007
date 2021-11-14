@@ -3,6 +3,7 @@ package no.kristiania.http;
 import no.kristiania.http.dao.QuestionnaireDao;
 import no.kristiania.http.dao.UserDao;
 import no.kristiania.http.model.Questionnaire;
+import no.kristiania.http.util.Authenticator;
 import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcDataSource;
 
@@ -14,11 +15,11 @@ public class TestData {
     public static User retrieveTestUser() throws SQLException {
         User user = new User();
         UserDao userDao = new UserDao(testDataSource());
-
+        Authenticator authenticator = new Authenticator();
         user.setPassword("123");
         user.setFirstName("test");
         user.setLastName("user");
-        user.setEmail("test@user.com");
+        user.setEmail(authenticator.encryptPass("test@user.com"));
 
         userDao.save(user);
 
