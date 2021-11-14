@@ -29,7 +29,6 @@
 <main>
     <div id="pop-up-container"></div>
     <div class="flex-container" id="question-container"></div>
-
 </main>
 
 <script>
@@ -71,7 +70,7 @@
         showLoginForm();
     }
 
-        addButton(questionContainer, question, questionnaireId);
+        addButton(questionContainer, question, userId, userId);
 
         fetch(`/api/questionnaireName?questionnaireId=${questionnaireId}`).then(function (res) {
             return res.text()

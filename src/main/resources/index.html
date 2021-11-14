@@ -16,9 +16,7 @@
 </div>
 <main>
     <div id="pop-up-container"></div>
-    <div class="flex-container" id="questionnaire-container">
-
-    </div>
+    <div class="flex-container" id="questionnaire-container"></div>
 </main>
 
 
@@ -55,7 +53,7 @@
     } else {
         showLoginForm();
     }
-    addButton(questionnaireContainer, "questionnaire", userId);
+    addButton(questionnaireContainer, "questionnaire", userId, userId);
 
     fetch(`/api/questionnaires?userId=${userId}`).then(function (res) {
         return res.text()

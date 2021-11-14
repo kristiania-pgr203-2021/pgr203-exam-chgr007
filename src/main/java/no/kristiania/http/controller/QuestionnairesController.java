@@ -97,12 +97,24 @@ public class QuestionnairesController implements HttpController {
         StringBuilder stringBuilder = new StringBuilder();
 
 
-        for (Questionnaire questionnaire : questionnaireDao.retrieveAllByUserID(id)) {
-            stringBuilder.append("<a href=\"questionnaire.html?questionnaireId=" + questionnaire.getId() + "\" class=\"random-color flexbox-box flex-content questionnaire\" id=\"questionnaire_\"" + questionnaire.getId() + "\">");
-            stringBuilder.append("<h2>").append(questionnaire.getName()).append("</h2>");
-            stringBuilder.append("</a>");
+        for (Questionnaire questionnaire : questionnaireDao.retrieveAll()) {
+
+            if(questionnaire.getPersonId() == id){
+
+                stringBuilder.append("<a href=\"questionnaire.html?questionnaireId=" + questionnaire.getId() + "\" class=\"random-color flexbox-box flex-content questionnaire\" id=\"questionnaire_\"" + questionnaire.getId() + "\">");
+                stringBuilder.append("<h2>").append(questionnaire.getName()).append("</h2>");
+                stringBuilder.append("<p class=\"bottom-text\">").append("this is your questionnaire").append("</p>");
+                stringBuilder.append("</a>");
+
+            } else {
+                stringBuilder.append("<a href=\"questionnaire.html?questionnaireId=" + questionnaire.getId() + "\" class=\"random-color flexbox-box flex-content questionnaire\" id=\"questionnaire_\"" + questionnaire.getId() + "\">");
+                stringBuilder.append("<h2>").append(questionnaire.getName()).append("</h2>");
+                stringBuilder.append("</a>");
+            }
+
 
         }
+
         return stringBuilder.toString();
     }
 }
