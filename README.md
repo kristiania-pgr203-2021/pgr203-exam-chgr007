@@ -24,6 +24,8 @@
 
 ## Beskriv hvordan programmet skal testes:
 * Bygg programmet med `mvn package`
+* opprett en fil pgr203.properties i current working directory
+  * Trenger dataSource.username, dataSource.password og dataSource.url.
 * Kjør den eksekverbare .jar filen med kommandoen `java -jar <sti til jar> [--port]`
   * Port argumentet er valgfritt. Dersom det unnlates vil port 8080 bli benyttet.
 * Registrer en bruker
