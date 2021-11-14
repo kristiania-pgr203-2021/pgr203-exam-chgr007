@@ -95,4 +95,22 @@ public class QuestionDaoTest {
                 .isEqualTo(rangeQuestionFromDB);
 
     }
+
+    @Test
+    void shouldUpdateSavedQuestion() throws SQLException {
+
+        Question question = new Question();
+        question.setQuestion("Hvordan har du det i dag?");
+        question.setQuestionnaireId(questionnaire.getId());
+        question.setQuestionType(QuestionType.text);
+        questionDao.save(question);
+
+        question.setQuestion("Liker du fiskeboller?");
+        questionDao.update(question);
+
+        Question questionFromServer = questionDao.retrieveById(question.getId());
+        assertThat(questionFromServer)
+                .usingRecursiveComparison()
+                .isEqualTo(question);
+    }
 }
