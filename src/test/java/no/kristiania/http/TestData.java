@@ -1,8 +1,12 @@
 package no.kristiania.http;
 
+import no.kristiania.http.dao.QuestionDao;
 import no.kristiania.http.dao.QuestionnaireDao;
 import no.kristiania.http.dao.UserDao;
+import no.kristiania.http.model.Question;
+import no.kristiania.http.model.QuestionType;
 import no.kristiania.http.model.Questionnaire;
+import no.kristiania.http.model.TextQuestion;
 import no.kristiania.http.util.Authenticator;
 import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcDataSource;
@@ -36,6 +40,19 @@ public class TestData {
         questionnaireDao.save(questionnaire);
 
         return questionnaire;
+    }
+
+    public static Question retrieveTestQuestion() throws SQLException {
+        Question question = new Question<>();
+        QuestionDao questionDao = new QuestionDao(testDataSource());
+
+        question.setQuestion("How are you?");
+        question.setQuestionnaireId(retrieveTestQuestionnaire().getId());
+        question.setQuestionType(QuestionType.text);
+
+        questionDao.save(question);
+
+        return question;
     }
 
     public static DataSource testDataSource() {

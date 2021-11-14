@@ -16,13 +16,13 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class APITests {
+public class APITest {
 
     DataSource dataSource = TestData.testDataSource();
     Questionnaire questionnaire = TestData.retrieveTestQuestionnaire();
     QuestionDao questionDao = new QuestionDao(dataSource);
 
-    public APITests() throws SQLException {
+    public APITest() throws SQLException {
     }
 
     @Test
