@@ -149,21 +149,7 @@ public class QuestionnaireDaoTest {
     }
 
 
-    @Test
-    void shouldSaveQuestionToDatabase() throws IOException, SQLException {
-        Questionnaire questionnaire = randomFromDatabase(questionnaireDao);
 
-        Question question = new Question();
-        question.setQuestion("Hvordan har du det i dag?");
-        question.setQuestionnaireId(questionnaire.getId());
-        question.setQuestionType(QuestionType.text);
-        questionDao.save(question);
-
-        Question questionFromDB = questionDao.retrieveById(question.getId());
-        assertThat(question)
-                .usingRecursiveComparison()
-                .isEqualTo(questionFromDB);
-    }
 
     @Test
     void shouldSaveQuestionAndAnswersToDatabase() throws SQLException {
