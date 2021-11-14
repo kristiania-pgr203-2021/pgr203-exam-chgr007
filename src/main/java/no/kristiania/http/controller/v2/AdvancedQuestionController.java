@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.List;
@@ -48,7 +50,7 @@ public class AdvancedQuestionController implements HttpController {
             List<Question> questionList = questionDao.retrieveAll();
             ObjectMapper objectMapper = new ObjectMapper();
 
-            String jsonObject = objectMapper.writeValueAsString(questionList);
+            String jsonObject = URLEncoder.encode(objectMapper.writeValueAsString(questionList),StandardCharsets.UTF_8);
             HttpResponse response = new HttpResponse(200, "OK");
             response.setHeaderField("Connection", "Close");
             response.setHeaderField("Content-Type", "application/json; charset=UTF-8");
@@ -91,7 +93,7 @@ public class AdvancedQuestionController implements HttpController {
     private HttpResponse parseJSONValues(ObjectMapper objectMapper, Map<String, String> postValues) throws IOException, SQLException {
         HttpResponse httpResponse = new HttpResponse(200, "OK");
         if (postValues != null && postValues.containsKey("json")) {
-            String questionJson = postValues.get("json");
+            String questionJson = URLDecoder.decode(postValues.get("json"), StandardCharsets.UTF_8);
 
             JsonNode jsonNodeRoot = objectMapper.readTree(questionJson);
 

@@ -67,7 +67,6 @@ public class HttpServer {
 
     private void configureRouter(Router router) {
         router.addController(new AdvancedQuestionController(new QuestionDao(dataSource), new RangeQuestionDao(dataSource), new RadioQuestionDao(dataSource), new TextQuestionDao(dataSource)));
-        //router.addController(new QuestionController(new QuestionDao(dataSource)));
         router.addController(new QuestionnairesController(new QuestionnaireDao(dataSource)));
         router.addController(new NewQuestionnaireController(new QuestionnaireDao(dataSource)));
         router.addController(new QuestionnaireNameController(new QuestionnaireDao(dataSource)));
@@ -78,7 +77,6 @@ public class HttpServer {
         router.addController(new QuestionAnswersController(new QuestionDao(dataSource), new AnswerDao(dataSource)));
         router.addController(new QuestionNameController(new QuestionDao(dataSource)));
         router.addController(new AnswerController(new AnswerDao(dataSource), new QuestionDao(dataSource), new RangeQuestionDao(dataSource), new RadioQuestionDao(dataSource), new TextQuestionDao(dataSource)));
-        router.addController(new AnswerOptionController(new RangeQuestionDao(dataSource)));
     }
 
 

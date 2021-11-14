@@ -7,6 +7,7 @@ import no.kristiania.http.util.HttpRequest;
 import no.kristiania.http.util.HttpResponse;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,7 +31,15 @@ public class SignupController implements HttpController {
             String firstName = postValues.get("firstName");
             String lastName = postValues.get("lastName");
             if(validateUserData(firstName,lastName,userName,password)) {
-                if (userExists(userName)) return new HttpResponse(403, "Already exists");
+                if (userExists(userName)) {
+                    HttpResponse response = new HttpResponse(403, "Already exists");
+                    String responseText = "<p>user already exists</p>";
+                    response.setMessageBody(responseText);
+                    response.setHeaderField("Connection", "Close");
+                    response.setHeaderField("Content-Type", "text/html");
+                    response.setHeaderField("Content-Length", String.valueOf(responseText.getBytes(StandardCharsets.UTF_8).length));
+                    return response;
+                }
 
                 Authenticator auth = new Authenticator();
 
@@ -54,7 +63,9 @@ public class SignupController implements HttpController {
             };
 
         }
-        return null;
+        HttpResponse response = new HttpResponse();
+        response.useServerErrorParams();
+        return response;
     }
 
     @Override

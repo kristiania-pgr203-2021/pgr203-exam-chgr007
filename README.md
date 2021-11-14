@@ -6,10 +6,13 @@
 * https://github.com/kristiania-pgr203-2021/pgr203-exam-chgr007 Github Repo
 * https://github.com/kristiania-pgr203-2021/pgr203-exam-chgr007/actions Github Actions 
 
+
+
 ## Funksjonalitet utenfor beskrivelse
 * Serveren benytter JWT (JSON Web Tokens) for å autorisere bruker
 * Serveren benytter Spring Security og Bcryp for å autentisere bruker
 * Serializing til/fra server med JSON, Jackson-biblioteket er benyttet backend
+  * Vi har ikke fått UTF-8 til å fungere med Jackson og JSON. UTF-8 fungerer imidlertid der hvor vi ikke har benyttet JSON, for eksempel når man oppretter questionnaire.
 * Fancy random css farger :D
 * Man kan endre tittel på spørreundersøkelse og spørsmål ved bruk av edit-ikonet ved siden av tittelen
 * Answer vil bruke info fra opprettelsen av spørreundersøkelsen for å gi riktig svarmulighet
@@ -37,6 +40,7 @@
 * For å logge ut, må token slettes (F12 -> Application -> Token)
 * Deretter kan man opprette ny bruker for å teste at questionnaire og svar blir lagret i databasen på
   den innloggede brukeren. For å verifisere må man sjekke databasen og userId.
+
 
 ## Korreksjoner av eksamensteksten i Wiseflow:
 

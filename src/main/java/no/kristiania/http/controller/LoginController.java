@@ -31,7 +31,6 @@ public class LoginController implements HttpController {
             userName = postValues.containsKey("userName") ? postValues.get("userName") : null;
             password = postValues.containsKey("password") ? postValues.get("password") : null;
 
-            // TODO: legge inn sjekk på om brukeren eksisterer
             User user = userDao.retrieveByEmail(userName);
 
             if(user != null && authenticator.validatePassword(password,user.getPassword())) {
@@ -49,7 +48,9 @@ public class LoginController implements HttpController {
         } else {
             // show login form
         }
-        return new HttpResponse(500, "Internal server error");
+        HttpResponse response = new HttpResponse();
+        response.useServerErrorParams();
+        return response;
     }
 
     @Override
