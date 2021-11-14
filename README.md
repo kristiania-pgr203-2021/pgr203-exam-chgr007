@@ -13,6 +13,8 @@
 * Fancy random css farger :D
 * Man kan endre tittel på spørreundersøkelse og spørsmål ved bruk av edit-ikonet ved siden av tittelen
 * Answer vil bruke info fra opprettelsen av spørreundersøkelsen for å gi riktig svarmulighet
+* Man må være logget inn for å kunne legge til spørreundersøkelse/spørsmål/svar
+* Man får opp hvilke(n) undersøkelser som er dine
 
 
 ## Kilder:
@@ -53,16 +55,16 @@
 ## Vedlegg: Sjekkliste for innlevering
 
 * [x] Dere har lest eksamensteksten
-* [ ] Dere har lastet opp en ZIP-fil med navn basert på navnet på deres Github repository
+* [x] Dere har lastet opp en ZIP-fil med navn basert på navnet på deres Github repository
 * [x] Koden er sjekket inn på github.com/pgr203-2021-repository
 * [x] Dere har committed kode med begge prosjektdeltagernes GitHub konto (alternativt: README beskriver arbeidsform)
 
 ### README.md
 
-* [ ] `README.md` inneholder en korrekt link til Github Actions
-* [ ] `README.md` beskriver prosjektets funksjonalitet, hvordan man bygger det og hvordan man kjører det
-* [ ] `README.md` beskriver eventuell ekstra leveranse utover minimum
-* [ ] `README.md` inneholder et diagram som viser datamodellen
+* [x] `README.md` inneholder en korrekt link til Github Actions
+* [x] `README.md` beskriver prosjektets funksjonalitet, hvordan man bygger det og hvordan man kjører det
+* [x] `README.md` beskriver eventuell ekstra leveranse utover minimum
+* [x] `README.md` inneholder et diagram som viser datamodellen
 
 ### Koden
 
@@ -93,10 +95,10 @@
 * [x] Dersom brukeren går til http://localhost:8080 får man 404. Serveren burde i stedet returnere innholdet av index.html
 * [x] Et favorittikon er et lite ikon som nettleseren viser i tab-vinduer for en webapplikasjon. Kan dere lage et favorittikon for deres server? Tips: ikonet er en binærfil og ikke en tekst og det går derfor ikke an å laste den inn i en StringBuilder
 * [x] I forelesningen har vi sett på å innføre begrepet Controllers for å organisere logikken i serveren. Unntaket fra det som håndteres med controllers er håndtering av filer på disk. Kan dere skrive om HttpServer til å bruke en FileController for å lese filer fra disk?
-* [ ] Kan dere lage noen diagrammer som illustrerer hvordan programmet deres virker?
-* [ ] JDBC koden fra forelesningen har en feil ved retrieve dersom id ikke finnes. Kan dere rette denne?
+* [x] Kan dere lage noen diagrammer som illustrerer hvordan programmet deres virker?
+* [x] JDBC koden fra forelesningen har en feil ved retrieve dersom id ikke finnes. Kan dere rette denne?
 * [x] I forelesningen fikk vi en rar feil med CSS når vi hadde `<!DOCTYPE html>`. Grunnen til det er feil content-type. Klarer dere å fikse det slik at det fungerer å ha `<!DOCTYPE html>` på starten av alle HTML-filer?
-* [ ] Klarer dere å lage en Coverage-rapport med GitHub Actions med Coveralls? (Advarsel: Foreleser har nylig opplevd feil med Coveralls så det er ikke sikkert dere får det til å virke)
+* [ ] Klarer dere å lage en Coverage-rapport med GitHub Actions med Coveralls? (Advarsel: Foreleser har nylig opplevd feil med Coveralls så det er ikke sikkert dere får det til å virke) <-- Vi prøvde å få det til, men vi fikk det ikke til å fungere og github actions feilet.
 * [x] FARLIG: I løpet av kurset har HttpServer og tester fått funksjonalitet som ikke lenger er nødvendig. Klarer dere å fjerne alt som er overflødig nå uten å også fjerne kode som fortsatt har verdi? (Advarsel: Denne kan trekke ned dersom dere gjør det feil!)
 
  ## Bilder
