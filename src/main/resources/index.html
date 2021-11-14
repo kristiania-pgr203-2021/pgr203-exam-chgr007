@@ -16,9 +16,7 @@
 </div>
 <main>
     <div id="pop-up-container"></div>
-    <div class="flex-container" id="questionnaire-container">
-
-    </div>
+    <div class="flex-container" id="questionnaire-container"></div>
 </main>
 
 
@@ -28,6 +26,10 @@
     const questionnaire = "questionnaire"
     const questionnaireContainer = document.getElementById("questionnaire-container");
     let userId = 0;
+    function showLoginForm() {
+        document.getElementById("welcome-msg").innerHTML = "<a href='/login.html'>login</a><br>or <a href='/signup.html'>sign up</a>";
+    }
+    //Kilde: https://stackoverflow.com/questions/38552003/how-to-decode-jwt-token-in-javascript-without-using-a-library
     function parseJwt(token) {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -51,9 +53,9 @@
     } else {
         showLoginForm();
     }
-    addButton(questionnaireContainer, "questionnaire", userId);
+    addButton(questionnaireContainer, "questionnaire", userId, userId);
 
-    fetch("/api/questionnaires").then(function (res) {
+    fetch(`/api/questionnaires?userId=${userId}`).then(function (res) {
         return res.text()
     }).then(function (text) {
 
@@ -63,10 +65,8 @@
 
         randomColor();
     });
-    function showLoginForm() {
-        document.getElementById("welcome-msg").innerHTML = "<a href='/login.html'>login</a><br>or <a href='/signup.html'>sign up</a>";
-    }
-    //Kilde: https://stackoverflow.com/questions/38552003/how-to-decode-jwt-token-in-javascript-without-using-a-library
+
+
 
 </script>
 

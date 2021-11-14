@@ -4,6 +4,7 @@ import no.kristiania.http.model.Questionnaire;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class QuestionnaireDao extends DataAccessObject<Questionnaire> {
     public QuestionnaireDao(DataSource dataSource) {
@@ -40,5 +41,22 @@ public class QuestionnaireDao extends DataAccessObject<Questionnaire> {
         questionnaire.setId(rs.getLong("id"));
         questionnaire.setPersonId(rs.getLong("person_id"));
         return questionnaire;
+    }
+
+    public ArrayList<Questionnaire> retrieveAllByUserID(long id) throws SQLException{
+
+        ArrayList<Questionnaire> arrayList = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("select * from questionnaire where person_id = ?")) {
+                statement.setLong(1, id);
+                try (ResultSet rs = statement.executeQuery()) {
+                    while(rs.next()){
+                        arrayList.add(mapValuesToObject(rs));
+                    }
+                }
+            }
+        }
+
+        return arrayList;
     }
 }
