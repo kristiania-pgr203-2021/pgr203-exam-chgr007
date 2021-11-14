@@ -85,7 +85,6 @@ public class QuestionnairesController implements HttpController {
 
 
         for (Questionnaire questionnaire : questionnaireDao.retrieveAll()) {
-
             stringBuilder.append("<a href=\"questionnaire.html?questionnaireId=" + questionnaire.getId() + "\" class=\"random-color flexbox-box flex-content questionnaire\" id=\"questionnaire_\"" + questionnaire.getId() + "\">");
             stringBuilder.append("<h2>").append(questionnaire.getName()).append("</h2>");
             stringBuilder.append("</a>");
@@ -97,13 +96,14 @@ public class QuestionnairesController implements HttpController {
     private String printAllQuestionnairesById(long id) throws SQLException {
         StringBuilder stringBuilder = new StringBuilder();
 
+
         for (Questionnaire questionnaire : questionnaireDao.retrieveAll()) {
 
             if(questionnaire.getPersonId() == id){
 
                 stringBuilder.append("<a href=\"questionnaire.html?questionnaireId=" + questionnaire.getId() + "\" class=\"random-color flexbox-box flex-content questionnaire\" id=\"questionnaire_\"" + questionnaire.getId() + "\">");
                 stringBuilder.append("<h2>").append(questionnaire.getName()).append("</h2>");
-                stringBuilder.append("<p style=\"bottom:0px;\"> Your questionnaire </p>");
+                stringBuilder.append("<p class=\"bottom-text\">").append("this is your questionnaire").append("</p>");
                 stringBuilder.append("</a>");
 
             } else {
@@ -111,7 +111,10 @@ public class QuestionnairesController implements HttpController {
                 stringBuilder.append("<h2>").append(questionnaire.getName()).append("</h2>");
                 stringBuilder.append("</a>");
             }
+
+
         }
+
         return stringBuilder.toString();
     }
 }

@@ -4,16 +4,45 @@
   <meta charset="UTF-8">
   <title>Sign up!</title>
   <script src="app.js" defer></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="javascript/javascript.js"></script>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
 </head>
 <body>
-<form action="/api/login" method="post">
-  <label for="userName">Email:</label><br>
-  <input type="text" id="userName" name="userName"><br>
-  <label for="password">Password:</label><br>
-  <input type="password" id="password" name="password"><br>
-  <input type="submit" value="Submit">
-</form>
+
+<div class="top-bar">
+  <div class="centred">
+        <h1 style="display: inline-block; text-align: center">LOG IN</h1>
+  </div>
+  <div class="nav-bar" id="nav-bar">
+      <a class="nav-element" href="/index.html">Main Menu</a>
+      <span> | </span>
+      <a class="nav-element" href="/signup.html">Sign up</a>
+  </div>
+</div>
+
+<main>
+  <div id="pop-up-container">
+    <div id="inner-pop-up-container" class="main">
+      <div id="pop-up-div" class="popup">
+        <div class="random-color popup-header">
+            <h1>LOG IN</h1>
+        </div>
+        <form action="/api/login" method="post" class="popup">
+          <label for="userName">Email:</label><br>
+          <input type="text" id="userName" name="userName"><br>
+          <label for="password">Password:</label><br>
+          <input type="password" id="password" name="password"><br>
+          <input type="submit" value="Submit">
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+  randomColor();
+</script>
+
 
 </body>
 </html>
